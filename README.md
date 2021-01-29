@@ -2,7 +2,7 @@
 
 **Idea**<br />
 - Multiple low end servers
-- Dashboard to manage vhosts for settings
+- Simple cli to manage vhosts and settings
 - Keep the overhead and dependencies at a minimum
 - Keep it Simple and Stupid and fucking Dry
 - Decentralized + High Availability even if the db cluster shits itself, stuff should keep going
