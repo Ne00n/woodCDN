@@ -1,6 +1,6 @@
 # woodCDN
 
-== Work in Progress ==
+## Work in Progress, proceed with caution
 
 **Idea**<br />
 - Multiple low end servers
