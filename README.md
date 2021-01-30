@@ -18,7 +18,7 @@
 
 **Setup**<br />
 ```
-apt-get install sudo nginx git -y
+apt-get install sudo nginx git python3 -y
 adduser cdn --disabled--login
 chgrp -R cdn /etc/nginx/sites-enabled/
 chmod 775 -R /etc/nginx/sites-enabled/
@@ -31,7 +31,10 @@ git clone https://github.com/Ne00n/woodCDN.git
 ```
 rqlited -http-addr 127.0.0.1:4001 -http-cert server.crt \
 -http-key key.pem -raft-addr :4004 -join https://xxx.xxx.xxx.xxx:4004 \
--node-encrypt -node-cert node.crt -node-key node-key.pem node.1
+-node-encrypt -node-cert node.crt -node-key node-key.pem dataDir
 ```
 
 You need signed cert otherwise use -no-node-verify however this is not recommended.<br />
+
+**cron**<br />
+You need to add python3 generate.py nginx to cronjob at least every 60s, to sync the database with the local nginx<br />
