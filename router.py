@@ -8,8 +8,6 @@ reader = geoip2.database.Reader('/opt/woodCDN/GeoLite2-Country.mmdb')
 cli = CLI()
 
 domains = cli.query(["SELECT * FROM domains"])
-vhosts = cli.query(["SELECT * FROM vhosts"])
-
 domainList = {}
 
 for result in domains['results']:
@@ -17,16 +15,16 @@ for result in domains['results']:
         for row in result['values']:
             domainList[row[0]] = row[1].split(",")
 
-line = stdin.readline()
-if line is not "HELO\t3":
+line = stdin.readline().rstrip()
+if "HELO\t3" not in line:
     print("FAIL\n",flush=True)
 
 print("OK\twoodCDN\n",flush=True)
 
 while True:
-    line = stdin.readline()
+    line = stdin.readline().rstrip()
 
-    if (len(line.split("#")) < 8):
+    if (len(line.split("t")) < 8):
         print("FAIL\n",flush=True)
         continue
 
