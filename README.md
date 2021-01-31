@@ -18,23 +18,32 @@
 
 **Setup**<br />
 ```
+#Nginx
 apt-get install sudo nginx git python3 -y
+#DNS
+apt-get install git python3 pdns pdns-backend-pipe -y
+#Both
 adduser cdn --disabled--login
+#Nginx
 chgrp -R cdn /etc/nginx/sites-enabled/
 chmod 775 -R /etc/nginx/sites-enabled/
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
+#Both
 cd /home/cdn/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git
 ```
 
 **rqlite**<br />
 ```
-rqlited -http-addr 127.0.0.1:4001 -http-cert server.crt \
--http-key key.pem -raft-addr :4004 -join https://xxx.xxx.xxx.xxx:4004 \
--node-encrypt -node-cert node.crt -node-key node-key.pem dataDir
+#First node
+./rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
+#Moah nodes
+./rqlited -http-addr 10.0.0.2:4003 -raft-addr 10.0.0.2:4004 -join http://10.0.0.1:4003 datadir
 ```
-
-You need signed cert otherwise use -no-node-verify however this is not recommended.<br />
+Afterwards you should be able to run on that on any node but just once
+```
+python3 cli.py init
+```
 
 **cron**<br />
 You need to add python3 generate.py nginx to cronjob at least every 60s, to sync the database with the local nginx<br />
