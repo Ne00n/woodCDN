@@ -2,7 +2,6 @@
 from sys import stdin
 from Class.cli import CLI
 import geoip2.database
-from pathlib import Path
 
 reader = geoip2.database.Reader('/opt/woodCDN/GeoLite2-Country.mmdb')
 
