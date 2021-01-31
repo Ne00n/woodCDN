@@ -21,7 +21,8 @@
 #Nginx
 apt-get install sudo nginx git python3 -y
 #DNS
-apt-get install git python3 pdns pdns-backend-pipe -y
+apt-get install git python3 pdns-server pdns-backend-pipe -y
+pip3 install geoip2
 #Both
 adduser cdn --disabled--login
 #Nginx
@@ -29,8 +30,11 @@ chgrp -R cdn /etc/nginx/sites-enabled/
 chmod 775 -R /etc/nginx/sites-enabled/
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
 #Both
-cd /home/cdn/;su cdn
+mkdir /opt/woodCDN
+chown -R cdn:cdn /opt/woodCDN/
+cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git
+exit; chmod 775 -R /opt/woodCDN
 ```
 
 You need some kind of decentralized vpn like cloudvpn or tinc otherwise rqlite tls configuration will be quite painful.<br />
