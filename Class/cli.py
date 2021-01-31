@@ -26,17 +26,32 @@ class CLI:
         return self.curl(url,query)
 
     def init(self):
-        self.curl(["CREATE TABLE vhosts (domain TEXT NOT NULL PRIMARY KEY, backend TEXT NOT NULL)"])
+        self.execute(["CREATE TABLE domains (domain TEXT NOT NULL PRIMARY KEY, nsv4 TEXT NOT NULL)"])
+        self.execute(["CREATE TABLE vhosts (domain TEXT NOT NULL PRIMARY KEY, subdomain TEXT NOT NULL, backend TEXT NOT NULL, FOREIGN KEY(domain) REFERENCES domains(domain))"])
+        self.execute(["PRAGMA foreign_keys = ON"])
 
-    def add(self,domain,target):
+    def addDomain(self,domain,nsv4):
         print("adding",domain)
-        response = self.execute(['INSERT INTO vhosts(domain,backend) VALUES(?, ?)',domain,target])
+        response = self.execute(['INSERT INTO domains(domain,nsv4) VALUES(?, ?)',domain,nsv4])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def list(self):
+    def addVHost(self,domain,subdomain,target):
+        print("adding",domain)
+        response = self.execute(['INSERT INTO vhosts(domain,subdomain,backend) VALUES(?, ?, ?)',domain,subdomain,target])
+        print(json.dumps(response, indent=4, sort_keys=True))
+
+    def listDomain(self):
+        response = self.query(["SELECT * FROM domains"])
+        print(json.dumps(response, indent=4, sort_keys=True))
+
+    def listVHost(self):
         response = self.query(["SELECT * FROM vhosts"])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def delete(self,domain):
-        response = self.execute(['DELETE FROM vhosts WHERE domain=?',domain])
+    def deleteDomain(self,domain):
+        response = self.execute(['DELETE FROM domains WHERE domain=?',domain])
+        print(json.dumps(response, indent=4, sort_keys=True))
+
+    def deleteVhost(self,subdomain):
+        response = self.execute(['DELETE FROM vhosts WHERE subdomain=?',domain])
         print(json.dumps(response, indent=4, sort_keys=True))
