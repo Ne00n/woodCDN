@@ -33,6 +33,8 @@ cd /home/cdn/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git
 ```
 
+You need some kind of decentralized vpn like cloudvpn or tinc otherwise rqlite tls configuration will be quite painful.<br />
+
 **rqlite**<br />
 ```
 #First node
