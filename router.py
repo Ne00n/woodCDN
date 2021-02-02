@@ -22,6 +22,7 @@ for result in domainsRaw["results"]:
 if "values" in pops['results'][0]:
     pops = pops['results'][0]['values']
 else:
+    stderr.write("Database down or pops table empty\n")
     print("FAIL")
 
 line = stdin.readline()
