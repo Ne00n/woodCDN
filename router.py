@@ -54,14 +54,17 @@ while True:
                 print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tNS\t3600\t-1\tns2."+domain)
 
             if(qtype == "A" or qtype == "ANY"):
-                try:
-                    response = reader.country(ip)
-                    ip = Data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
-                except:
-                    ip = pops[0][3]
-                    stderr.write("Could not resolve"+ip+"\n")
-                print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+ip)
-                print("DATA\t"+bits+"\t"+auth+"\tns1."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameservers[domain][0])
-                print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameservers[domain][1])
+                if qname.startswith("ns1"):
+                    print("DATA\t"+bits+"\t"+auth+"\tns1."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameservers[domain][0])
+                elif qname.startswith("ns2"):
+                    print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameservers[domain][1])
+                else:
+                    try:
+                        response = reader.country(ip)
+                        ip = Data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
+                    except:
+                        ip = pops[0][3]
+                        stderr.write("Could not resolve"+ip+"\n")
+                        print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+ip)
 
     print("END");
