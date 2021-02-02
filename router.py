@@ -4,7 +4,7 @@ from Class.cli import CLI
 from Class.data import Data
 import geoip2.database
 
-reader = geoip2.database.Reader("/opt/woodCDN/GeoLite2-Country.mmdb")
+reader = geoip2.database.Reader("/opt/woodCDN/GeoLite2-City.mmdb")
 
 cli = CLI()
 data = Data()
@@ -60,7 +60,7 @@ while True:
                     print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameservers[domain][1])
                 else:
                     try:
-                        response = reader.country(ip)
+                        response = reader.city(ip)
                         ip = Data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
                     except:
                         ip = pops[0][3]
