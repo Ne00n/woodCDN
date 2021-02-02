@@ -23,7 +23,7 @@ class CLI:
         return self.curl(url,query)
 
     def init(self):
-        self.execute(["CREATE TABLE pops (name TEXT NOT NULL PRIMARY KEY, latitude TEXT NOT NULL, longitude TEXT NOT NULL)"])
+        self.execute(["CREATE TABLE pops (name TEXT NOT NULL PRIMARY KEY,v4 TEXT NOT NULL, latitude TEXT NOT NULL, longitude TEXT NOT NULL)"])
         self.execute(["CREATE TABLE domains (domain TEXT NOT NULL PRIMARY KEY, nsv4 TEXT NOT NULL)"])
         self.execute(["CREATE TABLE vhosts (domain TEXT NOT NULL PRIMARY KEY, subdomain TEXT NOT NULL, backend TEXT NOT NULL, FOREIGN KEY(domain) REFERENCES domains(domain))"])
         self.execute(["PRAGMA foreign_keys = ON"])
@@ -38,21 +38,13 @@ class CLI:
         response = self.execute(['INSERT INTO vhosts(domain,subdomain,backend) VALUES(?, ?, ?)',domain,subdomain,target])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def addPoP(self,name,latitude,longitude):
+    def addPoP(self,name,v4,latitude,longitude):
         print("adding",name)
-        response = self.execute(['INSERT INTO pops(name,latitude,longitude) VALUES(?, ?, ?)',name,latitude,longitude])
+        response = self.execute(['INSERT INTO pops(name,v4,latitude,longitude) VALUES(?, ?, ?, ?)',name,v4,latitude,longitude])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def listDomain(self):
-        response = self.query(["SELECT * FROM domains"])
-        print(json.dumps(response, indent=4, sort_keys=True))
-
-    def listPoP(self):
-        response = self.query(["SELECT * FROM pops"])
-        print(json.dumps(response, indent=4, sort_keys=True))
-
-    def listVHost(self):
-        response = self.query(["SELECT * FROM vhosts"])
+    def getTable(self,table="domains"):
+        response = self.query(["SELECT * FROM "+table])
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def deleteDomain(self,domain):

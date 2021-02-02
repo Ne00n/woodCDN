@@ -13,13 +13,13 @@ elif sys.argv[1] == "addDomain":
 elif sys.argv[1] == "addVHost":
     cli.addVHost(sys.argv[2],sys.argv[3],sys.argv[4])
 elif sys.argv[1] == "addPoP":
-    cli.addPoP(sys.argv[2],sys.argv[3],sys.argv[4])
+    cli.addPoP(sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
 elif sys.argv[1] == "listDomain":
-    cli.listDomain()
+    cli.getTable("domains")
 elif sys.argv[1] == "listVHost":
-    cli.listVHost()
+    cli.getTable("vhosts")
 elif sys.argv[1] == "listPoP":
-    cli.listPoP()
+    cli.getTable("pops")
 elif sys.argv[1] == "deleteVhost":
     cli.deleteVhost(sys.argv[2])
 elif sys.argv[1] == "deleteDomain":
