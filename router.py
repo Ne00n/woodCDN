@@ -1,57 +1,66 @@
 #!/usr/bin/python3 -u
-from sys import stdin, stderr, stdout
+from math import sin, cos, sqrt, atan2, radians
+from sys import stdin, stderr
 from Class.cli import CLI
+from Class.data import Data
 import geoip2.database
 
-reader = geoip2.database.Reader('/opt/woodCDN/GeoLite2-Country.mmdb')
+reader = geoip2.database.Reader("/opt/woodCDN/GeoLite2-Country.mmdb")
 
 cli = CLI()
+data = Data()
 
-domainsRaw = cli.query(["SELECT * FROM domains"])
+domainsRaw,pops = cli.query(["SELECT * FROM domains"]),cli.query(["SELECT * FROM pops"])
 nameservers,domains = {},[]
 
-for result in domainsRaw['results']:
-    if 'values' in result:
-        for row in result['values']:
+for result in domainsRaw["results"]:
+    if "values" in result:
+        for row in result["values"]:
             nameservers[row[0]] = row[1].split(",")
             domains.append(row[0])
 
+if "values" in pops['results'][0]:
+    pops = pops['results'][0]['values']
+else:
+    print("FAIL")
+
 line = stdin.readline()
 if "HELO\t3" not in line:
-    print("FAIL\n")
+    stderr.write("Received unexpected line, wrong ABI version?\n")
+    print("FAIL")
 
-print("OK\twoodCDN Router\n")
+print("OK\twoodCDN Router")
 stderr.write("wood is loaded\n")
 
 while True:
     line = stdin.readline().rstrip()
 
+    stderr.write(line)
     if (len(line.split("\t")) < 8):
-        print("FAIL\n")
+        stderr.write("PowerDNS sent unparseable line\n")
+        print("FAIL")
         continue
 
     type, qname, qclass, qtype, id, ip, localip, ednsip = line.split("\t")
+    bits,auth = "21","1"
 
     if any(ext in qname for ext in domains):
-        stderr.write(qname+"\n")
-        stderr.write("match\n")
 
         if(qtype == "SOA" or qtype == "ANY"):
-            stderr.write("SOA\n")
-            print("DATA	$qname	$qclass	SOA	3600	-1	ns1.example.com ahu.example.com 2008080300 1800 3600 604800 3600\n")
+            print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tSOA\t3600\t-1\tahu.example.com ns1.example.com 2008080300 1800 3600 604800 3600")
 
         if(qtype == "NS" or qtype == "ANY"):
-            stderr.write("NS\n")
-            print("DATA	$qname	$qclass	NS	3600	-1	ns1.example.com\n")
-            print("DATA	$qname	$qclass	NS	3600	-1	ns2.example.com\n")
+            print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tNS\t3600\t-1\tns1.example.com")
+            print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tNS\t3600\t-1\tns2.example.com")
 
         if(qtype == "A" or qtype == "ANY"):
-            stderr.write("A\n")
-            print("DATA	$qname	$qclass	A	3600	-1	1.2.3.4\n")
-            print("DATA	$qname	$qclass	A	3600	-1	1.2.3.5\n")
-            print("DATA	$qname	$qclass	A	3600	-1	1.2.3.6\n")
-    else:
-        stdout.write("FAIL\n")
-        stderr.write("no match\n")
+            try:
+                response = reader.country(ip)
+                ip = Data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
+            except:
+                ip = pops[0][3]
+                stderr.write("Could not resolve"+ip+"\n")
+            print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t3600\t-1\t"+ip)
+            print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t3600\t-1\t"+ip)
 
-    stdout.write('END\n');
+    print("END");
