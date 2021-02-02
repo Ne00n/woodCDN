@@ -12,7 +12,7 @@
 
 **Software**<br />
 - Nginx as proxy/caching device
-- rqlite to store the vhosts
+- rqlite to store the vhosts/domains/pops
 - python3 for syncing/generating the vhosts
 - python3 to add/edit/delete vhosts and settings
 
