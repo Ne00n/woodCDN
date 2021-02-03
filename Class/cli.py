@@ -8,17 +8,17 @@ class CLI:
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
         query = json.dumps(query)
         r = requests.post(url, data=query, headers=headers)
-        if (r.status_code == 200 or r.status_code == 301):
+        if (r.status_code == 200):
             return r.json()
         else:
             return False
 
-    def query(self,query):
-        url = 'http://'+self.ip+':'+str(self.port)+'/db/query?pretty&timings'
+    def query(self,query,level="none"):
+        url = 'http://'+self.ip+':'+str(self.port)+'/db/query?pretty&timings&level='+level
         return self.curl(url,query)
 
-    def execute(self,query):
-        url = 'http://'+self.ip+':'+str(self.port)+'/db/execute?pretty&timings'
+    def execute(self,query,level="none"):
+        url = 'http://'+self.ip+':'+str(self.port)+'/db/execute?pretty&timings&level='+level
         query = [query]
         return self.curl(url,query)
 
