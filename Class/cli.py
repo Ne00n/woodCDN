@@ -17,8 +17,8 @@ class CLI:
         url = 'http://'+self.ip+':'+str(self.port)+'/db/query?pretty&timings&level='+level
         return self.curl(url,query)
 
-    def execute(self,query,level="none"):
-        url = 'http://'+self.ip+':'+str(self.port)+'/db/execute?pretty&timings&level='+level
+    def execute(self,query):
+        url = 'http://'+self.ip+':'+str(self.port)+'/db/execute?pretty&timings'
         query = [query]
         return self.curl(url,query)
 
