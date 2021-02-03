@@ -8,7 +8,7 @@ User=cdn
 Group=cdn
 Type=simple
 WorkingDirectory=/home/cdn/rqlite
-ExecStart=/home/cdn/rqlite/rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
+ExecStart=/home/cdn/rqlite/rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 -join http://10.0.0.1:4003 datadir
 
 [Install]
 WantedBy=multi-user.target
