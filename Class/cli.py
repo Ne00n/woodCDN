@@ -2,7 +2,7 @@ import requests, json
 
 class CLI:
 
-    ip,port = "rqlite",4001
+    ip,port = "rqlite",4003
 
     def curl(self,url,query):
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
