@@ -61,7 +61,7 @@ while True:
                 else:
                     try:
                         response = reader.city(ip)
-                        ip = Data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
+                        ip = data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
                     except Exception as e:
                         stderr.write("Error "+str(e)+"\n")
                         stderr.write("Could not resolve "+ip+"\n")
