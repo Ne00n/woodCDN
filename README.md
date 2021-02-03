@@ -13,8 +13,14 @@
 **Software**<br />
 - Nginx as proxy/caching device
 - rqlite to store the vhosts/domains/pops
+- pdns as nameserver + geodns
 - python3 for syncing/generating the vhosts
 - python3 to add/edit/delete vhosts and settings
+
+**Todo**<br />
+- Rerouting offline locations
+- HTTPS Support (wildcard per domain)
+- Exclude specific dns entries from geodns
 
 **Setup**<br />
 ```
