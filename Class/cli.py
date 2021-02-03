@@ -23,7 +23,7 @@ class CLI:
         return self.curl(url,query)
 
     def init(self):
-        self.execute(["CREATE TABLE pops (name TEXT NOT NULL PRIMARY KEY, latitude TEXT NOT NULL, longitude TEXT NOT NULL,v4 TEXT NOT NULL)"])
+        self.execute(["CREATE TABLE pops (name TEXT NOT NULL PRIMARY KEY, latitude DECIMAL(10,7) NOT NULL, longitude DECIMAL(10,7) NOT NULL,v4 TEXT NOT NULL)"])
         self.execute(["CREATE TABLE domains (domain TEXT NOT NULL PRIMARY KEY, nsv4 TEXT NOT NULL)"])
         self.execute(["CREATE TABLE vhosts (domain TEXT NOT NULL PRIMARY KEY, subdomain TEXT NOT NULL, backend TEXT NOT NULL, FOREIGN KEY(domain) REFERENCES domains(domain))"])
         self.execute(["PRAGMA foreign_keys = ON"])
