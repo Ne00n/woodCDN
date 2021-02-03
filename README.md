@@ -24,7 +24,7 @@ apt-get install sudo nginx git python3 -y
 apt-get install git python3 pdns-server pdns-backend-pipe -y
 pip3 install geoip2
 #Both
-adduser cdn --disabled--login
+adduser cdn --disabled-login
 #Nginx
 chgrp -R cdn /etc/nginx/sites-enabled/
 chmod 775 -R /etc/nginx/sites-enabled/
