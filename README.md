@@ -43,11 +43,17 @@ You can get the free country lite database here https://dev.maxmind.com/geoip/ge
 **rqlite**<br />
 ```
 #First node
-./rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
+rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
 #Moah nodes
-./rqlited -http-addr 10.0.0.2:4003 -raft-addr 10.0.0.2:4004 -join http://10.0.0.1:4003 datadir
+rqlited -http-addr 10.0.0.2:4003 -raft-addr 10.0.0.2:4004 -join http://10.0.0.1:4003 datadir
 ```
-Afterwards you should be able to run on that on any node but just once
+You can check the cluster status by running
+```
+rqlite --host rqlite --port 4003
+.status
+```
+To run rqlite as service and on boot config/rqlite.service<br />
+Afterwards you should be able to run on that on any node but just once<br />
 ```
 python3 cli.py init
 ```
