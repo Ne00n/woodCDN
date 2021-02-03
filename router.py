@@ -63,7 +63,7 @@ while True:
                         response = reader.city(ip)
                         ip = Data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
                     except Exception as e:
-                        stderr.write("Error "+e+"\n")
+                        stderr.write("Error "+str(e)+"\n")
                         stderr.write("Could not resolve "+ip+"\n")
                         ip = pops[0][3]
                         print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+ip)
