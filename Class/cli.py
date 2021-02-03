@@ -8,7 +8,7 @@ class CLI:
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
         query = json.dumps(query)
         r = requests.post(url, data=query, headers=headers)
-        if (r.status_code == 200 || r.status_code == 301):
+        if (r.status_code == 200 or r.status_code == 301):
             return r.json()
         else:
             return False
