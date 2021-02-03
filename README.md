@@ -19,9 +19,9 @@
 **Setup**<br />
 ```
 #Nginx
-apt-get install sudo nginx git python3 -y
+apt-get install sudo nginx git python3 python3-pip -y
 #DNS
-apt-get install git python3 pdns-server pdns-backend-pipe -y
+apt-get install git python3 python3-pip pdns-server pdns-backend-pipe -y
 pip3 install geoip2
 #Both
 adduser cdn --disabled-login
