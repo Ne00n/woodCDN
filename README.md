@@ -38,7 +38,7 @@ exit; chmod 775 -R /opt/woodCDN
 ```
 
 You need some kind of decentralized vpn like cloudvpn or tinc otherwise rqlite tls configuration will be quite painful.<br />
-You can get the free country lite database here https://dev.maxmind.com/geoip/geoip2/geolite2/<br />
+You can get the free city lite database here https://dev.maxmind.com/geoip/geoip2/geolite2/<br />
 
 **rqlite**<br />
 ```
