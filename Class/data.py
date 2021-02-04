@@ -5,6 +5,7 @@ class Data:
     def getClosestPoP(self,latitude,longitude,pops):
         lowest,ip = 0,""
         for pop in pops:
+            # Source https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude
             # approximate radius of earth in km
             R = 6373.0
 
