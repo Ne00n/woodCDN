@@ -7,10 +7,14 @@ class CLI:
     def curl(self,url,query):
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
         query = json.dumps(query)
-        r = requests.post(url, data=query, headers=headers)
-        if (r.status_code == 200):
-            return r.json()
-        else:
+        try:
+            r = requests.post(url, data=query, headers=headers)
+            if (r.status_code == 200):
+                return r.json()
+            else:
+                return False
+        except Exception as e:
+            print(e)
             return False
 
     def query(self,query,level="none"):
