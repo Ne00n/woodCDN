@@ -1,28 +1,25 @@
 #!/usr/bin/python3 -u
-from sys import stdin, stderr
+from sys import stdin, stderr, exit
 from Class.cli import CLI
 from Class.data import Data
-import geoip2.database
+import geoip2.database, time
 
 reader = geoip2.database.Reader("/opt/woodCDN/GeoLite2-City.mmdb")
 
 cli = CLI()
 data = Data()
 
+nameservers = {}
 domainsRaw,pops = cli.query(["SELECT * FROM domains"]),cli.query(["SELECT * FROM pops"])
-nameservers,domains = {},[]
 
-for result in domainsRaw["results"]:
-    if "values" in result:
-        for row in result["values"]:
-            nameservers[row[0]] = row[1].split(",")
-            domains.append(row[0])
+if domainsRaw == False or pops == False or "values" not in pops['results'][0] or "values" not in domainsRaw['results'][0]:
+    print("domains/pops table missing or empty")
+    time.sleep(1.5) #slow down pdns restarts
+    exit(0)
 
-if "values" in pops['results'][0]:
-    pops = pops['results'][0]['values']
-else:
-    stderr.write("pops table empty or missing\n")
-    print("FAIL")
+pops = pops['results'][0]['values']
+for row in domainsRaw['results'][0]['values']:
+    nameservers[row[0]] = row[1].split(",")
 
 line = stdin.readline()
 if "HELO\t3" not in line:
@@ -43,7 +40,7 @@ while True:
     type, qname, qclass, qtype, id, ip, localip, ednsip = line.split("\t")
     bits,auth = "21","1"
 
-    for domain in domains:
+    for domain in nameservers:
         if domain in qname:
 
             if(qtype == "SOA" or qtype == "ANY"):
