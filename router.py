@@ -58,7 +58,7 @@ while True:
     bits,auth = "21","1"
 
     for domain, nameserverList in nameservers.items(): #prevent fuckery if thread is updating
-        if domain in qname:
+        if qname.endswith(domain):
 
             if(qtype == "SOA" or qtype == "ANY"):
                 print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tSOA\t3600\t-1\tns1."+domain+" noc."+domain+" 2008080300 1800 3600 604800 3600")
