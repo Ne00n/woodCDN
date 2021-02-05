@@ -1,25 +1,42 @@
 #!/usr/bin/python3 -u
+from multiprocessing.pool import ThreadPool
 from sys import stdin, stderr, exit
 from Class.cli import CLI
 from Class.data import Data
 import geoip2.database, time
 
 reader = geoip2.database.Reader("/opt/woodCDN/GeoLite2-City.mmdb")
+pool = ThreadPool(processes=1)
 
 cli = CLI()
 data = Data()
 
-nameservers = {}
-domainsRaw,pops = cli.query(["SELECT * FROM domains"]),cli.query(["SELECT * FROM pops"])
+nameservers,lastupdate,pops = {},time.time(),{}
 
-if domainsRaw == False or pops == False or "values" not in pops['results'][0] or "values" not in domainsRaw['results'][0]:
-    print("domains/pops table missing or empty")
+def updateData():
+    domainsRaw,pops = cli.query(["SELECT * FROM domains"]),cli.query(["SELECT * FROM pops"])
+
+    if domainsRaw == False or pops == False or "values" not in pops['results'][0] or "values" not in domainsRaw['results'][0]:
+        print("domains/pops table missing or empty")
+        return False
+
+    pops = pops['results'][0]['values']
+    for row in domainsRaw['results'][0]['values']:
+        nameservers[row[0]] = row[1].split(",")
+    return {'ns':nameservers,'pops':pops}
+
+def syncData(data):
+    global nameservers, pops
+    if data is not False:
+        nameservers,pops = data['ns'],data['pops']
+        stderr.write("Updated NS information\n")
+
+response = updateData()
+if response is False:
     time.sleep(1.5) #slow down pdns restarts
-    exit(0)
+    exit()
 
-pops = pops['results'][0]['values']
-for row in domainsRaw['results'][0]['values']:
-    nameservers[row[0]] = row[1].split(",")
+nameservers,pops = response['ns'],response['pops']
 
 line = stdin.readline()
 if "HELO\t3" not in line:
@@ -40,7 +57,7 @@ while True:
     type, qname, qclass, qtype, id, ip, localip, ednsip = line.split("\t")
     bits,auth = "21","1"
 
-    for domain in nameservers:
+    for domain, nameserverList in nameservers.items(): #prevent fuckery if thread is updating
         if domain in qname:
 
             if(qtype == "SOA" or qtype == "ANY"):
@@ -52,9 +69,9 @@ while True:
 
             if(qtype == "A" or qtype == "ANY"):
                 if qname.startswith("ns1"):
-                    print("DATA\t"+bits+"\t"+auth+"\tns1."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameservers[domain][0])
+                    print("DATA\t"+bits+"\t"+auth+"\tns1."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[0])
                 elif qname.startswith("ns2"):
-                    print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameservers[domain][1])
+                    print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[1])
                 else:
                     try:
                         response = reader.city(ip)
@@ -66,3 +83,6 @@ while True:
                     print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+ip)
 
     print("END");
+    if time.time() > lastupdate + 60:
+        pool.apply_async(updateData, callback=syncData)
+        lastupdate = time.time()
