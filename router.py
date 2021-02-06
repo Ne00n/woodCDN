@@ -1,12 +1,10 @@
 #!/usr/bin/python3 -u
-from multiprocessing.pool import ThreadPool
 from sys import stdin, stderr, exit
 from Class.cli import CLI
 from Class.data import Data
 import geoip2.database, time
 
 reader = geoip2.database.Reader("/opt/woodCDN/GeoLite2-City.mmdb")
-pool = ThreadPool(processes=1)
 
 cli = CLI()
 data = Data()
@@ -31,12 +29,6 @@ def updateData():
             if not row[3]+"."+row[1] in vhosts: vhosts[row[3]+"."+row[1]] = []
             vhosts[row[3]+"."+row[1]].append(row[2:])
     return {'ns':nameservers,'vhosts':vhosts,'pops':data['results'][2]['values']}
-
-def syncData(data):
-    global nameservers, vhosts, pops
-    if data is not False:
-        nameservers,vhosts,pops = data['ns'],data['vhosts'],data['pops']
-        stderr.write("Updated NS information\n")
 
 response = updateData()
 if response is False:
@@ -63,6 +55,13 @@ while True:
 
     type, qname, qclass, qtype, id, ip, localip, ednsip = line.split("\t")
     bits,auth = "21","1"
+
+    if time.time() > lastupdate + 60:
+        freshData = updateData()
+        if freshData is not False:
+            nameservers,vhosts,pops = freshData['ns'],freshData['vhosts'],freshData['pops']
+            stderr.write("Updated NS information\n")
+        lastupdate = time.time()
 
     for domain, nameserverList in nameservers.items(): #prevent fuckery if thread is updating
         if qname.endswith(domain):
@@ -92,7 +91,4 @@ while True:
                         ip = pops[0][3]
                     print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+ip)
 
-    print("END");
-    if time.time() > lastupdate + 60:
-        pool.apply_async(updateData, callback=syncData)
-        lastupdate = time.time()
+    print("END")

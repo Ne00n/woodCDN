@@ -20,7 +20,6 @@
 **Todo**<br />
 - Rerouting offline locations
 - HTTPS Support (wildcard per domain)
-- Exclude specific dns entries from geodns
 
 **Setup**<br />
 ```
