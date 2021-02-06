@@ -12,7 +12,7 @@ data = Data()
 nameservers,lastupdate,vhosts,pops = {},time.time(),{},{}
 
 def updateData():
-    data = cli.query(["SELECT * FROM domains","SELECT * FROM vhosts","SELECT * FROM pops"])
+    data = cli.query(["SELECT * FROM domains","SELECT * FROM vhosts WHERE backend is null","SELECT * FROM pops"])
 
     if (data is False or "values" not in data['results'][0] or "values" not in data['results'][1] or "values" not in data['results'][2]):
         stderr.write("domains/vhosts/pops table missing or empty\n")
@@ -21,7 +21,6 @@ def updateData():
     for row in data['results'][0]['values']:
         nameservers[row[0]] = row[1].split(",")
     for row in data['results'][1]['values']:
-        if row[4] == None: continue
         if row[3] == "@":
             if not row[1] in vhosts: vhosts[row[1]] = []
             vhosts[row[1]].append(row[2:])
