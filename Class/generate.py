@@ -13,7 +13,7 @@ class Generate:
     def nginx(self):
         print("Updating nginx")
 
-        response = self.cli.query(["SELECT * FROM vhosts"])
+        response = self.cli.query(["SELECT * FROM vhosts WHERE value is null"])
         if 'values' not in response['results'][0]: return False
 
         files,reload,current = os.listdir(self.nginxPath),False,[]
@@ -33,7 +33,7 @@ class Generate:
             if file not in current and "cdn-" in file:
                 os.remove(self.nginxPath+file)
                 reload = True
-                
+
         if reload:
             #Gracefull reloading, won't impact incomming or ongoing connections
             subprocess.run(["/usr/sbin/service", "nginx","reload"])
