@@ -29,36 +29,39 @@ class CLI:
     def init(self):
         self.execute(["CREATE TABLE pops (name TEXT NOT NULL PRIMARY KEY, latitude DECIMAL(10,7) NOT NULL, longitude DECIMAL(10,7) NOT NULL,v4 TEXT NOT NULL)"])
         self.execute(["CREATE TABLE domains (domain TEXT NOT NULL PRIMARY KEY, nsv4 TEXT NOT NULL)"])
-        self.execute(["CREATE TABLE vhosts (domain TEXT NOT NULL PRIMARY KEY, subdomain TEXT NOT NULL, backend TEXT NOT NULL, FOREIGN KEY(domain) REFERENCES domains(domain))"])
+        self.execute(["CREATE TABLE vhosts (id INTEGER NOT NULL PRIMARY KEY, domain TEXT NOT NULL, type TEXT not NULL, subdomain TEXT NOT NULL, value TEXT NULL, backend TEXT NULL, FOREIGN KEY(domain) REFERENCES domains(domain))"])
         self.execute(["PRAGMA foreign_keys = ON"])
 
-    def addDomain(self,domain,nsv4):
-        print("adding",domain)
-        response = self.execute(['INSERT INTO domains(domain,nsv4) VALUES(?, ?)',domain,nsv4])
+    def addDomain(self,data):
+        print("adding",data[0])
+        response = self.execute(['INSERT INTO domains(domain,nsv4) VALUES(?, ?)',data[0],data[1]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def addVHost(self,domain,subdomain,target):
-        print("adding",domain)
-        response = self.execute(['INSERT INTO vhosts(domain,subdomain,backend) VALUES(?, ?, ?)',domain,subdomain,target])
+    def addVHost(self,data):
+        print("adding",data[0])
+        if len(data) == 4:
+            response = self.execute(['INSERT INTO vhosts(domain,subdomain,type,value) VALUES(?, ?, ?, ?)',data[0],data[1],data[2],data[3]])
+        elif len(data) == 5:
+            response = self.execute(['INSERT INTO vhosts(domain,subdomain,type,backend) VALUES(?, ?, ?, ?)',data[0],data[1],data[2],data[4]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def addPoP(self,name,v4,latitude,longitude):
-        print("adding",name)
-        response = self.execute(['INSERT INTO pops(name,v4,latitude,longitude) VALUES(?, ?, ?, ?)',name,v4,latitude,longitude])
+    def addPoP(self,data):
+        print("adding",data[0])
+        response = self.execute(['INSERT INTO pops(name,v4,latitude,longitude) VALUES(?, ?, ?, ?)',data[0],data[1],data[2],data[3]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def getTable(self,table="domains"):
         response = self.query(["SELECT * FROM "+table])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def deleteDomain(self,domain):
-        response = self.execute(['DELETE FROM domains WHERE domain=?',domain])
+    def deleteDomain(self,data):
+        response = self.execute(['DELETE FROM domains WHERE domain=?',data[0]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def deleteVhost(self,subdomain):
-        response = self.execute(['DELETE FROM vhosts WHERE subdomain=?',domain])
+    def deleteVhost(self,data):
+        response = self.execute(['DELETE FROM vhosts WHERE subdomain=? and type=?',data[0],data[1]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def deletePoP(self,name):
-        response = self.execute(['DELETE FROM pops WHERE name=?',name])
+    def deletePoP(self,data):
+        response = self.execute(['DELETE FROM pops WHERE name=?',data[0]])
         print(json.dumps(response, indent=4, sort_keys=True))
