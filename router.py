@@ -13,11 +13,14 @@ data = Data()
 
 nameservers,lastupdate,pops = {},time.time(),{}
 
-def updateData():
+def updateData(startUp=False):
     domainsRaw,pops = cli.query(["SELECT * FROM domains"]),cli.query(["SELECT * FROM pops"])
 
     if domainsRaw == False or pops == False or "values" not in pops['results'][0] or "values" not in domainsRaw['results'][0]:
-        print("domains/pops table missing or empty")
+        if startUp:
+            print("domains/pops table missing or empty\n")
+        else:
+            stderr.write("domains/pops table missing or empty\n")
         return False
 
     pops = pops['results'][0]['values']
@@ -31,7 +34,7 @@ def syncData(data):
         nameservers,pops = data['ns'],data['pops']
         stderr.write("Updated NS information\n")
 
-response = updateData()
+response = updateData(True)
 if response is False:
     time.sleep(1.5) #slow down pdns restarts
     exit()
