@@ -11,35 +11,39 @@ pool = ThreadPool(processes=1)
 cli = CLI()
 data = Data()
 
-nameservers,lastupdate,pops = {},time.time(),{}
+nameservers,lastupdate,vhosts,pops = {},time.time(),{},{}
 
-def updateData(startUp=False):
-    domainsRaw,pops = cli.query(["SELECT * FROM domains"]),cli.query(["SELECT * FROM pops"])
+def updateData():
+    data = cli.query(["SELECT * FROM domains","SELECT * FROM vhosts","SELECT * FROM pops"])
 
-    if domainsRaw == False or pops == False or "values" not in pops['results'][0] or "values" not in domainsRaw['results'][0]:
-        if startUp:
-            print("domains/pops table missing or empty\n")
-        else:
-            stderr.write("domains/pops table missing or empty\n")
+    if (data is False or "values" not in data['results'][0] or "values" not in data['results'][1] or "values" not in data['results'][2]):
+        stderr.write("domains/vhosts/pops table missing or empty\n")
         return False
 
-    pops = pops['results'][0]['values']
-    for row in domainsRaw['results'][0]['values']:
+    for row in data['results'][0]['values']:
         nameservers[row[0]] = row[1].split(",")
-    return {'ns':nameservers,'pops':pops}
+    for row in data['results'][1]['values']:
+        if row[4] == None: continue
+        if row[3] == "@":
+            if not row[1] in vhosts: vhosts[row[1]] = []
+            vhosts[row[1]].append(row[2:])
+        else:
+            if not row[3]+"."+row[1] in vhosts: vhosts[row[3]+"."+row[1]] = []
+            vhosts[row[3]+"."+row[1]].append(row[2:])
+    return {'ns':nameservers,'vhosts':vhosts,'pops':data['results'][2]['values']}
 
 def syncData(data):
-    global nameservers, pops
+    global nameservers, vhosts, pops
     if data is not False:
-        nameservers,pops = data['ns'],data['pops']
+        nameservers,vhosts,pops = data['ns'],data['vhosts'],data['pops']
         stderr.write("Updated NS information\n")
 
-response = updateData(True)
+response = updateData()
 if response is False:
     time.sleep(1.5) #slow down pdns restarts
     exit()
 
-nameservers,pops = response['ns'],response['pops']
+nameservers,vhosts,pops = response['ns'],response['vhosts'],response['pops']
 
 line = stdin.readline()
 if "HELO\t3" not in line:
@@ -71,7 +75,10 @@ while True:
                 print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tNS\t3600\t-1\tns2."+domain)
 
             if(qtype == "A" or qtype == "ANY"):
-                if qname.startswith("ns1"):
+                if qname in vhosts:
+                    for entry in vhosts[qname]:
+                        print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\t"+entry[0]+"\t3600\t-1\t"+entry[2])
+                elif qname.startswith("ns1"):
                     print("DATA\t"+bits+"\t"+auth+"\tns1."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[0])
                 elif qname.startswith("ns2"):
                     print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[1])
