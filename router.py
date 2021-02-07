@@ -44,6 +44,8 @@ if "HELO\t3" not in line:
 print("OK\twoodCDN Router")
 stderr.write("wood is loaded\n")
 
+geoCache = {}
+
 while True:
     line = stdin.readline().rstrip()
 
@@ -84,13 +86,18 @@ while True:
                 elif qname.startswith("ns2"):
                     print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[1])
                 elif skipGeo is False:
-                    try:
-                        response = reader.city(ip)
-                        ip = data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
-                    except Exception as e:
-                        stderr.write("Error "+str(e)+"\n")
-                        stderr.write("Could not resolve "+ip+"\n")
-                        ip = pops[0][3]
-                    print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+ip)
+                    if not ip in geoCache:
+                        try:
+                            response = reader.city(ip)
+                            popIP = data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
+                            geoCache[ip] = geoCache
+                        except Exception as e:
+                            stderr.write("Error "+str(e)+"\n")
+                            stderr.write("Could not resolve "+ip+"\n")
+                            popIP = pops[0][3]
+                            geoCache[ip] = popIP
+                    else:
+                        popIP = geoCache[ip]
+                    print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+popIP)
 
     print("END")
