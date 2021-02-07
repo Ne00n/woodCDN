@@ -17,6 +17,10 @@
 - python3 for syncing/generating the vhosts
 - python3 to add/edit/delete vhosts and settings
 
+**Features**<br />
+- High Availability
+- Not proxied DNS entries
+
 **Todo**<br />
 - Rerouting offline locations
 - HTTPS Support (wildcard per domain)
