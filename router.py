@@ -73,14 +73,17 @@ while True:
                 print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tNS\t3600\t-1\tns2."+domain)
 
             if(qtype == "A" or qtype == "ANY"):
+                skipGeo = False
                 if qname in vhosts:
                     for entry in vhosts[qname]:
+                        if entry[0] == "A": skipGeo = True
                         print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\t"+entry[0]+"\t3600\t-1\t"+entry[2])
-                elif qname.startswith("ns1"):
+
+                if qname.startswith("ns1"):
                     print("DATA\t"+bits+"\t"+auth+"\tns1."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[0])
                 elif qname.startswith("ns2"):
                     print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[1])
-                else:
+                elif skipGeo is False:
                     try:
                         response = reader.city(ip)
                         ip = data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
