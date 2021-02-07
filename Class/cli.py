@@ -17,8 +17,8 @@ class CLI:
             print(e)
             return False
 
-    def query(self,query,level="none"):
-        url = 'http://'+self.ip+':'+str(self.port)+'/db/query?pretty&timings&level='+level
+    def query(self,query,level="none",timings="&timings"):
+        url = 'http://'+self.ip+':'+str(self.port)+'/db/query?pretty'+timings+'&level='+level
         return self.curl(url,query)
 
     def execute(self,query):
