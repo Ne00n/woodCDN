@@ -62,7 +62,7 @@ while True:
             stderr.write("Updated NS information\n")
         lastupdate = time.time()
 
-    for domain, nameserverList in nameservers.items(): #prevent fuckery if thread is updating
+    for domain, nameserverList in nameservers.items():
         if qname.endswith(domain):
 
             if(qtype == "SOA" or qtype == "ANY"):
