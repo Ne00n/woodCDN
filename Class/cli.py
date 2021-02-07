@@ -29,7 +29,7 @@ class CLI:
     def init(self):
         self.execute(["CREATE TABLE pops (name TEXT NOT NULL PRIMARY KEY, latitude DECIMAL(10,7) NOT NULL, longitude DECIMAL(10,7) NOT NULL,v4 TEXT NOT NULL)"])
         self.execute(["CREATE TABLE domains (domain TEXT NOT NULL PRIMARY KEY, nsv4 TEXT NOT NULL)"])
-        self.execute(["CREATE TABLE vhosts (id INTEGER NOT NULL PRIMARY KEY, domain TEXT NOT NULL, type TEXT not NULL, subdomain TEXT NOT NULL, value TEXT NULL, backend TEXT NULL, FOREIGN KEY(domain) REFERENCES domains(domain))"])
+        self.execute(["CREATE TABLE vhosts (id INTEGER NOT NULL PRIMARY KEY, domain TEXT NOT NULL, subdomain TEXT NOT NULL, type TEXT not NULL, value TEXT NULL, FOREIGN KEY(domain) REFERENCES domains(domain))"])
         self.execute(["PRAGMA foreign_keys = ON"])
 
     def addDomain(self,data):
@@ -39,10 +39,7 @@ class CLI:
 
     def addVHost(self,data):
         print("adding",data[0])
-        if len(data) == 4:
-            response = self.execute(['INSERT INTO vhosts(domain,subdomain,type,value) VALUES(?, ?, ?, ?)',data[0],data[1],data[2],data[3]])
-        elif len(data) == 5:
-            response = self.execute(['INSERT INTO vhosts(domain,subdomain,type,backend) VALUES(?, ?, ?, ?)',data[0],data[1],data[2],data[4]])
+        response = self.execute(['INSERT INTO vhosts(domain,subdomain,type,value) VALUES(?, ?, ?, ?)',data[0],data[1],data[2],data[3]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def addPoP(self,data):

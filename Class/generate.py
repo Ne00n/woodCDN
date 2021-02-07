@@ -13,7 +13,7 @@ class Generate:
     def nginx(self):
         print("Updating nginx")
 
-        response = self.cli.query(["SELECT * FROM vhosts WHERE value is null"])
+        response = self.cli.query(['SELECT * FROM vhosts WHERE type = "proxy"'])
         if 'values' not in response['results'][0]: return False
 
         files,reload,current = os.listdir(self.nginxPath),False,[]
