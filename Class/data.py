@@ -1,10 +1,12 @@
 from math import sin, cos, sqrt, atan2, radians
+import time
 
 class Data:
 
     def getClosestPoP(self,latitude,longitude,pops):
         lowest,ip = 0,""
         for pop in pops:
+            if int(time.time()) - 60 > pop[4]: continue # ignore fallen nodes
             # Source https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude
             # approximate radius of earth in km
             R = 6373.0
