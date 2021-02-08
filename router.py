@@ -12,6 +12,7 @@ data = Data()
 nameservers,lastupdate,vhosts,pops = {},time.time(),{},{}
 
 def updateData():
+    fallback = False
     data = cli.query(["SELECT * FROM domains",'SELECT * FROM vhosts WHERE type != "proxy"',"SELECT * FROM pops"])
 
     if (data is False or "values" not in data['results'][0] or "values" not in data['results'][1] or "values" not in data['results'][2]):
@@ -19,7 +20,9 @@ def updateData():
         return False
 
     pops = [x for x in data['results'][2]['values'] if x[4] + 60 > int(time.time())]
-    if len(pops) == 0: pops = data['results'][2]['values'] #fallback
+    if len(pops) == 0:
+        pops = data['results'][2]['values'] #fallback
+        fallback = True
     for row in data['results'][0]['values']:
         nameservers[row[0]] = row[1].split(",")
     for row in data['results'][1]['values']:
@@ -29,14 +32,14 @@ def updateData():
         else:
             if not row[3]+"."+row[1] in vhosts: vhosts[row[3]+"."+row[1]] = []
             vhosts[row[3]+"."+row[1]].append(row[2:])
-    return {'ns':nameservers,'vhosts':vhosts,'pops':pops}
+    return {'ns':nameservers,'vhosts':vhosts,'pops':pops,'fallback':fallback}
 
 response = updateData()
 if response is False:
     time.sleep(1.5) #slow down pdns restarts
     exit()
 
-nameservers,vhosts,pops = response['ns'],response['vhosts'],response['pops']
+nameservers,vhosts,pops,fallback = response['ns'],response['vhosts'],response['pops'],response['fallback']
 
 line = stdin.readline()
 if "HELO\t3" not in line:
@@ -62,7 +65,7 @@ while True:
     if time.time() > lastupdate + 60:
         freshData = updateData()
         if freshData is not False:
-            nameservers,vhosts,pops = freshData['ns'],freshData['vhosts'],freshData['pops']
+            nameservers,vhosts,pops,fallback = freshData['ns'],freshData['vhosts'],freshData['pops'],freshData['fallback']
             stderr.write("Updated NS information\n")
         lastupdate = time.time()
 
@@ -91,7 +94,7 @@ while True:
                     if not ip in geoCache:
                         try:
                             response = reader.city(ip)
-                            popIP = data.getClosestPoP(response.location.latitude,response.location.longitude,pops)
+                            popIP = data.getClosestPoP(response.location.latitude,response.location.longitude,pops,fallback)
                             geoCache[ip] = geoCache
                         except Exception as e:
                             stderr.write("Error "+str(e)+"\n")
