@@ -21,7 +21,7 @@ class Generate:
         for entry in response['results'][0]['values']:
             current.append("cdn-"+entry[1])
             if "cdn-"+entry[1] not in files:
-                http = self.templator.nginxHTTP(entry[1],entry[1])
+                http = self.templator.nginxHTTP(entry[1],entry[4])
                 with open(self.nginxPath+"cdn-"+entry[1], 'a') as out:
                     out.write(http)
                 reload = True
