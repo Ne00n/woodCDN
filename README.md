@@ -68,4 +68,4 @@ python3 cli.py init
 ```
 
 **cron**<br />
-You need to add python3 generate.py nginx to cronjob at least every 60s, to sync the database with the local nginx<br />
+You need to add python3 generate.py nginx to cronjob at least every 60s, to sync nginx with the database<br />
