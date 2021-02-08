@@ -19,10 +19,10 @@
 
 **Features**<br />
 - High Availability
+- Rerouting offline locations
 - Not proxied DNS entries
 
 **Todo**<br />
-- Rerouting offline locations
 - HTTPS Support (wildcard per domain)
 
 **Setup**<br />
