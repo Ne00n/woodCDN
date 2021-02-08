@@ -19,6 +19,7 @@ def updateData():
         return False
 
     pops = [x for x in data['results'][2]['values'] if x[4] + 60 > int(time.time())]
+    if len(pops) == 0: pops = data['results'][2]['values'] #fallback
     for row in data['results'][0]['values']:
         nameservers[row[0]] = row[1].split(",")
     for row in data['results'][1]['values']:
