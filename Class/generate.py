@@ -13,20 +13,28 @@ class Generate:
     def nginx(self):
         print("Updating nginx")
 
-        response = self.cli.query(['SELECT * FROM vhosts WHERE type = "proxy"'])
-        if 'values' not in response['results'][0]: return False
+        data = self.cli.query(['SELECT * FROM vhosts WHERE type = "proxy"'])
+        if 'values' not in data['results'][0]: return False
 
         files,reload,current = os.listdir(self.nginxPath),False,[]
 
-        for entry in response['results'][0]['values']:
-            current.append("cdn-"+entry[1])
-            if "cdn-"+entry[1] not in files:
-                http = self.templator.nginxHTTP(entry[1],entry[4])
-                with open(self.nginxPath+"cdn-"+entry[1], 'a') as out:
+        #Prepare
+        vhosts = []
+        for row in data['results'][0]['values']:
+            if row[3] == "@":
+                vhosts.append([row[1],row[4]])
+            else:
+                vhosts.append([row[3]+"."+row[1],row[4]])
+
+        for entry in vhosts:
+            current.append("cdn-"+entry[0])
+            if "cdn-"+entry[0] not in files:
+                http = self.templator.nginxHTTP(entry[0],entry[1])
+                with open(self.nginxPath+"cdn-"+entry[0], 'a') as out:
                     out.write(http)
                 reload = True
             else:
-                print("cdn-"+entry[1],"skipping")
+                print("cdn-"+entry[0],"skipping")
 
         for file in files:
             #vhosts removed from database
