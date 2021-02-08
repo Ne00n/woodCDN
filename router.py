@@ -18,6 +18,7 @@ def updateData():
         stderr.write("domains/vhosts/pops table missing or empty\n")
         return False
 
+    pops = [x for x in data['results'][2]['values'] if x[4] + 60 > int(time.time())]
     for row in data['results'][0]['values']:
         nameservers[row[0]] = row[1].split(",")
     for row in data['results'][1]['values']:
@@ -27,7 +28,7 @@ def updateData():
         else:
             if not row[3]+"."+row[1] in vhosts: vhosts[row[3]+"."+row[1]] = []
             vhosts[row[3]+"."+row[1]].append(row[2:])
-    return {'ns':nameservers,'vhosts':vhosts,'pops':data['results'][2]['values']}
+    return {'ns':nameservers,'vhosts':vhosts,'pops':pops}
 
 response = updateData()
 if response is False:
