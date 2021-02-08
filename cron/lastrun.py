@@ -5,7 +5,11 @@ from Class.cli import CLI
 
 cli = CLI()
 hostname = socket.gethostname()
+if "." in hostname:
+    sub = hostname.split(".", 1)[0]
+else:
+    sub = hostname
 
-status = cli.execute(["UPDATE pops SET lastrun = ? WHERE name = ?",int(time.time()),hostname])
+status = cli.execute(["UPDATE pops SET lastrun = ? WHERE name = ?",int(time.time()),sub])
 time.sleep(30)
-status = cli.execute(["UPDATE pops SET lastrun = ? WHERE name = ?",int(time.time()),hostname])
+status = cli.execute(["UPDATE pops SET lastrun = ? WHERE name = ?",int(time.time()),sub])
