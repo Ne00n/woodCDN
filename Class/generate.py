@@ -19,14 +19,14 @@ class Generate:
         files,reload,current = os.listdir(self.nginxPath),False,[]
 
         for entry in response['results'][0]['values']:
-            current.append("cdn-"+entry[0])
-            if "cdn-"+entry[0] not in files:
-                http = self.templator.nginxHTTP(entry[0],entry[1])
-                with open(self.nginxPath+"cdn-"+entry[0], 'a') as out:
+            current.append("cdn-"+entry[1])
+            if "cdn-"+entry[1] not in files:
+                http = self.templator.nginxHTTP(entry[1],entry[1])
+                with open(self.nginxPath+"cdn-"+entry[1], 'a') as out:
                     out.write(http)
                 reload = True
             else:
-                print("cdn-"+entry[0],"skipping")
+                print("cdn-"+entry[1],"skipping")
 
         for file in files:
             #vhosts removed from database

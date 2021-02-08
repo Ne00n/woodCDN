@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-from Class.generate import Generate
 import sys
+sys.path.append("..") # Adds higher directory to python modules path.
+from Class.generate import Generate
 
 generate = Generate()
 
