@@ -67,5 +67,23 @@ Afterwards you should be able to run on that on any node but just once<br />
 python3 cli.py init
 ```
 
+**cli**<br />
+Add your first PoP<br/>
+```
+python3 cli.py pop add <hostname of node> <v4> <latitude> <longitude>
+```
+
+Add your first Domain
+```
+python3 cli.py domain add <name> <ns1>,<ns2>
+```
+
+Add your first vhost (proxy/dns) entry
+```
+python3 cli.py vhost add <domain> <subdomain> <type> <value>
+#type can be proxy or A, TXT...
+```
+Afterwards you can bring the dns servers online, without any entries they won't start.<br />
+
 **cron**<br />
 You need to add python3 generate.py nginx to cronjob at least every 60s, to sync nginx with the database<br />
