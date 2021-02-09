@@ -26,7 +26,7 @@
 - HTTPS Support (wildcard per domain)
 
 **Setup**<br />
-1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes</br >
+1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
 2. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
 ```
 #First node
