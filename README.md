@@ -84,5 +84,5 @@ python3 cli.py vhost add <domain> <subdomain> <type> <value>
 ```
 
 **cron**<br />
-Check /scripts, lastrun and generate need to be added as cronjob to run every 60s<br /
+Check /scripts, lastrun and generate need to be added as cronjob to run every 60s<br />
 Afterwards you can bring the dns servers online, without any entries or configured cronjobs they won't start.<br />
