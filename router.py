@@ -62,7 +62,7 @@ while True:
     type, qname, qclass, qtype, id, ip, localip, ednsip = line.split("\t")
     bits,auth,qname = "21","1",qname.lower()
 
-    if time.time() > lastupdate + 60:
+    if time.time() > lastupdate + 30:
         freshData = updateData()
         if freshData is not False:
             nameservers,vhosts,pops,fallback = freshData['ns'],freshData['vhosts'],freshData['pops'],freshData['fallback']
