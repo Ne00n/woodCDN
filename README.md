@@ -62,6 +62,7 @@ exit; chmod 775 -R /opt/woodCDN
 ```
 
 You can get the free city lite database here https://dev.maxmind.com/geoip/geoip2/geolite2/<br />
+Put the Database on each dns node in /opt/woodCDN<br />
 Afterwards you should be able to run on that on any node but just once<br />
 ```
 python3 cli.py init
