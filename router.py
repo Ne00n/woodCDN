@@ -31,7 +31,7 @@ def updateData():
             vhosts[row[1]].append(row[3:])
         else:
             if not row[3]+"."+row[1] in vhosts: vhosts[row[3]+"."+row[1]] = []
-            vhosts[row[3]+"."+row[1]].append(row[3:])
+            vhosts[row[2]+"."+row[1]].append(row[3:])
     return {'ns':nameservers,'vhosts':vhosts,'pops':pops,'fallback':fallback}
 
 response = updateData()
