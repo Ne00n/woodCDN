@@ -8,7 +8,10 @@ class CLI:
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
         query = json.dumps(query)
         try:
-            r = requests.post(url, data=query, headers=headers)
+            r = requests.post(url, data=query, headers=headers,allow_redirects=False)
+            if r.status_code == 301:
+                leader = r.headers['Location']
+                r = requests.post(leader, data=query, headers=headers,allow_redirects=False)
             if (r.status_code == 200):
                 return r.json()
             else:
