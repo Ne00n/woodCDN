@@ -82,7 +82,7 @@ Add your first vhost (proxy/dns) entry
 python3 cli.py vhost add <domain> <subdomain> <type> <value>
 #type can be proxy or A, TXT...
 ```
-Afterwards you can bring the dns servers online, without any entries they won't start.<br />
 
 **cron**<br />
-You need to add python3 generate.py nginx to cronjob at least every 60s, to sync nginx with the database<br />
+Check /scripts, lastrun and generate need to be added as cronjob to run every 60s<br /
+Afterwards you can bring the dns servers online, without any entries or configured cronjobs they won't start.<br />
