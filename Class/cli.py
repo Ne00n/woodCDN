@@ -6,9 +6,12 @@ class CLI:
 
     def curl(self,url,query):
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
-        query = json.dumps(query)
         try:
-            r = requests.post(url, data=query, headers=headers,allow_redirects=False)
+            if not query:
+                r = requests.get(url,allow_redirects=False)
+            else:
+                query = json.dumps(query)
+                r = requests.post(url, data=query, headers=headers,allow_redirects=False)
             if r.status_code == 301:
                 leader = r.headers['Location']
                 r = requests.post(leader, data=query, headers=headers,allow_redirects=False)
@@ -28,6 +31,10 @@ class CLI:
         url = 'http://'+self.ip+':'+str(self.port)+'/db/execute?pretty&timings'
         query = [query]
         return self.curl(url,query)
+
+    def status(self):
+        url = 'http://'+self.ip+':'+str(self.port)+'/status?pretty'
+        return self.curl(url,[])
 
     def init(self):
         self.execute(["CREATE TABLE pops (name TEXT NOT NULL PRIMARY KEY, latitude DECIMAL(10,7) NOT NULL, longitude DECIMAL(10,7) NOT NULL,v4 TEXT NOT NULL, lastrun INTEGER NULL)"])
