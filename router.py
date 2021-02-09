@@ -26,7 +26,7 @@ def updateData():
     for row in data['results'][0]['values']:
         nameservers[row[0]] = row[1].split(",")
     for row in data['results'][1]['values']:
-        if row[3] == "@":
+        if row[2] == "@":
             if not row[1] in vhosts: vhosts[row[1]] = []
             vhosts[row[1]].append(row[2:])
         else:
