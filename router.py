@@ -60,7 +60,7 @@ while True:
         continue
 
     type, qname, qclass, qtype, id, ip, localip, ednsip = line.split("\t")
-    bits,auth = "21","1"
+    bits,auth,qname = "21","1",qname.lower()
 
     if time.time() > lastupdate + 60:
         freshData = updateData()
