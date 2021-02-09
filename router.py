@@ -92,8 +92,7 @@ while True:
                         if entry[0] == "A": skipGeo = True
                         print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\t"+entry[0]+"\t3600\t-1\t"+entry[2])
 
-
-                elif skipGeo is False:
+                if skipGeo is False:
                     if not ip in geoCache:
                         try:
                             response = reader.city(ip)
