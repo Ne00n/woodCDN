@@ -68,7 +68,7 @@ while True:
             oldPoPs = pops
             nameservers,vhosts,pops,fallback = freshData['ns'],freshData['vhosts'],freshData['pops'],freshData['fallback']
             stderr.write("Updated NS information\n")
-            if pops != oldPoPs:
+            if len(pops) != len(oldPoPs):
                 stderr.write("Flushing geocache\n")
                 geoCache = {}
         lastupdate = time.time()
