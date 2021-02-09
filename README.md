@@ -7,7 +7,7 @@
 - Simple cli to manage vhosts and settings
 - Keep the overhead and dependencies at a minimum
 - Keep it Simple and Stupid and fucking Dry
-- Decentralized + High Availability even if the db cluster shits itself, stuff should keep going
+- High Availability, even if the db cluster shits itself, stuff should keep going
 - GeoDNS to reduce latency
 
 **Software**<br />
@@ -26,6 +26,21 @@
 - HTTPS Support (wildcard per domain)
 
 **Setup**<br />
+1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes</br >
+2. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
+```
+#First node
+rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
+#Moah nodes
+rqlited -http-addr 10.0.0.2:4003 -raft-addr 10.0.0.2:4004 -join http://10.0.0.1:4003 datadir
+```
+You can check the cluster status by running
+```
+rqlite --host rqlite --port 4003
+.status
+```
+To run rqlite as service and on boot config/rqlite.service<br />
+3. Deploy the Code
 ```
 #Nginx
 apt-get install sudo nginx git python3 python3-pip -y
@@ -46,38 +61,21 @@ git clone https://github.com/Ne00n/woodCDN.git
 exit; chmod 775 -R /opt/woodCDN
 ```
 
-You need some kind of decentralized mesh vpn like VpnCloud or Tinc otherwise rqlite tls configuration will be quite painful.<br />
 You can get the free city lite database here https://dev.maxmind.com/geoip/geoip2/geolite2/<br />
-
-**rqlite**<br />
-```
-#First node
-rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
-#Moah nodes
-rqlited -http-addr 10.0.0.2:4003 -raft-addr 10.0.0.2:4004 -join http://10.0.0.1:4003 datadir
-```
-You can check the cluster status by running
-```
-rqlite --host rqlite --port 4003
-.status
-```
-To run rqlite as service and on boot config/rqlite.service<br />
 Afterwards you should be able to run on that on any node but just once<br />
 ```
 python3 cli.py init
 ```
 
 **cli**<br />
-Add your first PoP<br/>
-```
-python3 cli.py pop add <hostname of node> <v4> <latitude> <longitude>
-```
-
 Add your first Domain
 ```
 python3 cli.py domain add <name> <ns1>,<ns2>
 ```
-
+Add your first PoP<br/>
+```
+python3 cli.py pop add <hostname of node> <v4> <latitude> <longitude>
+```
 Add your first vhost (proxy/dns) entry
 ```
 python3 cli.py vhost add <domain> <subdomain> <type> <value>
