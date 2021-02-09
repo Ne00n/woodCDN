@@ -28,10 +28,10 @@ def updateData():
     for row in data['results'][1]['values']:
         if row[2] == "@":
             if not row[1] in vhosts: vhosts[row[1]] = []
-            vhosts[row[1]].append(row[2:])
+            vhosts[row[1]].append(row[3:])
         else:
             if not row[3]+"."+row[1] in vhosts: vhosts[row[3]+"."+row[1]] = []
-            vhosts[row[3]+"."+row[1]].append(row[2:])
+            vhosts[row[3]+"."+row[1]].append(row[3:])
     return {'ns':nameservers,'vhosts':vhosts,'pops':pops,'fallback':fallback}
 
 response = updateData()
@@ -94,7 +94,7 @@ while True:
                 elif qname in vhosts:
                     for entry in vhosts[qname]:
                         if entry[0] == "A": skipGeo = True
-                        print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\t"+entry[0]+"\t3600\t-1\t"+entry[2])
+                        print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\t"+entry[0]+"\t3600\t-1\t"+entry[1])
 
                 if skipGeo is False:
                     if not ip in geoCache:
