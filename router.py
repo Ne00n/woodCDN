@@ -81,15 +81,18 @@ while True:
 
             if(qtype == "A" or qtype == "ANY"):
                 skipGeo = False
-                if qname in vhosts:
+                if qname.startswith("ns"):
+                    skipGeo = True
+                    if qname.startswith("ns1"):
+                        print("DATA\t"+bits+"\t"+auth+"\tns1."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[0])
+                    elif qname.startswith("ns2"):
+                        print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[1])
+                elif qname in vhosts:
                     for entry in vhosts[qname]:
                         if entry[0] == "A": skipGeo = True
                         print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\t"+entry[0]+"\t3600\t-1\t"+entry[2])
 
-                if qname.startswith("ns1"):
-                    print("DATA\t"+bits+"\t"+auth+"\tns1."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[0])
-                elif qname.startswith("ns2"):
-                    print("DATA\t"+bits+"\t"+auth+"\tns2."+domain+"\t"+qclass+"\tA\t3600\t-1\t"+nameserverList[1])
+
                 elif skipGeo is False:
                     if not ip in geoCache:
                         try:
