@@ -10,7 +10,7 @@ elif sys.argv[1] == "init":
     cli.init()
 elif sys.argv[1] == "domain":
     if len(sys.argv) == 2:
-        print("domain add <name> <ns1>,<ns2>\ndomain list\ndomain del <name>")
+        print("domain add <name> <email> <ns1>,<ns2>\ndomain list\ndomain del <name>")
     elif sys.argv[2] == "add":
         cli.addDomain(sys.argv[3:])
     elif sys.argv[2] == "list":
