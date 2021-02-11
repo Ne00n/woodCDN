@@ -28,7 +28,7 @@
 
 **Setup**<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
-You can use ansible for that so you get it up in a few minutes. Fork that I use: https://github.com/Ne00n/ansible-tinc</br >
+You can use ansible for that so you get it up in a few minutes. Fork that I [use](https://github.com/Ne00n/ansible-tinc).</br >
 2. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
 ```
 #First node
@@ -63,7 +63,7 @@ git clone https://github.com/Ne00n/woodCDN.git
 exit; chmod 775 -R /opt/woodCDN
 ```
 
-You can get the free city lite database here https://dev.maxmind.com/geoip/geoip2/geolite2/<br />
+You can get the free city lite database [here](https://dev.maxmind.com/geoip/geoip2/geolite2/)<br />
 Put the Database on each dns node in /opt/woodCDN<br />
 Afterwards you should be able to run on that on any node but just once<br />
 ```
