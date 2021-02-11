@@ -21,14 +21,8 @@ if state == "Leader":
         if row[8] == None:
             print("Missing cert for",target)
 
-            client = simple_acme_dns.ACMEClient(
-                domains=[target],
-                email=row[7],
-                directory="https://acme-staging-v02.api.letsencrypt.org/directory",
-                nameservers=["8.8.8.8", "1.1.1.1"],
-                new_account=True,
-                generate_csr=True
-            )
+            directory = "https://acme-staging-v02.api.letsencrypt.org/directory"
+            client = simple_acme_dns.ACMEClient(domains=[target],email=row[7],directory=directory,nameservers=["8.8.8.8", "1.1.1.1"],new_account=True,generate_csr=True)
 
             tokens = {} # record for cleanup
             for domain, token in client.request_verification_tokens():
@@ -41,13 +35,13 @@ if state == "Leader":
                 print(client.certificate.decode())
                 print(client.private_key.decode())
 
-                for entry in tokens:
-                    cli.deleteVhost([row[1],"_acme-challenge."+row[2],'TXT'])
-
             else:
                 client.deactivate_account()
                 print("Failed to issue certificate for " + str(client.domains))
                 exit(1)
+
+            for entry in tokens:
+                cli.deleteVhost([row[1],"_acme-challenge."+row[2],'TXT'])
 
         else:
             print("Checking cert for",target)
