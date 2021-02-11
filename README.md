@@ -20,13 +20,15 @@
 **Features**<br />
 - High Availability
 - Rerouting offline locations
-- Not proxied DNS entries
+- Geo routed + proxied DNS entries
+- Static DNS entries
 
 **Todo**<br />
 - HTTPS Support (wildcard per domain)
 
 **Setup**<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
+You can use ansible for that so you get it up in a few minutes. Fork that I use: https://github.com/Ne00n/ansible-tinc</br >
 2. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
 ```
 #First node
@@ -44,11 +46,9 @@ To run rqlite as service and on boot config/rqlite.service<br />
 ```
 #Nginx
 apt-get install sudo nginx git python3 python3-pip -y
-pip3 install simple-acme-dns
 #DNS
 apt-get install git python3 python3-pip pdns-server pdns-backend-pipe -y
 pip3 install geoip2
-pip3 install simple-acme-dns
 #Both
 adduser cdn --disabled-login
 #Nginx
@@ -73,7 +73,7 @@ python3 cli.py init
 **cli**<br />
 Add your first Domain
 ```
-python3 cli.py domain add <name> <ns1>,<ns2>
+python3 cli.py domain add <name> <email> <ns1>,<ns2>
 ```
 Add your first PoP<br/>
 ```
