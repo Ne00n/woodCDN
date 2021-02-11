@@ -38,17 +38,19 @@ if state == "Leader":
                 tokens[domain] = token
 
             print("Waiting for dns propagation")
-            if client.check_dns_propagation(timeout=1200):
-                client.request_certificate()
-                print(client.certificate.decode())
-                print(client.private_key.decode())
+            try:
+                if client.check_dns_propagation(timeout=1200):
+                    client.request_certificate()
+                    print(client.certificate.decode())
+                    print(client.private_key.decode())
+                else:
+                    client.deactivate_account()
+                    print("Failed to issue certificate for " + str(client.domains))
+                    exit(1)
+            except Exception as e:
+                print(e)
+            finally:
                 cli.deleteVhost([row[1],"_acme-challenge."+row[2],'TXT'])
-
-            else:
-                client.deactivate_account()
-                print("Failed to issue certificate for " + str(client.domains))
-                cli.deleteVhost([row[1],"_acme-challenge."+row[2],'TXT'])
-                exit(1)
 
         else:
             print("Checking cert for",target)
