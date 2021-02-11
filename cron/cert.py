@@ -1,9 +1,11 @@
 #!/usr/bin/python3
-import simple_acme_dns, sys
+import simple_acme_dns, time, sys
 sys.path.append("..") # Adds higher directory to python modules path.
 from Class.cli import CLI
+from Class.cert import Cert
 
 cli = CLI()
+cert = Cert()
 
 status = cli.status()
 if status is False: print("rqlite gone")
@@ -12,7 +14,6 @@ state = status['store']['raft']['state']
 if state == "Leader":
     print("Getting doamins")
     domains = cli.query(['SELECT * FROM vhosts as v JOIN domains as d ON v.domain=d.domain LEFT JOIN certs as c ON v.domain=c.domain AND v.subdomain=c.subdomain WHERE v.type = "proxy"'])
-    print(domains)
 
     if domains is False:
         print("rqlite gone")
@@ -22,7 +23,6 @@ if state == "Leader":
         sys.exit()
 
     for row in domains['results'][0]['values']:
-        print(row)
         target = row[1]
         if row[2] is not "@": target = row[2]+"."+row[1]
         if row[8] == None:
@@ -41,8 +41,9 @@ if state == "Leader":
             try:
                 if client.check_dns_propagation(timeout=1200):
                     client.request_certificate()
-                    print(client.certificate.decode())
-                    print(client.private_key.decode())
+                    fullchain = client.certificate.decode()
+                    privkey = client.private_key.decode()
+                    cert.addCert([row[1],row[2],fullchain,privkey],time.time())
                 else:
                     client.deactivate_account()
                     print("Failed to issue certificate for " + str(client.domains))
