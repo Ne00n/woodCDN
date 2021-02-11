@@ -19,12 +19,13 @@
 
 **Features**<br />
 - High Availability
+- HTTPS Support (single cert)
 - Rerouting offline locations
 - Geo routed + proxied DNS entries
 - Static DNS entries
 
 **Todo**<br />
-- HTTPS Support (wildcard per domain)
+- HTTPS Support (wildcard)
 
 **Setup**<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >

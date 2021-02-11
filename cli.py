@@ -19,7 +19,7 @@ elif sys.argv[1] == "domain":
         cli.deleteDomain(sys.argv[3:])
 elif sys.argv[1] == "vhost":
     if len(sys.argv) == 2:
-        print("vhost add <domain> <subdomain> <type> <value>\nvhost list\nvhost del <subdomain> <type>")
+        print("vhost add <domain> <subdomain> <type> <value>\nvhost list\nvhost del <domain> <subdomain> <type>")
     elif sys.argv[2] == "add":
         cli.addVHost(sys.argv[3:])
     elif sys.argv[2] == "list":

@@ -40,7 +40,7 @@ class CLI:
         self.execute(["CREATE TABLE pops (name TEXT NOT NULL PRIMARY KEY, latitude DECIMAL(10,7) NOT NULL, longitude DECIMAL(10,7) NOT NULL,v4 TEXT NOT NULL, lastrun INTEGER NULL)"])
         self.execute(["CREATE TABLE domains (domain TEXT NOT NULL PRIMARY KEY, nsv4 TEXT NOT NULL, email TEXT NOT NULL)"])
         self.execute(["CREATE TABLE vhosts (id INTEGER NOT NULL PRIMARY KEY, domain TEXT NOT NULL, subdomain TEXT NOT NULL, type TEXT not NULL, value TEXT NULL, FOREIGN KEY(domain) REFERENCES domains(domain) ON DELETE CASCADE)"])
-        self.execute(["CREATE TABLE certs (domain TEXT NOT NULL PRIMARY KEY, fullchain TEXT NOT NULL, privkey TEXT not NULL, updated INTEGER NULL, FOREIGN KEY(domain) REFERENCES domains(domain) ON DELETE CASCADE)"])
+        self.execute(["CREATE TABLE certs (id INTEGER NOT NULL PRIMARY KEY, domain TEXT NOT NULL, subdomain TEXT NULL, fullchain TEXT NOT NULL, privkey TEXT not NULL, updated INTEGER NULL, FOREIGN KEY(domain) REFERENCES domains(domain) ON DELETE CASCADE)"])
         self.execute(["PRAGMA foreign_keys = ON"])
 
     def addDomain(self,data):
@@ -67,7 +67,7 @@ class CLI:
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def deleteVhost(self,data):
-        response = self.execute(['DELETE FROM vhosts WHERE subdomain=? and type=?',data[0],data[1]])
+        response = self.execute(['DELETE FROM vhosts WHERE domain=? and subdomain=? AND type =?',data[0],data[1],data[2]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def deletePoP(self,data):
