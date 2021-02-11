@@ -43,7 +43,7 @@ if state == "Leader":
                     client.request_certificate()
                     fullchain = client.certificate.decode()
                     privkey = client.private_key.decode()
-                    cert.addCert([row[1],row[2],fullchain,privkey],time.time())
+                    cert.addCert([row[1],row[2],fullchain,privkey,time.time()])
                 else:
                     client.deactivate_account()
                     print("Failed to issue certificate for " + str(client.domains))
