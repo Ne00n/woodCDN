@@ -26,10 +26,11 @@ if state == "Leader":
 
             tokens = {} # record for cleanup
             for domain, token in client.request_verification_tokens():
-                print("{domain} --> {token}".format(domain=domain, token=token))
-                tokens[domain] = token
+                print("adding {domain} --> {token}".format(domain=domain, token=token))
                 cli.addVHost([row[1],"_acme-challenge."+row[2],'TXT',token])
+                tokens[domain] = token
 
+            print("Waiting for dns propagation")
             if client.check_dns_propagation(timeout=1200):
                 client.request_certificate()
                 print(client.certificate.decode())
