@@ -34,9 +34,10 @@ def updateData():
             vhosts[row[2]+"."+row[1]].append(row[3:])
     return {'ns':nameservers,'vhosts':vhosts,'pops':pops,'fallback':fallback}
 
+time.sleep(1.5) #slow down pdns restarts
+
 response = updateData()
 if response is False:
-    time.sleep(1.5) #slow down pdns restarts
     exit()
 
 nameservers,vhosts,pops,fallback = response['ns'],response['vhosts'],response['pops'],response['fallback']
