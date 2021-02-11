@@ -39,6 +39,8 @@ rqlited -http-addr 10.0.0.2:4003 -raft-addr 10.0.0.2:4004 -join http://10.0.0.1:
 ```
 You can check the cluster status by running
 ```
+curl rqlite:4003/status?pretty
+#or
 rqlite --host rqlite --port 4003
 .status
 ```
