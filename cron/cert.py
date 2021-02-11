@@ -13,6 +13,7 @@ if state == "Leader":
     print("Getting doamins")
     domains = cli.query(['SELECT * FROM vhosts as v JOIN domains as d ON v.domain=d.domain LEFT JOIN certs as c ON v.domain=c.domain AND v.subdomain=c.subdomain WHERE v.type = "proxy"'])
     print(domains)
+
     if domains is False:
         print("rqlite gone")
         sys.exit()
@@ -41,14 +42,13 @@ if state == "Leader":
                 client.request_certificate()
                 print(client.certificate.decode())
                 print(client.private_key.decode())
+                cli.deleteVhost([row[1],"_acme-challenge."+row[2],'TXT'])
 
             else:
                 client.deactivate_account()
                 print("Failed to issue certificate for " + str(client.domains))
-                exit(1)
-
-            for entry in tokens:
                 cli.deleteVhost([row[1],"_acme-challenge."+row[2],'TXT'])
+                exit(1)
 
         else:
             print("Checking cert for",target)
