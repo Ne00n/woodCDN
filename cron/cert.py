@@ -13,7 +13,13 @@ if state == "Leader":
     print("Getting doamins")
     domains = cli.query(['SELECT * FROM vhosts as v JOIN domains as d ON v.domain=d.domain LEFT JOIN certs as c ON v.domain=c.domain AND v.subdomain=c.subdomain WHERE v.type = "proxy"'])
     print(domains)
-    if domains is False: print("rqlite gone")
+    if domains is False:
+        print("rqlite gone")
+        sys.exit()
+    if 'values' not in domains['results'][0]:
+        print("no vhosts added")
+        sys.exit()
+
     for row in domains['results'][0]['values']:
         print(row)
         target = row[1]
