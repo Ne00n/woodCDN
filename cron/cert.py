@@ -31,11 +31,9 @@ if state == "Leader":
             directory = "https://acme-staging-v02.api.letsencrypt.org/directory"
             client = simple_acme_dns.ACMEClient(domains=[target],email=row[7],directory=directory,nameservers=["8.8.8.8", "1.1.1.1"],new_account=True,generate_csr=True)
 
-            tokens = {} # record for cleanup
             for domain, token in client.request_verification_tokens():
                 print("adding {domain} --> {token}".format(domain=domain, token=token))
                 cli.addVHost([row[1],"_acme-challenge."+row[2],'TXT',token])
-                tokens[domain] = token
 
             print("Waiting for dns propagation")
             try:
