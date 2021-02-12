@@ -66,7 +66,7 @@ mkdir /opt/woodCDN
 chown -R cdn:cdn /opt/woodCDN/
 cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git
-exit; chmod 775 -R /opt/woodCDN
+exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
 ```
 
 You can get the free city lite database [here](https://dev.maxmind.com/geoip/geoip2/geolite2/)<br />
