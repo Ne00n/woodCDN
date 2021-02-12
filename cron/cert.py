@@ -35,7 +35,7 @@ if state == "Leader":
 
         else:
             print("Checking cert for",target)
-            if time.time() > (row[5] + (86400 * 30)):
+            if time.time() > (row[14] + (86400 * 30)):
                 print("Certificate is older than 30 days")
 
                 response = cert.getCert(target,row[1],row[2],row[8],True)
