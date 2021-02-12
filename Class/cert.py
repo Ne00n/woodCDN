@@ -1,6 +1,6 @@
 from Class.rqlite import rqlite
 from Class.cli import CLI
-import simple_acme_dns, json, os
+import simple_acme_dns, json, time, os
 
 class Cert(rqlite):
 
