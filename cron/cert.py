@@ -28,7 +28,7 @@ if state == "Leader":
         if row[9] == None:
             print("Missing cert for",target)
 
-            response = cert.getCert(target,row[1,row[2],row[8])
+            response = cert.getCert(target,row[1],row[2],row[8])
             if response is False:
                 print("Failed to get cert for",target)
                 sys.exit()
