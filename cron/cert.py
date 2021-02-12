@@ -30,7 +30,7 @@ if state == "Leader":
 
             directory = "https://acme-v02.api.letsencrypt.org/directory"
             #directory = "https://acme-staging-v02.api.letsencrypt.org/directory"
-            client = simple_acme_dns.ACMEClient(domains=[target],email=row[7],directory=directory,nameservers=["8.8.8.8", "1.1.1.1"],new_account=True,generate_csr=True)
+            client = simple_acme_dns.ACMEClient(domains=[target],email=row[8],directory=directory,nameservers=["8.8.8.8", "1.1.1.1"],new_account=True,generate_csr=True)
 
             for domain, token in client.request_verification_tokens():
                 print("adding {domain} --> {token}".format(domain=domain, token=token))
