@@ -30,8 +30,9 @@ def updateData():
             if not row[1] in vhosts: vhosts[row[1]] = []
             vhosts[row[1]].append(row[3:])
         else:
-            if not row[3]+"."+row[1] in vhosts: vhosts[row[3]+"."+row[1]] = []
-            vhosts[row[2]+"."+row[1]].append(row[3:])
+            subdomain = row[2]+"."+row[1]
+            if not subdomain in vhosts: vhosts[subdomain] = []
+            vhosts[subdomain].append(row[3:])
     return {'ns':nameservers,'vhosts':vhosts,'pops':pops,'fallback':fallback}
 
 response = updateData()

@@ -19,18 +19,24 @@
 
 **Features**<br />
 - High Availability
+- HTTPS Support (single cert)
 - Rerouting offline locations
 - Geo routed + proxied DNS entries
 - Static DNS entries
 
 **Todo**<br />
-- HTTPS Support (wildcard per domain)
+- HTTPS Support (wildcard)
 
 **Setup**<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
 You can use ansible for that so you get it up in a few minutes. Fork that I [use](https://github.com/Ne00n/ansible-tinc).</br >
+Add rqlite as entry to hosts that points to the local vpn interface.<br />
 2. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
 ```
+adduser cdn --disabled-login
+#Make sure to check for the latest release!
+su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v5.8.0/rqlite-v5.8.0-linux-amd64.tar.gz -o rqlite-v5.8.0-linux-amd64.tar.gz
+tar xvfz rqlite-v5.8.0-linux-amd64.tar.gz; mv xvfz rqlite-v5.8.0-linux-amd64 rqlite
 #First node
 rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
 #Moah nodes
@@ -38,6 +44,8 @@ rqlited -http-addr 10.0.0.2:4003 -raft-addr 10.0.0.2:4004 -join http://10.0.0.1:
 ```
 You can check the cluster status by running
 ```
+curl rqlite:4003/status?pretty
+#or
 rqlite --host rqlite --port 4003
 .status
 ```
@@ -46,9 +54,11 @@ To run rqlite as service and on boot config/rqlite.service<br />
 ```
 #Nginx
 apt-get install sudo nginx git python3 python3-pip -y
+pip3 install simple-acme-dns
 #DNS
 apt-get install git python3 python3-pip pdns-server pdns-backend-pipe -y
 pip3 install geoip2
+pip3 install simple-acme-dns
 #Both
 adduser cdn --disabled-login
 #Nginx
@@ -60,7 +70,7 @@ mkdir /opt/woodCDN
 chown -R cdn:cdn /opt/woodCDN/
 cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git
-exit; chmod 775 -R /opt/woodCDN
+exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
 ```
 
 You can get the free city lite database [here](https://dev.maxmind.com/geoip/geoip2/geolite2/)<br />
@@ -83,8 +93,17 @@ Add your first vhost (proxy/dns) entry
 ```
 python3 cli.py vhost add <domain> <subdomain> <type> <value>
 #type can be proxy or A, TXT...
+#to proxy a IP/Domain
+python3 cli.py vhost add domain.com test proxy 1.1.1.1
+#to add a static dns entry
+python3 cli.py vhost add domain.com static A 2.2.2.2
 ```
 
 **cron**<br />
-Check /scripts, lastrun (nginx/pop) and generate (nginx/pop) need to be added as cronjob to run every 60s<br />
+Check /scripts, lastrun and generate need to run every 60s<br />
+```
+*   *  *   *   *     /opt/woodCDN/scripts/lastrun.sh >/dev/null 2>&1   #all nodes
+*   *  *   *   *     /opt/woodCDN/scripts/generate.sh > /dev/null 2>&1 #web only
+*/5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
+```
 Afterwards you can bring the dns servers online, without any entries or configured cronjobs they won't start.<br />

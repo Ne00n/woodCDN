@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 from Class.cli import CLI
+from Class.cert import Cert
 import sys
 
 cli = CLI()
+cert = Cert()
 
 if len(sys.argv) == 1:
-    print("init, domain, vhost, pop")
+    print("init, domain, vhost, pop, cert")
 elif sys.argv[1] == "init":
     cli.init()
 elif sys.argv[1] == "domain":
@@ -19,7 +21,7 @@ elif sys.argv[1] == "domain":
         cli.deleteDomain(sys.argv[3:])
 elif sys.argv[1] == "vhost":
     if len(sys.argv) == 2:
-        print("vhost add <domain> <subdomain> <type> <value>\nvhost list\nvhost del <subdomain> <type>")
+        print("vhost add <domain> <subdomain> <type> <value>\nvhost list\nvhost del <domain> <subdomain> <type>")
     elif sys.argv[2] == "add":
         cli.addVHost(sys.argv[3:])
     elif sys.argv[2] == "list":
@@ -35,3 +37,8 @@ elif sys.argv[1] == "pop":
         cli.getTable("pops")
     elif sys.argv[2] == "del":
         cli.deletePoP(sys.argv[3:])
+elif sys.argv[1] == "cert":
+    if len(sys.argv) == 2:
+        print("cert del <domain> <subdomain>")
+    elif sys.argv[2] == "del":
+        cert.deleteCert(sys.argv[3:])
