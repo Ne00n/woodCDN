@@ -31,7 +31,7 @@ class Generate:
                 current.append(domain+"-fullchain.pem")
                 current.append(domain+"-privkey.pem")
 
-                if domain+"-fullchain.pem" not in files or row[5] > os.path.getmtime(self.nginxCerts+domain+"-fullchain.pem"):
+                if domain+"-fullchain.pem" not in files or entry[5] > os.path.getmtime(self.nginxCerts+domain+"-fullchain.pem"):
                     print("Writing",domain+"-fullchain.pem")
                     with open(self.nginxCerts+domain+"-fullchain.pem", 'w') as out:
                         out.write(entry[3])
@@ -39,7 +39,7 @@ class Generate:
                 else:
                     print(domain+"-fullchain.pem","skipping")
 
-                if domain+"-privkey.pem" not in files or row[5] > os.path.getmtime(self.nginxCerts+domain+"-privkey.pem"):
+                if domain+"-privkey.pem" not in files or entry[5] > os.path.getmtime(self.nginxCerts+domain+"-privkey.pem"):
                     print("Writing",domain+"-privkey.pem")
                     with open(self.nginxCerts+domain+"-privkey.pem", 'w') as out:
                         out.write(entry[4])
