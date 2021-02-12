@@ -25,7 +25,7 @@ if state == "Leader":
     for row in domains['results'][0]['values']:
         target = row[1]
         if row[2] is not "@": target = row[2]+"."+row[1]
-        if row[8] == None:
+        if row[9] == None:
             print("Missing cert for",target)
 
             directory = "https://acme-v02.api.letsencrypt.org/directory"
