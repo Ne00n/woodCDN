@@ -8,6 +8,10 @@ class Cert(rqlite):
         response = self.execute(['INSERT INTO certs(domain,subdomain,fullchain,privkey,updated) VALUES(?, ?, ?, ?, ?)',data[0],data[1],data[2],data[3],data[4]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
+    def deleteCert(self,data):
+        response = self.execute(['DELETE FROM certs WHERE domain=? and subdomain=?',data[0],data[1]])
+        print(json.dumps(response, indent=4, sort_keys=True))
+
     def syncVHosts(self,current,files,reload,path):
         #vhosts removed from database
         for file in files:
