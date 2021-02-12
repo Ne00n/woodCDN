@@ -29,7 +29,6 @@ class Generate:
                     out.write(entry[3])
                 with open(self.nginxCerts+domain+"-privkey.pem", 'a') as out:
                     out.write(entry[4])
-                self.reload = True
             else:
                 print(domain,"skipping")
 
@@ -37,7 +36,6 @@ class Generate:
         for file in files:
             if file not in current:
                 os.remove(self.nginxCerts+file)
-                self.reload = True
 
     def nginx(self):
         print("Updating nginx")
@@ -64,6 +62,7 @@ class Generate:
                     file = file + "\n\n" + self.templator.nginxHTTPS(domain,entry[4])
                     with open(self.nginxPath+"cdn-"+domain, 'a') as out:
                         out.write(file)
+                    self.reload = True
                 elif "443" not in file:
                     print("Cert missing for",domain,"skipping")
                 else:
