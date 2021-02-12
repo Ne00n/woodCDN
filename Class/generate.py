@@ -60,12 +60,12 @@ class Generate:
                 if entry[2] == "@": domain = entry[1]
                 if entry[2] != "@": domain = entry[2]+"."+entry[1]
                 current.append("cdn-"+domain)
-                if "cdn-"+domain not in files:
+                if "cdn-"+domain not in files or entry[5] > os.path.getmtime(self.nginxPath+"cdn-"+domain):
                     print("Writing HTTP config for",domain)
                     http = self.templator.nginxHTTP(domain,entry[4]) + "\n"
                     with open(self.nginxPath+"cdn-"+domain, 'w') as out:
                         out.write(http)
-                    self.reload = True
+                    if "cdn-"+domain not in files: self.reload = True
                 else:
                     with open(self.nginxPath+"cdn-"+domain, 'r') as f:
                         file = f.read()
