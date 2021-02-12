@@ -9,5 +9,5 @@ if len(sys.argv) == 1:
     print("nginx cert")
 elif sys.argv[1] == "nginx":
     generate.nginx()
-elif sys.argv[1] == "cert":
+elif sys.argv[1] == "certs":
     generate.certs()
