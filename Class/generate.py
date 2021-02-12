@@ -33,7 +33,7 @@ class Generate:
 
                 if domain+"-fullchain.pem" not in files or row[5] > os.path.getmtime(self.nginxCerts+domain+"-fullchain.pem"):
                     print("Writing",domain+"-fullchain.pem")
-                    with open(self.nginxCerts+domain+"-fullchain.pem", 'a') as out:
+                    with open(self.nginxCerts+domain+"-fullchain.pem", 'w') as out:
                         out.write(entry[3])
                     self.reload = True
                 else:
@@ -41,7 +41,7 @@ class Generate:
 
                 if domain+"-privkey.pem" not in files or row[5] > os.path.getmtime(self.nginxCerts+domain+"-privkey.pem"):
                     print("Writing",domain+"-privkey.pem")
-                    with open(self.nginxCerts+domain+"-privkey.pem", 'a') as out:
+                    with open(self.nginxCerts+domain+"-privkey.pem", 'w') as out:
                         out.write(entry[4])
                     self.reload = True
                 else:
@@ -63,7 +63,7 @@ class Generate:
                 if "cdn-"+domain not in files:
                     print("Writing HTTP config for",domain)
                     http = self.templator.nginxHTTP(domain,entry[4]) + "\n"
-                    with open(self.nginxPath+"cdn-"+domain, 'a') as out:
+                    with open(self.nginxPath+"cdn-"+domain, 'w') as out:
                         out.write(http)
                     self.reload = True
                 else:
