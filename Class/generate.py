@@ -75,4 +75,4 @@ class Generate:
         if self.reload:
             #Gracefull reloading, won't impact incomming or ongoing connections
             print("Reloading nginx")
-            subprocess.run(["/usr/bin/sudo /usr/sbin/service nginx reload", "nginx","reload"])
+            subprocess.run(["/usr/bin/sudo", "/usr/sbin/service nginx reload", "nginx", "reload"])
