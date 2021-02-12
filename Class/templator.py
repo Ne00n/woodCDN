@@ -21,6 +21,7 @@ server {
 
     ssl_certificate     /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
     ssl_certificate_key /opt/woodCDN/certs/'''+domain+'''-privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3; #drop 1.0 and 1.1
     ssl on;
 
     location / {
