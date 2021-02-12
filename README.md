@@ -33,6 +33,10 @@ You can use ansible for that so you get it up in a few minutes. Fork that I [use
 Add rqlite as entry to hosts that points to the local vpn interface.<br />
 2. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
 ```
+adduser cdn --disabled-login
+#Make sure to check for the latest release!
+su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v5.8.0/rqlite-v5.8.0-linux-amd64.tar.gz -o rqlite-v5.8.0-linux-amd64.tar.gz
+tar xvfz rqlite-v5.8.0-linux-amd64.tar.gz; mv xvfz rqlite-v5.8.0-linux-amd64 rqlite
 #First node
 rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
 #Moah nodes
@@ -89,6 +93,10 @@ Add your first vhost (proxy/dns) entry
 ```
 python3 cli.py vhost add <domain> <subdomain> <type> <value>
 #type can be proxy or A, TXT...
+#to proxy a IP/Domain
+python3 cli.py vhost add domain.com test proxy 1.1.1.1
+#to add a static dns entry
+python3 cli.py vhost add domain.com static A 2.2.2.2
 ```
 
 **cron**<br />
