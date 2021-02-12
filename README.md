@@ -92,5 +92,9 @@ python3 cli.py vhost add <domain> <subdomain> <type> <value>
 ```
 
 **cron**<br />
-Check /scripts, lastrun (nginx/pop) and generate (nginx/pop) need to be added as cronjob to run every 60s<br />
+Check /scripts, lastrun and generate need to run every 60s<br />
+```
+* *  *   *   *     /opt/woodCDN/scripts/lastrun.sh >/dev/null 2>&1   #all nodes
+* *  *   *   *     /opt/woodCDN/scripts/generate.sh > /dev/null 2>&1 #web only
+```
 Afterwards you can bring the dns servers online, without any entries or configured cronjobs they won't start.<br />
