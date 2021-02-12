@@ -57,7 +57,17 @@ class Generate:
                     out.write(http)
                 self.reload = True
             else:
-                print("cdn-"+domain,"skipping")
+                with open(self.nginxPath+"cdn-"+domain, 'r') as f:
+                    file = f.read()
+                if "443" not in file and os.path.isfile(nginxCerts+domain+"-fullchain.pem") and os.path.isfile(nginxCerts+domain+"-privkey.pem"):
+                    print("Enabling TLS for",domain)
+                    file = file + "\n\n" + self.templator.nginxHTTPS(domain,entry[4])
+                    with open(self.nginxPath+"cdn-"+domain, 'a') as out:
+                        out.write(file)
+                elif "443" not in file:
+                    print("Cert missing for",domain,"skipping")
+                else:
+                    print("cdn-"+domain,"skipping")
 
         #vhosts removed from database
         for file in files:
