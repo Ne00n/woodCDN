@@ -5,10 +5,39 @@ import requests, subprocess, json, os
 class Generate:
 
     nginxPath = "/etc/nginx/sites-enabled/"
+    nginxCerts = "/opt/woodCDN/certs/"
+    reload = False
 
     def __init__(self):
         self.cli = CLI()
         self.templator = Templator()
+
+    def certs(self):
+        print("Updating certs")
+
+        data = self.cli.query(['SELECT * FROM certs'])
+        if 'values' not in data['results'][0]: return False
+
+        files,current = os.listdir(self.nginxCerts),[]
+
+        for entry in data['results'][0]['values']:
+            if entry[2] == "@": domain = entry[1]
+            if entry[2] != "@": domain = entry[2]+"."+entry[1]
+            current.append("cdn-"+domain)
+            if "cdn-"+domain not in files:
+                with open(self.nginxCerts+domain+"-fullchain.pem", 'a') as out:
+                    out.write(entry[3])
+                with open(self.nginxCerts+domain+"-privkey.pem", 'a') as out:
+                    out.write(entry[4])
+                self.reload = True
+            else:
+                print(domain,"skipping")
+
+        #certs removed from database
+        for file in files:
+            if file not in current:
+                os.remove(self.nginxCerts+file)
+                self.reload = True
 
     def nginx(self):
         print("Updating nginx")
@@ -16,32 +45,26 @@ class Generate:
         data = self.cli.query(['SELECT * FROM vhosts WHERE type = "proxy"'])
         if 'values' not in data['results'][0]: return False
 
-        files,reload,current = os.listdir(self.nginxPath),False,[]
+        files,current = os.listdir(self.nginxPath),[]
 
-        #Prepare
-        vhosts = []
-        for row in data['results'][0]['values']:
-            if row[3] == "@":
-                vhosts.append([row[1],row[4]])
-            else:
-                vhosts.append([row[3]+"."+row[1],row[4]])
-
-        for entry in vhosts:
-            current.append("cdn-"+entry[0])
-            if "cdn-"+entry[0] not in files:
-                http = self.templator.nginxHTTP(entry[0],entry[1])
-                with open(self.nginxPath+"cdn-"+entry[0], 'a') as out:
+        for entry in data['results'][0]['values']:
+            if entry[2] == "@": domain = entry[1]
+            if entry[2] != "@": domain = entry[2]+"."+entry[1]
+            current.append("cdn-"+domain)
+            if "cdn-"+domain not in files:
+                http = self.templator.nginxHTTP(domain,entry[4])
+                with open(self.nginxPath+"cdn-"+domain, 'a') as out:
                     out.write(http)
-                reload = True
+                self.reload = True
             else:
-                print("cdn-"+entry[0],"skipping")
+                print("cdn-"+domain,"skipping")
 
+        #vhosts removed from database
         for file in files:
-            #vhosts removed from database
             if file not in current and "cdn-" in file:
                 os.remove(self.nginxPath+file)
-                reload = True
+                self.reload = True
 
-        if reload:
+        if self.reload:
             #Gracefull reloading, won't impact incomming or ongoing connections
             subprocess.run(["/usr/sbin/service", "nginx","reload"])
