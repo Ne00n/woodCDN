@@ -18,25 +18,27 @@ class Generate:
         print("Updating certs")
 
         data = self.cli.query(['SELECT * FROM certs'])
-        if 'values' not in data['results'][0]: return False
-
         files,current = os.listdir(self.nginxCerts),[]
 
-        for entry in data['results'][0]['values']:
-            if entry[2] == "@": domain = entry[1]
-            if entry[2] != "@": domain = entry[2]+"."+entry[1]
-            current.append(domain+"-fullchain.pem")
-            current.append(domain+"-privkey.pem")
-            if domain+"-fullchain.pem" not in files:
-                print("Writing",domain+"-fullchain.pem")
-                with open(self.nginxCerts+domain+"-fullchain.pem", 'a') as out:
-                    out.write(entry[3])
-            elif domain+"-privkey.pem" not in files:
-                print("Writing",domain+"-privkey.pem")
-                with open(self.nginxCerts+domain+"-privkey.pem", 'a') as out:
-                    out.write(entry[4])
-            else:
-                print(domain,"skipping")
+        if 'values' in data['results'][0]:
+            for entry in data['results'][0]['values']:
+                if entry[2] == "@": domain = entry[1]
+                if entry[2] != "@": domain = entry[2]+"."+entry[1]
+                current.append(domain+"-fullchain.pem")
+                current.append(domain+"-privkey.pem")
+                if domain+"-fullchain.pem" not in files:
+                    print("Writing",domain+"-fullchain.pem")
+                    with open(self.nginxCerts+domain+"-fullchain.pem", 'a') as out:
+                        out.write(entry[3])
+                else:
+                    print(domain+"-fullchain.pem","skipping")
+
+                if domain+"-privkey.pem" not in files:
+                    print("Writing",domain+"-privkey.pem")
+                    with open(self.nginxCerts+domain+"-privkey.pem", 'a') as out:
+                        out.write(entry[4])
+                else:
+                    print(domain+"-privkey.pem","skipping")
 
         self.cert.syncCerts(current,files,self.nginxCerts)
 
