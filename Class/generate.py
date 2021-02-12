@@ -36,7 +36,7 @@ class Generate:
             else:
                 print(domain,"skipping")
 
-        self.cert.syncCerts(files,current,self.nginxCerts)
+        self.cert.syncCerts(current,files,self.nginxCerts)
 
     def nginx(self):
         print("Updating nginx")

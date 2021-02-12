@@ -16,7 +16,7 @@ class Cert(rqlite):
                 reload = True
         return reload
 
-    def syncCerts(self,files,current,path):
+    def syncCerts(self,current,files,path):
         #certs removed from database
         for file in files:
             if file not in current:
