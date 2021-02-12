@@ -71,7 +71,11 @@ class Generate:
                     else:
                         print("cdn-"+domain,"skipping")
 
-        self.reload = self.cert.syncVHosts(current,files,self.reload,self.nginxPath)
+        #vhosts removed from database
+        for file in files:
+            if file not in current and "cdn-" in file:
+                os.remove(path+file)
+                self.reload = True
 
         if self.reload:
             #Gracefull reloading, won't impact incomming or ongoing connections

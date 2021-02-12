@@ -1,7 +1,11 @@
 from Class.rqlite import rqlite
-import json, os
+from Class.cli import CLI
+import simple_acme_dns, json, os
 
 class Cert(rqlite):
+
+    def __init__(self):
+        self.cli = CLI()
 
     def addCert(self,data):
         print("adding",data[0])
@@ -12,13 +16,38 @@ class Cert(rqlite):
         response = self.execute(['DELETE FROM certs WHERE domain=? and subdomain=?',data[0],data[1]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
-    def syncVHosts(self,current,files,reload,path):
-        #vhosts removed from database
-        for file in files:
-            if file not in current and "cdn-" in file:
-                os.remove(path+file)
-                reload = True
-        return reload
+    def getCert(self,fullDomain,domain,subdomain,email):
+        directory = "https://acme-v02.api.letsencrypt.org/directory"
+        #directory = "https://acme-staging-v02.api.letsencrypt.org/directory"
+        try:
+            client = simple_acme_dns.ACMEClient(domains=[target],email=row[8],directory=directory,nameservers=["8.8.8.8", "1.1.1.1"],new_account=True,generate_csr=True)
+        except Exception as e:
+            print(e)
+            return False
+
+        for acmeDomain, token in client.request_verification_tokens():
+            print("adding {acmeDomain} --> {token}".format(domain=acmeDomain, token=token))
+            response = self.cli.addVHost([domain,"_acme-challenge."+subdomain,'TXT',token])
+            if response is False: return False
+
+        print("Waiting for dns propagation")
+        try:
+            if client.check_dns_propagation(timeout=1200):
+                client.request_certificate()
+                fullchain = client.certificate.decode()
+                privkey = client.private_key.decode()
+                self.addCert([domain,subdomain,fullchain,privkey,int(time.time())])
+            else:
+                client.deactivate_account()
+                print("Failed to issue certificate for " + str(client.domains))
+                return False
+        except Exception as e:
+            print(e)
+            return False
+        finally:
+            self.cli.deleteVhost([domain,"_acme-challenge."+subdomain,'TXT'])
+
+        return True
 
     def syncCerts(self,current,files,path):
         #certs removed from database

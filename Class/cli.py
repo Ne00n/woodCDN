@@ -12,6 +12,7 @@ class CLI(rqlite):
         print("adding",data[0])
         response = self.execute(['INSERT INTO vhosts(domain,subdomain,type,value,updated) VALUES(?, ?, ?, ?, ?)',data[0],data[1],data[2],data[3],int(time.time())])
         print(json.dumps(response, indent=4, sort_keys=True))
+        return response
 
     def addPoP(self,data):
         print("adding",data[0])
