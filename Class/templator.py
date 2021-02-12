@@ -4,6 +4,8 @@ class Templator:
 server {
     listen 80;
     server_name '''+domain+''';
+    server_tokens off;
+
     location / {
         proxy_set_header Host '''+domain+''';
         proxy_set_header X-Real-IP $remote_addr;
@@ -18,6 +20,7 @@ server {
 server {
     listen 443;
     server_name '''+domain+''';
+    server_tokens off;
 
     ssl_certificate     /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
     ssl_certificate_key /opt/woodCDN/certs/'''+domain+'''-privkey.pem;
