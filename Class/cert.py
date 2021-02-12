@@ -26,7 +26,7 @@ class Cert(rqlite):
             return False
 
         for acmeDomain, token in client.request_verification_tokens():
-            print("adding {acmeDomain} --> {token}".format(domain=acmeDomain, token=token))
+            print("adding {domain} --> {token}".format(domain=acmeDomain, token=token))
             response = self.cli.addVHost([domain,"_acme-challenge."+subdomain,'TXT',token])
             if response is False: return False
 
