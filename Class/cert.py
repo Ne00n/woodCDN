@@ -38,6 +38,7 @@ class Cert(rqlite):
         print("Waiting for dns propagation")
         try:
             if client.check_dns_propagation(timeout=1200):
+                print("Requesting certificate")
                 client.request_certificate()
                 fullchain = client.certificate.decode()
                 privkey = client.private_key.decode()
@@ -46,8 +47,8 @@ class Cert(rqlite):
                 else:
                     self.updateCert([domain,subdomain,fullchain,privkey,int(time.time())])
             else:
-                client.deactivate_account()
                 print("Failed to issue certificate for " + str(client.domains))
+                client.deactivate_account()
                 return False
         except Exception as e:
             print(e)
