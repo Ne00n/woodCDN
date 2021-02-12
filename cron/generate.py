@@ -11,3 +11,5 @@ elif sys.argv[1] == "nginx":
     generate.nginx()
 elif sys.argv[1] == "certs":
     generate.certs()
+elif sys.argv[1] == "run":
+    generate.run()

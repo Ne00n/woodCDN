@@ -1,7 +1,7 @@
 from Class.templator import Templator
 from Class.cli import CLI
 from Class.cert import Cert
-import requests, subprocess, json, os
+import requests, subprocess, json, time, os
 
 class Generate:
 
@@ -13,6 +13,10 @@ class Generate:
         self.cli = CLI()
         self.cert = Cert()
         self.templator = Templator()
+
+    def run(self):
+        self.certs()
+        self.nginx()
 
     def certs(self):
         print("Updating certs")
@@ -26,17 +30,20 @@ class Generate:
                 if entry[2] != "@": domain = entry[2]+"."+entry[1]
                 current.append(domain+"-fullchain.pem")
                 current.append(domain+"-privkey.pem")
-                if domain+"-fullchain.pem" not in files:
+
+                if domain+"-fullchain.pem" not in files or row[5] > os.path.getmtime(self.nginxCerts+domain+"-fullchain.pem"):
                     print("Writing",domain+"-fullchain.pem")
                     with open(self.nginxCerts+domain+"-fullchain.pem", 'a') as out:
                         out.write(entry[3])
+                    self.reload = True
                 else:
                     print(domain+"-fullchain.pem","skipping")
 
-                if domain+"-privkey.pem" not in files:
+                if domain+"-privkey.pem" not in files or row[5] > os.path.getmtime(self.nginxCerts+domain+"-privkey.pem"):
                     print("Writing",domain+"-privkey.pem")
                     with open(self.nginxCerts+domain+"-privkey.pem", 'a') as out:
                         out.write(entry[4])
+                    self.reload = True
                 else:
                     print(domain+"-privkey.pem","skipping")
 
