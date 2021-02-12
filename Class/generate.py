@@ -25,7 +25,8 @@ class Generate:
         for entry in data['results'][0]['values']:
             if entry[2] == "@": domain = entry[1]
             if entry[2] != "@": domain = entry[2]+"."+entry[1]
-            current.append(domain)
+            current.append(domain+"-fullchain.pem")
+            current.append(domain+"privkey.pem")
             if domain not in files:
                 print("Writing",domain+"-fullchain.pem")
                 with open(self.nginxCerts+domain+"-fullchain.pem", 'a') as out:
