@@ -1,5 +1,6 @@
 from Class.templator import Templator
 from Class.cli import CLI
+from Class.cert import Cert
 import requests, subprocess, json, os
 
 class Generate:
@@ -10,6 +11,7 @@ class Generate:
 
     def __init__(self):
         self.cli = CLI()
+        self.cert = Cert()
         self.templator = Templator()
 
     def certs(self):
@@ -34,10 +36,7 @@ class Generate:
             else:
                 print(domain,"skipping")
 
-        #certs removed from database
-        for file in files:
-            if file not in current:
-                os.remove(self.nginxCerts+file)
+        self.cert.syncCerts(files,current,self.nginxCerts)
 
     def nginx(self):
         print("Updating nginx")
@@ -71,12 +70,9 @@ class Generate:
                 else:
                     print("cdn-"+domain,"skipping")
 
-        #vhosts removed from database
-        for file in files:
-            if file not in current and "cdn-" in file:
-                os.remove(self.nginxPath+file)
-                self.reload = True
+        self.reload = self.cert.syncVHosts(current,files,self.reload,self.nginxPath)
 
         if self.reload:
             #Gracefull reloading, won't impact incomming or ongoing connections
+            print("Reloading nginx")
             subprocess.run(["/usr/sbin/service", "nginx","reload"])
