@@ -19,8 +19,8 @@ server {
     listen 443;
     server_name '''+domain+''';
 
-    ssl_certificate           /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
-    ssl_certificate_key       /opt/woodCDN/certs/'''+domain+'''-privkey.pem;
+    ssl_certificate     /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
+    ssl_certificate_key /opt/woodCDN/certs/'''+domain+'''-privkey.pem;
     ssl on;
 
     location / {
@@ -28,6 +28,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_pass http://'''+target+''';
+        proxy_ssl_verify on;
         proxy_redirect off;
     }
 }'''
