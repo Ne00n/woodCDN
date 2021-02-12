@@ -50,6 +50,7 @@ class Generate:
             if entry[2] != "@": domain = entry[2]+"."+entry[1]
             current.append("cdn-"+domain)
             if "cdn-"+domain not in files:
+                print("Writing HTTP config for",domain)
                 http = self.templator.nginxHTTP(domain,entry[4])
                 with open(self.nginxPath+"cdn-"+domain, 'a') as out:
                     out.write(http)
@@ -58,7 +59,7 @@ class Generate:
                 with open(self.nginxPath+"cdn-"+domain, 'r') as f:
                     file = f.read()
                 if "443" not in file and os.path.isfile(nginxCerts+domain+"-fullchain.pem") and os.path.isfile(nginxCerts+domain+"-privkey.pem"):
-                    print("Enabling TLS for",domain)
+                    print("Writing HTTPS config for",domain)
                     file = file + "\n\n" + self.templator.nginxHTTPS(domain,entry[4])
                     with open(self.nginxCerts+"cdn-"+domain, 'a') as out:
                         out.write(file)
