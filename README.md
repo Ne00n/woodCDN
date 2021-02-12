@@ -20,6 +20,7 @@
 **Features**<br />
 - High Availability
 - HTTPS Support (single cert)
+- Renew Certificates after 30 days
 - Rerouting offline locations
 - Geo routed + proxied DNS entries
 - Static DNS entries
