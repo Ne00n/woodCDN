@@ -60,7 +60,7 @@ class Generate:
             else:
                 with open(self.nginxPath+"cdn-"+domain, 'r') as f:
                     file = f.read()
-                if "443" not in file and os.path.isfile(nginxCerts+domain+"-fullchain.pem") and os.path.isfile(nginxCerts+domain+"-privkey.pem"):
+                if "443" not in file and os.path.isfile(self.nginxCerts+domain+"-fullchain.pem") and os.path.isfile(self.nginxCerts+domain+"-privkey.pem"):
                     print("Writing HTTPS config for",domain)
                     file = file + "\n\n" + self.templator.nginxHTTPS(domain,entry[4])
                     with open(self.nginxCerts+"cdn-"+domain, 'a') as out:
