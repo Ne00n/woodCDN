@@ -43,6 +43,5 @@ if state == "Leader":
                     print("Failed to get cert for",target)
                     sys.exit()
 
-
 else:
     print("Not leader, aborting.")
