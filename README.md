@@ -63,6 +63,7 @@ pip3 install simple-acme-dns
 #Both
 adduser cdn --disabled-login
 #Nginx
+mkdir -p /data/nginx/cache
 chgrp -R cdn /etc/nginx/sites-enabled/
 chmod 775 -R /etc/nginx/sites-enabled/
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers

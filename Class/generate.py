@@ -60,21 +60,33 @@ class Generate:
                 if entry[2] == "@": domain = entry[1]
                 if entry[2] != "@": domain = entry[2]+"."+entry[1]
                 current.append("cdn-"+domain)
+
+                #If the vhost does not exists or the database timestamp is newer than the file timestamp
                 if "cdn-"+domain not in files or entry[5] > os.path.getmtime(self.nginxPath+"cdn-"+domain):
+
                     print("Writing HTTP config for",domain)
-                    http = self.templator.nginxHTTP(domain,entry[4]) + "\n"
+                    http = self.templator.nginxHTTP(domain,entry[4])
+                    vhost = self.templator.nginxWrap(http)
+
                     with open(self.nginxPath+"cdn-"+domain, 'w') as out:
-                        out.write(http)
-                    if "cdn-"+domain not in files: self.reload = True
-                else:
+                        out.write(vhost)
+                    self.reload = True
+
+                #If the vhost exist lets do some modifications
+                if os.path.isfile(self.nginxPath+"cdn-"+domain):
                     with open(self.nginxPath+"cdn-"+domain, 'r') as f:
                         file = f.read()
+
                     if "443" not in file and os.path.isfile(self.nginxCerts+domain+"-fullchain.pem") and os.path.isfile(self.nginxCerts+domain+"-privkey.pem"):
                         print("Writing HTTPS config for",domain)
-                        file = file + self.templator.nginxHTTPS(domain,entry[4]) + "\n"
+                        http = self.templator.nginxHTTP(domain,entry[4])
+                        https = self.templator.nginxHTTPS(domain,entry[4])
+                        vhost = self.templator.nginxWrap(http+https)
+
                         with open(self.nginxPath+"cdn-"+domain, 'w') as out:
-                            out.write(file)
+                            out.write(vhost)
                         self.reload = True
+
                     elif "443" not in file:
                         print("Cert missing for",domain,"skipping")
                     else:
