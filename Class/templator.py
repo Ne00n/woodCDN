@@ -27,7 +27,6 @@ server {
     listen 443;
     server_name '''+domain+''';
     server_tokens off;
-    proxy_cache STATIC;
 
     ssl_certificate     /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
     ssl_certificate_key /opt/woodCDN/certs/'''+domain+'''-privkey.pem;
