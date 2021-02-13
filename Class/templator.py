@@ -1,7 +1,7 @@
 class Templator:
     def nginxWrap(self,body):
         template = '''
-proxy_cache_path /tmp/nginx/cache levels=1:2 keys_zone=STATIC:10m inactive=24h  max_size=1g;
+proxy_cache_path /data/nginx/cache levels=1:2 keys_zone=STATIC:10m inactive=24h  max_size=1g;
 '''+body+'''
 '''
         return template
