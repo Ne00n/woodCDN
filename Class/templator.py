@@ -25,14 +25,13 @@ server {
     def nginxHTTPS(self,domain,target):
         template = '''
 server {
-    listen 443;
+    listen 443 ssl http2;
     server_name '''+domain+''';
     server_tokens off;
 
     ssl_certificate     /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
     ssl_certificate_key /opt/woodCDN/certs/'''+domain+'''-privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3; #drop 1.0 and 1.1
-    ssl on;
 
     location ~* ^.+\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$ {
         proxy_cache STATIC;
