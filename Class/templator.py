@@ -31,7 +31,7 @@ server {
         proxy_set_header Host '''+domain+''';
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_pass http://'''+target+''';
+        proxy_pass https://'''+target+''';
         proxy_ssl_verify on;
         proxy_redirect off;
     }
