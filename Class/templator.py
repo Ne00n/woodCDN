@@ -37,6 +37,7 @@ server {
     location ~* ^.+\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$ {
         proxy_cache STATIC;
         proxy_cache_valid 200 1d;
+        proxy_cache_valid 404 1m;
         proxy_set_header Host '''+target+''';
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
