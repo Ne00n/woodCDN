@@ -4,7 +4,7 @@ class Templator:
 proxy_cache_path /tmp/nginx/cache levels=1:2 keys_zone=STATIC:10m inactive=24h  max_size=1g;
 '''+body+'''
 '''
-    return template
+        return template
     def nginxHTTP(self,domain,target):
         template = '''
 server {
