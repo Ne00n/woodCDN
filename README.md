@@ -61,8 +61,6 @@ pip3 install simple-acme-dns
 apt-get install git python3 python3-pip pdns-server pdns-backend-pipe -y
 pip3 install geoip2
 pip3 install simple-acme-dns
-#Both
-adduser cdn --disabled-login
 #Nginx
 mkdir -p /data/nginx/cache
 chgrp -R cdn /etc/nginx/sites-enabled/
@@ -103,9 +101,9 @@ Add your first vhost (proxy/dns) entry
 python3 cli.py vhost add <domain> <subdomain> <type> <value>
 #type can be proxy or A, TXT...
 #to proxy a IP/Domain
-python3 cli.py vhost add domain.com test proxy bla.com
+python3 cli.py vhost add bla.com test proxy website.com
 #to add a static dns entry
-python3 cli.py vhost add domain.com static A 2.2.2.2
+python3 cli.py vhost add bla.com static A 2.2.2.2
 ```
 
 **cron**<br />
