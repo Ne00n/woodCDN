@@ -66,7 +66,6 @@ while True:
     source = ip
     if ednsip != "0.0.0.0/0":
         sourceIP, sourcePrefix = ednsip.split("/")
-        stderr.write(sourceIP+" source\n")
         source = sourceIP
 
     if time.time() > lastupdate + 30:
