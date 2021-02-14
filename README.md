@@ -27,6 +27,7 @@
 
 **Todo**<br />
 - HTTPS Support (wildcard)
+- IPv6 Support
 
 **Setup**<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
@@ -86,17 +87,23 @@ python3 cli.py init
 Add your first Domain
 ```
 python3 cli.py domain add <name> <email> <ns1>,<ns2>
+#Example
+python3 cli.py domain add bla.com noc@bla.com 1.1.1.1,2.2.2.2
+#The email is needed to lets encrypt
 ```
 Add your first PoP<br/>
 ```
 python3 cli.py pop add <hostname of node> <v4> <latitude> <longitude>
+#Example
+python3 cli.py pop add atlanta 3.3.3.3 50.48 -2.88
+#The hostname needs to match the hostname of the node, otherwise the cron won't be updating data correctly
 ```
 Add your first vhost (proxy/dns) entry
 ```
 python3 cli.py vhost add <domain> <subdomain> <type> <value>
 #type can be proxy or A, TXT...
 #to proxy a IP/Domain
-python3 cli.py vhost add domain.com test proxy 1.1.1.1
+python3 cli.py vhost add domain.com test proxy bla.com
 #to add a static dns entry
 python3 cli.py vhost add domain.com static A 2.2.2.2
 ```
