@@ -1,4 +1,4 @@
-import requests, json
+import requests, time, json
 
 class rqlite:
 
@@ -6,22 +6,23 @@ class rqlite:
 
     def curl(self,url,query):
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
-        try:
-            if not query:
-                r = requests.get(url,allow_redirects=False)
-            else:
-                query = json.dumps(query)
-                r = requests.post(url, data=query, headers=headers,allow_redirects=False)
-            if r.status_code == 301:
-                leader = r.headers['Location']
-                r = requests.post(leader, data=query, headers=headers,allow_redirects=False)
-            if (r.status_code == 200):
-                return r.json()
-            else:
-                return False
-        except Exception as e:
-            print(e)
-            return False
+        #retry 4 times
+        for run in range(4):
+            try:
+                if not query:
+                    r = requests.get(url,allow_redirects=False)
+                else:
+                    query = json.dumps(query)
+                    r = requests.post(url, data=query, headers=headers,allow_redirects=False)
+                if r.status_code == 301:
+                    leader = r.headers['Location']
+                    r = requests.post(leader, data=query, headers=headers,allow_redirects=False)
+                if (r.status_code == 200):
+                    return r.json()
+            except Exception as e:
+                print(e)
+            time.sleep(2)
+        return False
 
     def query(self,query,level="none",timings="&timings"):
         url = 'http://'+self.ip+':'+str(self.port)+'/db/query?pretty'+timings+'&level='+level
