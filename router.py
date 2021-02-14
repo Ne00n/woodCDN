@@ -63,6 +63,12 @@ while True:
     type, qname, qclass, qtype, id, ip, localip, ednsip = line.split("\t")
     bits,auth,qname = "21","1",qname.lower()
 
+    source = ip
+    if ednsip != "0.0.0.0/0":
+        sourceIP, sourcePrefix = ednsip.split("/")
+        stderr.write(sourceIP+" source\n")
+        source = sourceIP
+
     if time.time() > lastupdate + 30:
         freshData = updateData()
         if freshData is not False:
@@ -98,18 +104,18 @@ while True:
                         print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\t"+entry[0]+"\t3600\t-1\t"+entry[1])
 
                 if skipGeo is False:
-                    if not ip in geoCache:
+                    if not source in geoCache:
                         try:
-                            response = reader.city(ip)
+                            response = reader.city(source)
                             popIP = data.getClosestPoP(response.location.latitude,response.location.longitude,pops,fallback)
-                            geoCache[ip] = popIP
+                            geoCache[source] = popIP
                         except Exception as e:
                             stderr.write("Error "+str(e)+"\n")
-                            stderr.write("Could not resolve "+ip+"\n")
+                            stderr.write("Could not resolve "+source+"\n")
                             popIP = pops[0][3]
-                            geoCache[ip] = popIP
+                            geoCache[source] = popIP
                     else:
-                        popIP = geoCache[ip]
+                        popIP = geoCache[source]
                     print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+popIP)
 
     print("END")
