@@ -1,0 +1,14 @@
+[Unit]
+Description=woodCDN lastrun service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=cdn
+Group=cdn
+Type=simple
+WorkingDirectory=/opt/woodCDN/cron
+ExecStart=/usr/bin/python3 generate.py run
+
+[Install]
+WantedBy=multi-user.target

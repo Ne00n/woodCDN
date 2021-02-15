@@ -106,11 +106,15 @@ python3 cli.py vhost add bla.com test proxy website.com
 python3 cli.py vhost add bla.com static A 2.2.2.2
 ```
 
+**service**<br />
+cp /opt/woodCDN/config/generate.service /etc/systemd/system/
+systemctl enable generate && systemctl start generate
+cp /opt/woodCDN/config/lastrun.service /etc/systemd/system/
+systemctl enable lastrun && systemctl start lastrun
+
 **cron**<br />
 Check /scripts, lastrun and generate need to run every 60s<br />
 ```
-*   *  *   *   *     /opt/woodCDN/scripts/lastrun.sh >/dev/null 2>&1   #all nodes
-*   *  *   *   *     /opt/woodCDN/scripts/generate.sh > /dev/null 2>&1 #web only
 */5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
 ```
 Afterwards you can bring the dns servers online, without any entries or configured cronjobs they won't start.<br />

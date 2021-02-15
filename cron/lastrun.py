@@ -11,5 +11,5 @@ else:
     sub = hostname
 
 while True:
-    time.sleep(30)
     status = cli.execute(["UPDATE pops SET lastrun = ? WHERE name = ?",int(time.time()),sub])
+    time.sleep(30)

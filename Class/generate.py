@@ -15,8 +15,10 @@ class Generate:
         self.templator = Templator()
 
     def run(self):
-        self.certs()
-        self.nginx()
+        while True:
+            self.certs()
+            self.nginx()
+            time.sleep(60)
 
     def certs(self):
         print("Updating certs")
