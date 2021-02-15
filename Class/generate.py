@@ -81,7 +81,7 @@ class Generate:
                         print("Writing HTTPS config for",domain)
                         http = self.templator.nginxHTTP(domain,entry[4])
                         https = self.templator.nginxHTTPS(domain,entry[4])
-                        vhost = self.templator.nginxWrap(http+https)
+                        vhost = self.templator.nginxWrap(domain,http+https)
 
                         with open(self.nginxPath+"cdn-"+domain, 'w') as out:
                             out.write(vhost)

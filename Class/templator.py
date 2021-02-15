@@ -1,7 +1,7 @@
 class Templator:
-    def nginxWrap(self,body):
+    def nginxWrap(self,domain,body):
         template = '''
-proxy_cache_path /data/nginx/cache levels=1:2 keys_zone=STATIC:10m inactive=24h  max_size=1g;
+proxy_cache_path /data/nginx/cache/'''+domain+''' levels=1:2 keys_zone='''+domain+''':10m inactive=24h  max_size=1g;
 '''+body+'''
 '''
         return template
@@ -34,7 +34,7 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3; #drop 1.0 and 1.1
 
     location ~* ^.+\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$ {
-        proxy_cache STATIC;
+        proxy_cache '''+domain+''';
         proxy_cache_valid 200 1d;
         proxy_cache_valid 404 1m;
         proxy_set_header Host '''+target+''';
