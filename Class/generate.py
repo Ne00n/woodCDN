@@ -66,7 +66,7 @@ class Generate:
 
                     print("Writing HTTP config for",domain)
                     http = self.templator.nginxHTTP(domain,entry[4])
-                    vhost = self.templator.nginxWrap(http)
+                    vhost = self.templator.nginxWrap(domain,http)
 
                     with open(self.nginxPath+"cdn-"+domain, 'w') as out:
                         out.write(vhost)
