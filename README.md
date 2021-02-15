@@ -115,7 +115,6 @@ systemctl enable lastrun && systemctl start lastrun
 ```
 
 **cron**<br />
-Check /scripts, lastrun and generate need to run every 60s<br />
 ```
 */5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
 ```
