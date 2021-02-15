@@ -1,5 +1,5 @@
 [Unit]
-Description=woodCDN lastrun service
+Description=woodCDN generate service
 Wants=network-online.target
 After=network-online.target
 
