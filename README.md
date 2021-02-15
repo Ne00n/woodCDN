@@ -107,10 +107,12 @@ python3 cli.py vhost add bla.com static A 2.2.2.2
 ```
 
 **service**<br />
+```
 cp /opt/woodCDN/config/generate.service /etc/systemd/system/
 systemctl enable generate && systemctl start generate
 cp /opt/woodCDN/config/lastrun.service /etc/systemd/system/
 systemctl enable lastrun && systemctl start lastrun
+```
 
 **cron**<br />
 Check /scripts, lastrun and generate need to run every 60s<br />
