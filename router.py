@@ -115,6 +115,6 @@ while True:
                             geoCache[source] = popIP
                     else:
                         popIP = geoCache[source]
-                    print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t1\t-1\t"+popIP)
+                    print("DATA\t"+bits+"\t"+auth+"\t"+qname+"\t"+qclass+"\tA\t30\t-1\t"+popIP)
 
     print("END")
