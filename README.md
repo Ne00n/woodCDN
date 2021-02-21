@@ -99,6 +99,25 @@ Afterwards you should be able to run on that on any node but just once<br />
 ```
 python3 cli.py init
 ```
+**service**<br />
+```
+#Nginx
+cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
+systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
+#Nginx and DNS
+cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
+systemctl enable cdnLastrun && systemctl start cdnLastrun
+#DNS
+cp /opt/woodCDN/config/cdnGenerateDNS.service /etc/systemd/system/
+systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
+cp /opt/woodCDN/config/geodns.service /etc/systemd/system/
+systemctl enable geodns && systemctl start geodns
+```
+
+**cron**<br />
+```
+*/5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
+```
 
 **cli**<br />
 Add your first Domain
@@ -123,24 +142,4 @@ python3 cli.py vhost add <domain> <subdomain> <type> <value>
 python3 cli.py vhost add bla.com test proxy website.com
 #to add a static dns entry
 python3 cli.py vhost add bla.com static A 2.2.2.2
-```
-
-**service**<br />
-```
-#Nginx
-cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
-systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
-#Nginx and DNS
-cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
-systemctl enable cdnLastrun && systemctl start cdnLastrun
-#DNS
-cp /opt/woodCDN/config/cdnGenerateDNS.service /etc/systemd/system/
-systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
-cp /opt/woodCDN/config/geodns.service /etc/systemd/system/
-systemctl enable geodns && systemctl start geodns
-```
-
-**cron**<br />
-```
-*/5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
 ```
