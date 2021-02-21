@@ -18,6 +18,12 @@ class DNS:
         with open('../config/countries.json') as f:
             self.countries = json.load(f)
 
+    def run(self):
+        while True:
+            response = self.fetch()
+            if response is not False: self.generate()
+            time.sleep(30)
+
     def fetch(self):
         self.fallback = False
         data = self.cli.query(["SELECT * FROM domains",'SELECT * FROM vhosts WHERE type != "proxy"',"SELECT * FROM pops"])

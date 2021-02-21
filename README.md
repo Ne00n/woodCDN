@@ -65,7 +65,7 @@ mkdir -p /data/nginx/cache
 chgrp -R cdn /etc/nginx/sites-enabled/
 chmod 775 -R /etc/nginx/sites-enabled/
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
-#Both
+#Nginx and DNS
 mkdir /opt/woodCDN
 chown -R cdn:cdn /opt/woodCDN/
 cd /opt/;su cdn
@@ -123,10 +123,15 @@ python3 cli.py vhost add bla.com static A 2.2.2.2
 
 **service**<br />
 ```
-cp /opt/woodCDN/config/generate.service /etc/systemd/system/
-systemctl enable generate && systemctl start generate
-cp /opt/woodCDN/config/lastrun.service /etc/systemd/system/
-systemctl enable lastrun && systemctl start lastrun
+#Nginx
+cp /opt/woodCDN/config/cdnGenerate.service /etc/systemd/system/
+systemctl enable cdnGenerate && systemctl start cdnGenerate
+#Nginx and DNS
+cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
+systemctl enable cdnLastrun && systemctl start cdnLastrun
+#DNS
+cp /opt/woodCDN/config/cdnGenerateDNS.service /etc/systemd/system/
+systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
 ```
 
 **cron**<br />
