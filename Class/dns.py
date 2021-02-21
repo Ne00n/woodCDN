@@ -36,7 +36,7 @@ class DNS:
 
     def generate(self):
         print("Generating configs")
-        config = {"ttl": 30,"targeting": "country continent @ regiongroup region ip asn","data":{"":{}}}
+        config = {"ttl": 30,"targeting": "country @ region ip asn","data":{"":{}}}
 
         for domain, nameservers in self.domains.items():
 
