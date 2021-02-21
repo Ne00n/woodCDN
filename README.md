@@ -127,7 +127,7 @@ Add your first Domain
 python3 cli.py domain add <name> <email> <ns1>,<ns2>
 #Example
 python3 cli.py domain add bla.com noc@bla.com 1.1.1.1,2.2.2.2
-#The email is needed to lets encrypt
+#The email is needed for lets encrypt
 ```
 Add your first PoP<br/>
 ```
