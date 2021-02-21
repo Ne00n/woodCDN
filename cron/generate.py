@@ -5,7 +5,6 @@ from Class.generate import Generate
 from Class.dns import DNS
 
 generate = Generate()
-dns = DNS()
 
 if len(sys.argv) == 1:
     print("nginx certs")
@@ -14,6 +13,10 @@ elif sys.argv[1] == "nginx":
 elif sys.argv[1] == "certs":
     generate.certs()
 elif sys.argv[1] == "dns":
+    if len(sys.argv) > 2:
+        dns = DNS(sys.argv[2])
+    else:
+        dns = DNS()
     response = dns.fetch()
     if response is False: sys.exit()
     dns.generate()
