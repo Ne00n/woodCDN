@@ -107,9 +107,9 @@ python3 cli.py domain add bla.com noc@bla.com 1.1.1.1,2.2.2.2
 ```
 Add your first PoP<br/>
 ```
-python3 cli.py pop add <hostname of node> <v4> <latitude> <longitude>
+python3 cli.py pop add <hostname of node> <country> <v4>
 #Example
-python3 cli.py pop add atlanta 3.3.3.3 50.48 -2.88
+python3 cli.py pop add atlanta fr 3.3.3.3
 #The hostname needs to match the hostname of the node, otherwise the cron won't be updating data correctly
 ```
 Add your first vhost (proxy/dns) entry

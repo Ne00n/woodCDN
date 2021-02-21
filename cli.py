@@ -30,7 +30,7 @@ elif sys.argv[1] == "vhost":
         cli.deleteVhost(sys.argv[3:])
 elif sys.argv[1] == "pop":
     if len(sys.argv) == 2:
-        print("pop add <name> <location> <v4>\npop list\npop del <name>")
+        print("pop add <name> <country> <v4>\npop list\npop del <name>")
     elif sys.argv[2] == "add":
         cli.addPoP(sys.argv[3:])
     elif sys.argv[2] == "list":
