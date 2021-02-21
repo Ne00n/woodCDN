@@ -59,7 +59,6 @@ apt-get install sudo nginx git python3 python3-pip -y
 pip3 install simple-acme-dns
 #DNS
 apt-get install git python3 python3-pip -y
-pip3 install geoip2
 pip3 install simple-acme-dns
 #Nginx
 mkdir -p /data/nginx/cache
@@ -107,9 +106,9 @@ python3 cli.py domain add bla.com noc@bla.com 1.1.1.1,2.2.2.2
 ```
 Add your first PoP<br/>
 ```
-python3 cli.py pop add <hostname of node> <country> <v4>
+python3 cli.py pop add <hostname of node> <country> <latitude> <longitude> <v4>
 #Example
-python3 cli.py pop add atlanta fr 3.3.3.3
+python3 cli.py pop add gravelines fr 46.22 2.21 3.3.3.3
 #The hostname needs to match the hostname of the node, otherwise the cron won't be updating data correctly
 ```
 Add your first vhost (proxy/dns) entry
