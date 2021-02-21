@@ -124,8 +124,8 @@ python3 cli.py vhost add bla.com static A 2.2.2.2
 **service**<br />
 ```
 #Nginx
-cp /opt/woodCDN/config/cdnGenerate.service /etc/systemd/system/
-systemctl enable cdnGenerate && systemctl start cdnGenerate
+cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
+systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
 #Nginx and DNS
 cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
 systemctl enable cdnLastrun && systemctl start cdnLastrun
