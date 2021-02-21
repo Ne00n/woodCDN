@@ -132,6 +132,8 @@ systemctl enable cdnLastrun && systemctl start cdnLastrun
 #DNS
 cp /opt/woodCDN/config/cdnGenerateDNS.service /etc/systemd/system/
 systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
+cp /opt/woodCDN/config/geodns.service /etc/systemd/system/
+systemctl enable geodns && systemctl start geodns
 ```
 
 **cron**<br />

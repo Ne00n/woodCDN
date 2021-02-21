@@ -1,5 +1,5 @@
 [Unit]
-Description=woodCDN generate dns service
+Description=geodns service
 Wants=network-online.target
 After=network-online.target
 
@@ -7,8 +7,8 @@ After=network-online.target
 User=cdn
 Group=cdn
 Type=simple
-WorkingDirectory=/opt/woodCDN/cron
-ExecStart=/usr/bin/python3 dns.py run
+WorkingDirectory=/home/cdn/geodns
+ExecStart=/home/cdn/geodns/geodns
 
 [Install]
 WantedBy=multi-user.target
