@@ -84,6 +84,7 @@ go version
 su cdn; cd /home/cdn
 git clone https://github.com/Ne00n/geodns
 cd geodns; ./build.sh
+setcap CAP_NET_BIND_SERVICE=+eip /home/cdn/geodns/geodns #grant low-numbered port access to a process
 ```
 
 You can get maxmind databases [here](https://dev.maxmind.com/geoip/geoip2/geolite2/)<br />
@@ -95,20 +96,6 @@ GeoLite2-Country.mmdb
 ```
 
 Into /usr/share/GeoIP/ on each dns node<br />
-**service**<br />
-```
-#Nginx
-cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
-systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
-#Nginx and DNS
-cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
-systemctl enable cdnLastrun && systemctl start cdnLastrun
-#DNS
-cp /opt/woodCDN/config/cdnGenerateDNS.service /etc/systemd/system/
-systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
-cp /opt/woodCDN/config/geodns.service /etc/systemd/system/
-systemctl enable geodns && systemctl start geodns
-```
 
 **cron**<br />
 ```
@@ -144,4 +131,19 @@ python3 cli.py vhost add <domain> <subdomain> <type> <value>
 python3 cli.py vhost add bla.com test proxy website.com
 #to add a static dns entry
 python3 cli.py vhost add bla.com static A 2.2.2.2
+```
+
+**services**<br />
+```
+#Nginx
+cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
+systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
+#Nginx and DNS
+cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
+systemctl enable cdnLastrun && systemctl start cdnLastrun
+#DNS
+cp /opt/woodCDN/config/cdnGenerateDNS.service /etc/systemd/system/
+systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
+cp /opt/woodCDN/config/geodns.service /etc/systemd/system/
+systemctl enable geodns && systemctl start geodns
 ```
