@@ -65,9 +65,9 @@ class DNS:
             for nameserver in nameservers:
                 ns = "ns"+str(count)+"."+domain
                 config["data"][""]["ns"].append(ns)
-                config["data"][ns] = {}
-                config["data"][ns]["a"] = []
-                config["data"][ns]["a"].append([nameserver])
+                config["data"]["ns"+str(count)] = {}
+                config["data"]["ns"+str(count)]["a"] = []
+                config["data"]["ns"+str(count)]["a"].append([nameserver])
                 count = count + 1
 
             #static entries
