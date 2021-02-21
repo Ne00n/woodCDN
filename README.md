@@ -52,7 +52,7 @@ rqlite --host rqlite --port 4003
 .status
 ```
 To run rqlite as service and on boot config/rqlite.service<br />
-3. Deploy the Code
+3. Deploy the Code<br />
 Nginx / DNS <br />
 ```
 apt-get install git python3 python3-pip -y
