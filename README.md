@@ -95,10 +95,6 @@ GeoLite2-Country.mmdb
 ```
 
 Into /usr/share/GeoIP/ on each dns node<br />
-Afterwards you should be able to run on that on any node but just once<br />
-```
-python3 cli.py init
-```
 **service**<br />
 ```
 #Nginx
@@ -117,6 +113,12 @@ systemctl enable geodns && systemctl start geodns
 **cron**<br />
 ```
 */5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
+```
+
+**init**<br />
+Afterwards you should be able to run on that on any node but just once<br />
+```
+python3 cli.py init
 ```
 
 **cli**<br />
