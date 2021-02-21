@@ -53,25 +53,28 @@ rqlite --host rqlite --port 4003
 ```
 To run rqlite as service and on boot config/rqlite.service<br />
 3. Deploy the Code
+Nginx / DNS <br />
 ```
-#Nginx
-apt-get install sudo nginx git python3 python3-pip -y
-pip3 install simple-acme-dns
-#DNS
 apt-get install git python3 python3-pip -y
 pip3 install simple-acme-dns
-#Nginx
-mkdir -p /data/nginx/cache
-chgrp -R cdn /etc/nginx/sites-enabled/
-chmod 775 -R /etc/nginx/sites-enabled/
-echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
 #Nginx and DNS
 mkdir /opt/woodCDN
 chown -R cdn:cdn /opt/woodCDN/
 cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
-#DNS
+```
+Nginx<br />
+```
+apt-get install sudo nginx git python3 python3-pip -y
+pip3 install simple-acme-dns
+mkdir -p /data/nginx/cache
+chgrp -R cdn /etc/nginx/sites-enabled/
+chmod 775 -R /etc/nginx/sites-enabled/
+echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
+```
+DNS <br />
+```
 #Make sure to check for the latest release!
 wget https://golang.org/dl/go1.16.linux-amd64.tar.gz
 tar -C /usr/local -xzf go*.linux-amd64.tar.gz
