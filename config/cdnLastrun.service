@@ -7,6 +7,7 @@ After=network-online.target
 User=cdn
 Group=cdn
 Type=simple
+LogLevelMax=alert
 WorkingDirectory=/opt/woodCDN/cron
 ExecStart=/usr/bin/python3 lastrun.py
 
