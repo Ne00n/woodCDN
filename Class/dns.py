@@ -45,11 +45,11 @@ class DNS:
             if not row[3] in self.vhosts[row[1]]: self.vhosts[row[1]][row[3]] = {}
             if row[2] == "@":
                 if not row[1] in self.vhosts[row[1]][row[3]]: self.vhosts[row[1]][row[3]][row[1]] = []
-                self.vhosts[row[1]][row[3]][row[1]].append(row[4:])
+                self.vhosts[row[1]][row[3]][row[1]].append(row[4])
             else:
                 subdomain = row[2]
                 if not subdomain in self.vhosts[row[1]][row[3]]: self.vhosts[row[1]][row[3]][subdomain] = []
-                self.vhosts[row[1]][row[3]][subdomain].append(row[4:])
+                self.vhosts[row[1]][row[3]][subdomain].append(row[4])
 
     def generate(self):
         print("Generating configs")
@@ -85,8 +85,8 @@ class DNS:
                                 if record != domain: config["data"][record][type].append([value])
                                 if record == domain: config["data"][""][type].append([value])
                             elif type == "mx" or type == "txt" or type == "spf":
-                                if record != domain: config["data"][record][type].append({type:value[0]})
-                                if record == domain: config["data"][""][type].append({type:value[0]})
+                                if record != domain: config["data"][record][type].append({type:value})
+                                if record == domain: config["data"][""][type].append({type:value})
 
             #geo
             for country in self.countries:
