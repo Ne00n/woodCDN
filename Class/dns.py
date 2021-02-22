@@ -93,13 +93,11 @@ class DNS:
                                 if record != domain: config["data"][record][type].append({type:value})
                                 if record == domain: config["data"][""][type].append({type:value})
 
-            ignoreCountry = []
             #regions
             for country,regions in self.regions.items():
                 match = False
                 for pop in self.pops:
                     if len(pop[1]) > 2 and pop[1].startswith(country):
-                        ignoreCountry.append(country.upper())
                         match = True
                 if match:
                     for region, geo in regions.items():
@@ -119,9 +117,6 @@ class DNS:
             #geo
             for country in self.countries:
                 ip = ""
-                if country['alpha2'] in ignoreCountry:
-                    print("Skipping",country['alpha2'])
-                    continue
                 for pop in self.pops:
                     if pop[1] == country['alpha2'].lower():
                         ip = pop[4]
