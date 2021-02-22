@@ -84,7 +84,7 @@ go version
 su cdn; cd /home/cdn
 git clone https://github.com/Ne00n/geodns
 cd geodns; ./build.sh
-setcap CAP_NET_BIND_SERVICE=+eip /home/cdn/geodns/geodns #grant low-numbered port access to a process
+exit; setcap CAP_NET_BIND_SERVICE=+eip /home/cdn/geodns/geodns #grant low-numbered port access to a process
 ```
 
 You can get maxmind databases [here](https://dev.maxmind.com/geoip/geoip2/geolite2/)<br />
