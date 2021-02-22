@@ -26,6 +26,7 @@ class DNS:
 
     def fetch(self):
         self.fallback = False
+        self.vhosts,self.domains = {},{}
         data = self.cli.query(["SELECT * FROM domains",'SELECT * FROM vhosts WHERE type != "proxy"',"SELECT * FROM pops"])
 
         if (data is False or "values" not in data['results'][0] or "values" not in data['results'][1] or "values" not in data['results'][2]):
