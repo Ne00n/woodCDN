@@ -108,8 +108,6 @@ class DNS:
                             if pop[1] == zone:
                                 ip = pop[4]
                         if ip == "":
-                            print(region)
-                            print(geo)
                             ip = self.data.getClosestPoP(float(geo['latitude']), float(geo['longitude']), self.pops, self.fallback)
                         if ip == "":
                             print("Could not geo",zone)
