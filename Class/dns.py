@@ -18,6 +18,10 @@ class DNS:
         with open('../config/countries.json') as f:
             self.countries = json.load(f)
 
+        print("Loading regions")
+        with open('../config/regions.json') as f:
+            self.regions = json.load(f)
+
     def run(self):
         while True:
             response = self.fetch()
@@ -89,9 +93,37 @@ class DNS:
                                 if record != domain: config["data"][record][type].append({type:value})
                                 if record == domain: config["data"][""][type].append({type:value})
 
+            ignoreCountry = []
+            #regions
+            for country,regions in self.regions.items():
+                match = False
+                for pop in self.pops:
+                    if len(pop[1]) > 2 and pop[1].startswith(country):
+                        ignoreCountry.append(country.upper())
+                        match = True
+                if match:
+                    for region, geo in regions.items():
+                        zone,ip = country+"-"+region.lower(),""
+                        for pop in self.pops:
+                            if pop[1] == zone:
+                                ip = pop[4]
+                        if ip == "":
+                            print(region)
+                            print(geo)
+                            ip = self.data.getClosestPoP(float(geo['latitude']), float(geo['longitude']), self.pops, self.fallback)
+                        if ip == "":
+                            print("Could not geo",zone)
+                            continue
+                        config["data"][zone] = {}
+                        config["data"][zone]["a"] = []
+                        config["data"][zone]["a"].append([ip])
+
             #geo
             for country in self.countries:
                 ip = ""
+                if country['alpha2'] in ignoreCountry:
+                    print("Skipping",country['alpha2'])
+                    continue
                 for pop in self.pops:
                     if pop[1] == country['alpha2'].lower():
                         ip = pop[4]
