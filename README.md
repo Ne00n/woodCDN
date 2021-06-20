@@ -13,7 +13,7 @@
 **Software**<br />
 - Nginx as proxy/caching device
 - rqlite to store the vhosts/domains/pops
-- pdns as nameserver + geodns
+- gdnsd as nameserver + latency based routing
 - python3 for syncing/generating the vhosts
 - python3 to add/edit/delete vhosts and settings
 
@@ -58,7 +58,7 @@ To run rqlite as service and on boot config/rqlite.service<br />
 apt-get install sudo nginx git python3 python3-pip -y
 pip3 install simple-acme-dns
 #DNS
-apt-get install git python3 python3-pip pdns-server pdns-backend-pipe -y
+apt-get install git python3 python3-pip gdnsd -y
 pip3 install geoip2
 pip3 install simple-acme-dns
 #Nginx
