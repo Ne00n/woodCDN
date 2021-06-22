@@ -22,6 +22,7 @@ server {
 }
 '''
         return template
+
     def nginxHTTPS(self,domain,target):
         template = '''
 server {
@@ -53,4 +54,29 @@ server {
     }
 }
 '''
+        return template
+
+    def gdnsdConfig(self,pops):
+        template = '''plugins => { geoip => {
+  maps => {
+    prod => {
+      datacenters => ['''
+        for index, pop in enumerate(pops):
+            template += pop[0]
+            if index < len(pops) -1: template += ","
+        template += '''],
+      nets = dc.conf
+    }
+  },
+  resources => {
+    prod_www => {
+      map => prod
+      dcmap => {
+'''
+        for pop in pops:
+            template += "       "+pop[0]+" => "+pop[1]+",\n"
+        template += '''      }
+    }
+  }
+}}'''
         return template

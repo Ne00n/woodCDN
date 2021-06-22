@@ -7,7 +7,9 @@ class Generate:
 
     nginxPath = "/etc/nginx/sites-enabled/"
     nginxCerts = "/opt/woodCDN/certs/"
+    gdnsdConfig = "/etc/gdnsd/config"
     reload = False
+    pops = {}
 
     def __init__(self):
         self.cli = CLI()
@@ -18,6 +20,7 @@ class Generate:
         while True:
             self.certs()
             self.nginx()
+            self.gdnsd()
             time.sleep(60)
 
     def certs(self):
@@ -104,3 +107,25 @@ class Generate:
             #Gracefull reloading, won't impact incomming or ongoing connections
             print("Reloading nginx")
             subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "nginx", "reload"])
+
+    def gdnsd(self):
+        print("Updating gdnsd")
+
+        data = self.cli.query(['SELECT * FROM pops'])
+        if not 'values' in data['results'][0]: return False
+
+        pops = [x for x in data['results'][0]['values'] if x[2] + 60 > int(time.time())]
+        if len(pops) == 0: pops = data['results'][0]['values'] #fallback
+
+        reload = False
+        if self.pops != data['results'][0]: reload = True
+
+        config = self.templator.gdnsdConfig(data['results'][0]['values'])
+
+        if reload:
+            with open(self.gdnsdConfig, 'w') as out:
+                out.write(config)
+            print("Restarting gdnsd")
+            subprocess.run(["/usr/bin/sudo", "/usr/bin/systemctl", "restart", "gdnsd"])
+
+        self.pops = data['results'][0]
