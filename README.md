@@ -85,13 +85,13 @@ Add your first Domain
 python3 cli.py domain add <name> <email> <ns1>,<ns2>
 #Example
 python3 cli.py domain add bla.com noc@bla.com 1.1.1.1,2.2.2.2
-#The email is needed to lets encrypt
+#The email is needed for lets encrypt
 ```
 Add your first PoP<br/>
 ```
-python3 cli.py pop add <hostname of node> <v4> <latitude> <longitude>
+python3 cli.py pop add <hostname of node> <v4>
 #Example
-python3 cli.py pop add atlanta 3.3.3.3 50.48 -2.88
+python3 cli.py pop add atlanta 3.3.3.3
 #The hostname needs to match the hostname of the node, otherwise the cron won't be updating data correctly
 ```
 Add your first vhost (proxy/dns) entry
