@@ -61,6 +61,7 @@ pip3 install simple-acme-dns
 apt-get install git python3 python3-pip gdnsd -y
 pip3 install geoip2
 pip3 install simple-acme-dns
+echo "cdn ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart gdnsd" >> /etc/sudoers
 #Nginx
 mkdir -p /data/nginx/cache
 chgrp -R cdn /etc/nginx/sites-enabled/
@@ -73,9 +74,6 @@ cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
 ```
-
-You can get the free city lite database [here](https://dev.maxmind.com/geoip/geoip2/geolite2/)<br />
-Put the Database on each dns node in /opt/woodCDN<br />
 Afterwards you should be able to run on that on any node but just once<br />
 ```
 python3 cli.py init
