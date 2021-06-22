@@ -59,7 +59,6 @@ apt-get install sudo nginx git python3 python3-pip -y
 pip3 install simple-acme-dns
 #DNS
 apt-get install git python3 python3-pip gdnsd -y
-pip3 install geoip2
 pip3 install simple-acme-dns
 echo "cdn ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart gdnsd" >> /etc/sudoers
 #Nginx
