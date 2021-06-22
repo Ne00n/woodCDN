@@ -126,6 +126,6 @@ class Generate:
             with open(self.gdnsdConfig, 'w') as out:
                 out.write(config)
             print("Restarting gdnsd")
-            subprocess.run(["/usr/bin/sudo", "/usr/bin/systemctl", "restart", "gdnsd"])
+            subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
 
         self.pops = data['results'][0]
