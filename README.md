@@ -61,6 +61,8 @@ pip3 install simple-acme-dns
 apt-get install git python3 python3-pip gdnsd -y
 pip3 install simple-acme-dns
 echo "cdn ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart gdnsd" >> /etc/sudoers
+chgrp -R cdn /etc/gdnsd/
+chmod 775 -R /etc/gdnsd/
 #Nginx
 mkdir -p /data/nginx/cache
 chgrp -R cdn /etc/nginx/sites-enabled/
