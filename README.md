@@ -40,9 +40,9 @@ adduser cdn --disabled-login
 su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v5.8.0/rqlite-v5.8.0-linux-amd64.tar.gz -o rqlite-v5.8.0-linux-amd64.tar.gz
 tar xvfz rqlite-v5.8.0-linux-amd64.tar.gz; mv xvfz rqlite-v5.8.0-linux-amd64 rqlite
 #First node
-rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 datadir
+rqlited -http-addr rqlite:4003 -raft-addr rqlite:4004 datadir
 #Moah nodes
-rqlited -http-addr 10.0.0.2:4003 -raft-addr 10.0.0.2:4004 -join http://10.0.0.1:4003 datadir
+rqlited -http-addr rqlite:4003 -raft-addr rqlite:4004 -join http://10.0.0.1:4003 datadir
 ```
 You can check the cluster status by running
 ```

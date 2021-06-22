@@ -8,8 +8,8 @@ User=cdn
 Group=cdn
 Type=simple
 WorkingDirectory=/home/cdn/rqlite
-ExecStartPre=/bin/sh -c 'until ping -c1 10.0.0.1; do sleep 1; done;'
-ExecStart=/home/cdn/rqlite/rqlited -http-addr 10.0.0.1:4003 -raft-addr 10.0.0.1:4004 -join http://10.0.0.1:4003 datadir
+ExecStartPre=/bin/sh -c 'until ping -c1 rqlite; do sleep 1; done;'
+ExecStart=/home/cdn/rqlite/rqlited -http-addr rqlite:4003 -raft-addr rqlite:4004 -join http://10.0.0.1:4003 datadir
 #Remove -join ... on the first node
 
 [Install]
