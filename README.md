@@ -33,25 +33,25 @@
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
 You can use ansible for that so you get it up in a few minutes. Fork that I [use](https://github.com/Ne00n/ansible-tinc).</br >
 Add rqlite as entry to hosts that points to the local vpn interface.<br />
+```
+echo "10.0.251.x rqlite" >> /etc/hosts
+```
 2. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
 ```
 adduser cdn --disabled-login
 #Make sure to check for the latest release!
-su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v5.8.0/rqlite-v5.8.0-linux-amd64.tar.gz -o rqlite-v5.8.0-linux-amd64.tar.gz
-tar xvfz rqlite-v5.8.0-linux-amd64.tar.gz; mv rqlite-v5.8.0-linux-amd64 rqlite
+su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v6.0.0/rqlite-v6.0.0-linux-amd64.tar.gz -o rqlite-v6.0.0-linux-amd64.tar.gz
+tar xvfz rqlite-v6.0.0-linux-amd64.tar.gz; mv rqlite-v6.0.0-linux-amd64 rqlite
 #First node
 rqlited -http-addr rqlite:4003 -raft-addr rqlite:4004 datadir
 #Moah nodes
 rqlited -http-addr rqlite:4003 -raft-addr rqlite:4004 -join http://10.0.0.1:4003 datadir
 ```
+To run rqlite as service and on boot checkout config/rqlite.service<br />
 You can check the cluster status by running
 ```
 curl rqlite:4003/status?pretty
-#or
-rqlite --host rqlite --port 4003
-.status
 ```
-To run rqlite as service and on boot config/rqlite.service<br />
 3. Deploy the Code
 
 **All Nodes**
