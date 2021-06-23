@@ -54,6 +54,18 @@ rqlite --host rqlite --port 4003
 To run rqlite as service and on boot config/rqlite.service<br />
 3. Deploy the Code
 
+**All Nodes**
+```
+mkdir /opt/woodCDN
+chown -R cdn:cdn /opt/woodCDN/
+cd /opt/;su cdn
+git clone https://github.com/Ne00n/woodCDN.git && git checkout gdnsd
+exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
+cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
+systemctl enable cdnLastrun && systemctl start cdnLastrun
+cp /opt/woodCDN/config/cdnCert.service /etc/systemd/system/
+systemctl enable cdnCert && systemctl start cdnCert
+```
 **Nginx Nodes**
 ```
 apt-get install sudo nginx git python3 python3-pip -y
@@ -74,18 +86,6 @@ chgrp -R cdn /etc/gdnsd/
 chmod 775 -R /etc/gdnsd/
 cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/
 systemctl enable cdnDNS && systemctl start cdnDNS
-```
-**All Nodes**
-```
-mkdir /opt/woodCDN
-chown -R cdn:cdn /opt/woodCDN/
-cd /opt/;su cdn
-git clone https://github.com/Ne00n/woodCDN.git && git checkout gdnsd
-exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
-cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
-systemctl enable cdnLastrun && systemctl start cdnLastrun
-cp /opt/woodCDN/config/cdnCert.service /etc/systemd/system/
-systemctl enable cdnCert && systemctl start cdnCert
 ```
 Afterwards you should be able to run on that on any node but just once<br />
 ```
