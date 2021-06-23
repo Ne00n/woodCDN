@@ -80,3 +80,31 @@ server {
   }
 }}'''
         return template
+
+    def gdnsdZone(self,vhost):
+        template = '''$TTL 86400
+
+@     SOA ns1 '''+vhost[0]+''' (
+      1      ; serial
+      7200   ; refresh
+      30M    ; retry
+      3D     ; expire
+      900    ; ncache
+)
+
+@       NS      ns1
+@       NS      ns2
+
+'''
+        for index, nameserver in enumerate(vhost[1]['nameserver'].split(",")):
+            template += 'ns'+str(index +1)+' 3600 A '+nameserver+"\n"
+        template += "\n"
+        if not vhost[1]['records']: return template
+        for record in vhost[1]['records']:
+            if record['type'] == "proxy":
+                template += record['record']+'   30 	DYNA 	 geoip!prod_www'+'\n'
+            elif record['type'] == 'TXT':
+                template += record['record']+'   3600 	'+record['type']+' 	 "'+record['target']+'"\n'
+            else:
+                template += record['record']+'   3600 	'+record['type']+' 	 '+record['target']+'\n'
+        return template

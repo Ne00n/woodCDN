@@ -8,7 +8,9 @@ class Generate:
     nginxPath = "/etc/nginx/sites-enabled/"
     nginxCerts = "/opt/woodCDN/certs/"
     gdnsdConfig = "/etc/gdnsd/config"
+    gdnsdZonesDir = "/etc/gdnsd/zones/"
     reload = False
+    vhosts = {}
     pops = {}
 
     def __init__(self):
@@ -20,7 +22,12 @@ class Generate:
         while True:
             self.certs()
             self.nginx()
-            self.gdnsd()
+            time.sleep(60)
+
+    def gdnsd(self):
+        while True:
+            self.gdnsdConfig()
+            self.gdnsdZones()
             time.sleep(60)
 
     def certs(self):
@@ -108,8 +115,47 @@ class Generate:
             print("Reloading nginx")
             subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "nginx", "reload"])
 
-    def gdnsd(self):
-        print("Updating gdnsd")
+    def gdnsdZones(self):
+        print("Updating gdnsd zones")
+
+        domains = self.cli.query(['SELECT * FROM domains LEFT JOIN vhosts ON domains.domain=vhosts.domain'])
+        files,current = os.listdir(self.gdnsdZonesDir),[]
+        if not 'values' in domains['results'][0]: return False
+
+        vhosts,reload = {},False
+        #build dict
+        for domain in domains['results'][0]['values']:
+            if not domain[0] in vhosts:
+                vhosts[domain[0]] = {}
+                vhosts[domain[0]]['records'] = []
+                vhosts[domain[0]]['nameserver'] = domain[1]
+            if domain[6] is None: continue
+            vhosts[domain[0]]['records'].append({"type":domain[6],"record":domain[5],"target":domain[7]})
+
+        #update/create dns zones
+        for vhost in vhosts.items():
+            if not vhost[0] in self.vhosts: self.vhosts[vhost[0]] = {}
+            current.append('cdn-'+vhost[0])
+            if self.vhosts[vhost[0]] == vhost[1]:
+                print("skipping",vhost[0])
+                continue
+            zone = self.templator.gdnsdZone(vhost)
+            with open(self.gdnsdZonesDir+'cdn-'+vhost[0], 'w') as out:
+                out.write(zone)
+            reload = True
+            self.vhosts[vhost[0]] = vhost[1]
+
+        #domains removed from database
+        for file in files:
+            if file not in current and "cdn-" in file:
+                os.remove(path+file)
+                reload = True
+
+        if reload:
+            subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
+
+    def gdnsdConfig(self):
+        print("Updating gdnsd config")
 
         data = self.cli.query(['SELECT * FROM pops'])
         if not 'values' in data['results'][0]: return False
@@ -117,15 +163,13 @@ class Generate:
         pops = [x for x in data['results'][0]['values'] if x[2] + 60 > int(time.time())]
         if len(pops) == 0: pops = data['results'][0]['values'] #fallback
 
-        reload = False
-        if self.pops != data['results'][0]: reload = True
+        if self.pops == data['results'][0]: return False
 
         config = self.templator.gdnsdConfig(data['results'][0]['values'])
 
-        if reload:
-            with open(self.gdnsdConfig, 'w') as out:
-                out.write(config)
-            print("Restarting gdnsd")
-            subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
+        with open(self.gdnsdConfig, 'w') as out:
+            out.write(config)
+        print("Restarting gdnsd")
+        subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
 
         self.pops = data['results'][0]
