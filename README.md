@@ -80,7 +80,7 @@ systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
 mkdir /opt/woodCDN
 chown -R cdn:cdn /opt/woodCDN/
 cd /opt/;su cdn
-git clone https://github.com/Ne00n/woodCDN.git
+git clone https://github.com/Ne00n/woodCDN.git && git checkout gdnsd
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
 cp /opt/woodCDN/config/lastrun.service /etc/systemd/system/
 systemctl enable lastrun && systemctl start lastrun
