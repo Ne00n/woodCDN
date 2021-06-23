@@ -38,7 +38,7 @@ Add rqlite as entry to hosts that points to the local vpn interface.<br />
 adduser cdn --disabled-login
 #Make sure to check for the latest release!
 su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v5.8.0/rqlite-v5.8.0-linux-amd64.tar.gz -o rqlite-v5.8.0-linux-amd64.tar.gz
-tar xvfz rqlite-v5.8.0-linux-amd64.tar.gz; mv xvfz rqlite-v5.8.0-linux-amd64 rqlite
+tar xvfz rqlite-v5.8.0-linux-amd64.tar.gz; mv rqlite-v5.8.0-linux-amd64 rqlite
 #First node
 rqlited -http-addr rqlite:4003 -raft-addr rqlite:4004 datadir
 #Moah nodes
