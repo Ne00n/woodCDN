@@ -56,12 +56,13 @@ server {
 '''
         return template
 
-    def gdnsdConfig(self,pops):
+    def gdnsdConfig(self,popsOrg,pops):
         template = '''plugins => { geoip => {
+  undefined_datacenters_ok = true
   maps => {
     prod => {
       datacenters => ['''
-        for index, pop in enumerate(pops):
+        for index, pop in enumerate(popsOrg):
             template += pop[0]
             if index < len(pops) -1: template += ","
         template += '''],

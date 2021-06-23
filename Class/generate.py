@@ -165,7 +165,8 @@ class Generate:
 
         if self.pops == data['results'][0]: return False
 
-        config = self.templator.gdnsdConfig(data['results'][0]['values'])
+        #pass the original list and filtered because gdnsd needs the full list in datacenters
+        config = self.templator.gdnsdConfig(data['results'][0]['values'],pops)
 
         with open(self.gdnsdConfig, 'w') as out:
             out.write(config)
