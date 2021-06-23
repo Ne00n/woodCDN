@@ -1,5 +1,5 @@
 [Unit]
-Description=woodCDN generate service
+Description=woodCDN generate nginx service
 Wants=network-online.target
 After=network-online.target
 

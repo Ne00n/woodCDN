@@ -107,8 +107,8 @@ python3 cli.py vhost add bla.com static A 2.2.2.2
 
 **service**<br />
 ```
-cp /opt/woodCDN/config/generate.service /etc/systemd/system/
-systemctl enable generate && systemctl start generate
+cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
+systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
 cp /opt/woodCDN/config/lastrun.service /etc/systemd/system/
 systemctl enable lastrun && systemctl start lastrun
 ```
