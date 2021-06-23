@@ -62,8 +62,8 @@ mkdir -p /data/nginx/cache
 chgrp -R cdn /etc/nginx/sites-enabled/
 chmod 775 -R /etc/nginx/sites-enabled/
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
-cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
-systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
+cp /opt/woodCDN/config/cdnNginx.service /etc/systemd/system/
+systemctl enable cdnNginx && systemctl start cdnNginx
 ```
 **DNS Nodes**
 ```
@@ -72,8 +72,8 @@ pip3 install simple-acme-dns
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service gdnsd restart" >> /etc/sudoers
 chgrp -R cdn /etc/gdnsd/
 chmod 775 -R /etc/gdnsd/
-cp /opt/woodCDN/config/cdnGenerateDNS.service /etc/systemd/system/
-systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
+cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/
+systemctl enable cdnDNS && systemctl start cdnDNS
 ```
 **All Nodes**
 ```
@@ -82,15 +82,11 @@ chown -R cdn:cdn /opt/woodCDN/
 cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git && git checkout gdnsd
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
-cp /opt/woodCDN/config/lastrun.service /etc/systemd/system/
-systemctl enable lastrun && systemctl start lastrun
+cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
+systemctl enable cdnLastrun && systemctl start cdnLastrun
+cp /opt/woodCDN/config/cdnCert.service /etc/systemd/system/
+systemctl enable cdnCert && systemctl start cdnCert
 ```
-
-**cron**<br />
-```
-*/5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
-```
-
 Afterwards you should be able to run on that on any node but just once<br />
 ```
 python3 cli.py init

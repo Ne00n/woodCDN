@@ -1,6 +1,6 @@
 from Class.rqlite import rqlite
 from Class.cli import CLI
-import simple_acme_dns, json, time, os
+import simple_acme_dns, json, time, sys, os
 
 class Cert(rqlite):
 
@@ -63,3 +63,43 @@ class Cert(rqlite):
         for file in files:
             if file not in current:
                 os.remove(path+file)
+
+    def renew(self):
+        status = self.cli.status()
+        if status is False: print("rqlite gone")
+        state = status['store']['raft']['state']
+
+        if state == "Leader":
+            print("Getting doamins")
+            domains = self.cli.query(['SELECT * FROM vhosts as v JOIN domains as d ON v.domain=d.domain LEFT JOIN certs as c ON v.domain=c.domain AND v.subdomain=c.subdomain WHERE v.type = "proxy"'])
+
+            if domains is False:
+                print("rqlite gone")
+                sys.exit()
+            if 'values' not in domains['results'][0]:
+                print("no vhosts added")
+                sys.exit()
+
+            for row in domains['results'][0]['values']:
+                target = row[1]
+                if row[2] != "@": target = row[2]+"."+row[1]
+                if row[9] == None:
+                    print("Missing cert for",target)
+
+                    response = self.getCert(target,row[1],row[2],row[8])
+                    if response is False:
+                        print("Failed to get cert for",target)
+                        sys.exit()
+
+                else:
+                    print("Checking cert for",target)
+                    if time.time() > (row[14] + (86400 * 30)):
+                        print("Certificate is older than 30 days")
+
+                        response = cert.getCert(target,row[1],row[2],row[8],True)
+                        if response is False:
+                            print("Failed to get cert for",target)
+                            sys.exit()
+
+        else:
+            print("Not leader, aborting.")
