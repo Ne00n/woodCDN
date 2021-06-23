@@ -29,7 +29,7 @@
 - HTTPS Support (wildcard)
 - IPv6 Support
 
-**Setup**<br />
+## Setup<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
 You can use ansible for that so you get it up in a few minutes. Fork that I [use](https://github.com/Ne00n/ansible-tinc).</br >
 Add rqlite as entry to hosts that points to the local vpn interface.<br />
@@ -53,28 +53,44 @@ rqlite --host rqlite --port 4003
 ```
 To run rqlite as service and on boot config/rqlite.service<br />
 3. Deploy the Code
+
+**Nginx Nodes**
 ```
-#Nginx
 apt-get install sudo nginx git python3 python3-pip -y
 pip3 install simple-acme-dns
-#DNS
+mkdir -p /data/nginx/cache
+chgrp -R cdn /etc/nginx/sites-enabled/
+chmod 775 -R /etc/nginx/sites-enabled/
+echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
+cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
+systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
+```
+**DNS Nodes**
+```
 apt-get install git python3 python3-pip gdnsd -y
 pip3 install simple-acme-dns
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service gdnsd restart" >> /etc/sudoers
 chgrp -R cdn /etc/gdnsd/
 chmod 775 -R /etc/gdnsd/
-#Nginx
-mkdir -p /data/nginx/cache
-chgrp -R cdn /etc/nginx/sites-enabled/
-chmod 775 -R /etc/nginx/sites-enabled/
-echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
-#Both
+cp /opt/woodCDN/config/cdnGenerateDNS.service /etc/systemd/system/
+systemctl enable cdnGenerateDNS && systemctl start cdnGenerateDNS
+```
+**All Nodes**
+```
 mkdir /opt/woodCDN
 chown -R cdn:cdn /opt/woodCDN/
 cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
+cp /opt/woodCDN/config/lastrun.service /etc/systemd/system/
+systemctl enable lastrun && systemctl start lastrun
 ```
+
+**cron**<br />
+```
+*/5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
+```
+
 Afterwards you should be able to run on that on any node but just once<br />
 ```
 python3 cli.py init
@@ -104,17 +120,3 @@ python3 cli.py vhost add bla.com test proxy website.com
 #to add a static dns entry
 python3 cli.py vhost add bla.com static A 2.2.2.2
 ```
-
-**service**<br />
-```
-cp /opt/woodCDN/config/cdnGenerateNginx.service /etc/systemd/system/
-systemctl enable cdnGenerateNginx && systemctl start cdnGenerateNginx
-cp /opt/woodCDN/config/lastrun.service /etc/systemd/system/
-systemctl enable lastrun && systemctl start lastrun
-```
-
-**cron**<br />
-```
-*/5 *  *   *   *     /opt/woodCDN/scripts/cert.sh >/dev/null 2>&1      #all nodes
-```
-Afterwards you can bring the dns servers online, without any entries or configured cronjobs they won't start.<br />
