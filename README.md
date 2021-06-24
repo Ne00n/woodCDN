@@ -49,6 +49,7 @@ rqlited -node-id 2 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 -join http:
 ```
 To run rqlite as service and on boot checkout config/rqlite.service<br />
 You can check the cluster status by running
+**rqlite is known to NOT resolve IP addresses!**
 ```
 curl rqlite:4003/nodes?pretty
 ```
@@ -68,9 +69,7 @@ systemctl enable cdnCert && systemctl start cdnCert
 **Nginx Nodes**
 ```
 apt-get install nginx -y
-mkdir -p /data/nginx/cache
-chgrp -R cdn /etc/nginx/sites-enabled/
-chmod 775 -R /etc/nginx/sites-enabled/
+mkdir -p /data/nginx/cache && chgrp -R cdn /etc/nginx/sites-enabled/ && chmod 775 -R /etc/nginx/sites-enabled/
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
 cp /opt/woodCDN/config/cdnNginx.service /etc/systemd/system/
 systemctl enable cdnNginx && systemctl start cdnNginx
