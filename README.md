@@ -57,7 +57,7 @@ curl rqlite:4003/nodes?pretty
 **All Nodes**
 ```
 mkdir /opt/woodCDN && chown -R cdn:cdn /opt/woodCDN/ && cd /opt/;su cdn
-git clone https://github.com/Ne00n/woodCDN.git && git checkout gdnsd
+git clone https://github.com/Ne00n/woodCDN.git && cd woodCDN && git checkout gdnsd
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
 cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
 systemctl enable cdnLastrun && systemctl start cdnLastrun
