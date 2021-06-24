@@ -107,7 +107,7 @@ class Generate:
         #vhosts removed from database
         for file in files:
             if file not in current and "cdn-" in file:
-                os.remove(path+file)
+                os.remove(self.nginxPath+file)
                 self.reload = True
 
         if self.reload:
@@ -148,7 +148,7 @@ class Generate:
         #domains removed from database
         for file in files:
             if file not in current and "cdn-" in file:
-                os.remove(path+file)
+                os.remove(self.gdnsdZonesDir+file)
                 reload = True
 
         if reload:
