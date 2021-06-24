@@ -171,7 +171,9 @@ class Generate:
         pops = [x for x in data['results'][0]['values'] if x[2] + 60 > int(time.time())]
         if len(pops) == 0: pops = data['results'][0]['values'] #fallback
 
-        if self.pops == data['results'][0]: return False
+        comp = pops
+        for comp in comp: del pop[2]
+        if self.pops == comp: return False
 
         #pass the original list and filtered because gdnsd needs the full list in datacenters
         config = self.templator.gdnsdConfig(data['results'][0]['values'],pops)
@@ -181,4 +183,4 @@ class Generate:
         print("Restarting gdnsd")
         subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
 
-        self.pops = data['results'][0]
+        self.pops = comp
