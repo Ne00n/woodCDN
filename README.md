@@ -43,9 +43,9 @@ adduser cdn --disabled-login
 su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v6.0.0/rqlite-v6.0.0-linux-amd64.tar.gz -o rqlite-v6.0.0-linux-amd64.tar.gz
 tar xvfz rqlite-v6.0.0-linux-amd64.tar.gz; mv rqlite-v6.0.0-linux-amd64 rqlite
 #First node
-rqlited -http-addr rqlite:4003 -raft-addr rqlite:4004 datadir
+rqlited -node-id 1 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 datadir
 #Moah nodes
-rqlited -http-addr rqlite:4003 -raft-addr rqlite:4004 -join http://10.0.0.1:4003 datadir
+rqlited -node-id 2 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 -join http://10.0.0.1:4003 datadir
 ```
 To run rqlite as service and on boot checkout config/rqlite.service<br />
 You can check the cluster status by running
