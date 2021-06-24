@@ -36,6 +36,10 @@ class Generate:
         data = self.cli.query(['SELECT * FROM certs'])
         files,current = os.listdir(self.nginxCerts),[]
 
+        if data is False:
+            print("rqlite gone")
+            return False
+
         if 'values' in data['results'][0]:
             for entry in data['results'][0]['values']:
                 if entry[2] == "@": domain = entry[1]

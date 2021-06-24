@@ -66,7 +66,9 @@ class Cert(rqlite):
 
     def renew(self):
         status = self.cli.status()
-        if status is False: print("rqlite gone")
+        if status is False:
+            print("rqlite gone")
+            return False
         state = status['store']['raft']['state']
 
         if state == "Leader":
