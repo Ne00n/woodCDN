@@ -66,8 +66,7 @@ systemctl enable cdnCert && systemctl start cdnCert
 ```
 **Nginx Nodes**
 ```
-apt-get install sudo nginx git python3 python3-pip -y
-pip3 install simple-acme-dns
+apt-get install sudo nginx git python3 python3-pip -y && pip3 install simple-acme-dns
 mkdir -p /data/nginx/cache
 chgrp -R cdn /etc/nginx/sites-enabled/
 chmod 775 -R /etc/nginx/sites-enabled/
@@ -77,8 +76,7 @@ systemctl enable cdnNginx && systemctl start cdnNginx
 ```
 **DNS Nodes**
 ```
-apt-get install git python3 python3-pip gdnsd -y
-pip3 install simple-acme-dns
+apt-get install git python3 python3-pip gdnsd -y && pip3 install simple-acme-dns
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service gdnsd restart" >> /etc/sudoers
 chgrp -R cdn /etc/gdnsd/
 chmod 775 -R /etc/gdnsd/
