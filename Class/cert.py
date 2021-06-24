@@ -75,10 +75,10 @@ class Cert(rqlite):
 
             if domains is False:
                 print("rqlite gone")
-                sys.exit()
+                return False
             if 'values' not in domains['results'][0]:
                 print("no vhosts added")
-                sys.exit()
+                return False
 
             for row in domains['results'][0]['values']:
                 target = row[1]
@@ -89,7 +89,7 @@ class Cert(rqlite):
                     response = self.getCert(target,row[1],row[2],row[8])
                     if response is False:
                         print("Failed to get cert for",target)
-                        sys.exit()
+                        return False
 
                 else:
                     print("Checking cert for",target)
@@ -99,7 +99,7 @@ class Cert(rqlite):
                         response = cert.getCert(target,row[1],row[2],row[8],True)
                         if response is False:
                             print("Failed to get cert for",target)
-                            sys.exit()
+                            return False
 
         else:
             print("Not leader, aborting.")
