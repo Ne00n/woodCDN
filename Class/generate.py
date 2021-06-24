@@ -71,6 +71,10 @@ class Generate:
         data = self.cli.query(['SELECT * FROM vhosts WHERE type = "proxy"'])
         files,current = os.listdir(self.nginxPath),[]
 
+        if data is False:
+            print("rqlite gone")
+            return False
+
         if 'values' in data['results'][0]:
             for entry in data['results'][0]['values']:
                 if entry[2] == "@": domain = entry[1]
