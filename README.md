@@ -77,10 +77,8 @@ cp /opt/woodCDN/config/cdnNginx.service /etc/systemd/system/ && systemctl enable
 ```
 apt-get install gdnsd -y
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service gdnsd restart" >> /etc/sudoers
-chgrp -R cdn /etc/gdnsd/
-chmod 775 -R /etc/gdnsd/
-cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/
-systemctl enable cdnDNS && systemctl start cdnDNS
+chgrp -R cdn /etc/gdnsd/ && chmod 775 -R /etc/gdnsd/
+cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/ && systemctl enable cdnDNS && systemctl start cdnDNS
 ```
 Afterwards you should be able to run on that on any node but just once<br />
 ```
