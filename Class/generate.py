@@ -127,8 +127,12 @@ class Generate:
         print("Updating gdnsd zones")
 
         domains = self.cli.query(['SELECT * FROM domains LEFT JOIN vhosts ON domains.domain=vhosts.domain'])
-        files,current = os.listdir(self.gdnsdZonesDir),[]
+        if domains is False:
+            print("rqlite gone")
+            return False
+
         if not 'values' in domains['results'][0]: return False
+        files,current = os.listdir(self.gdnsdZonesDir),[]
 
         vhosts,reload = {},False
         #build dict
@@ -166,6 +170,10 @@ class Generate:
         print("Updating gdnsd config")
 
         data = self.cli.query(['SELECT * FROM pops'])
+        if data is False:
+            print("rqlite gone")
+            return False
+
         if not 'values' in data['results'][0]: return False
 
         pops = [x for x in data['results'][0]['values'] if x[2] + 60 > int(time.time())]
@@ -180,7 +188,9 @@ class Generate:
 
         with open(self.gdnsdConfigFile, 'w') as out:
             out.write(config)
-        print("Restarting gdnsd")
-        subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
+
+        if self.pops:
+            print("Restarting gdnsd")
+            subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
 
         self.pops = comp
