@@ -7,7 +7,7 @@ class Generate:
 
     nginxPath = "/etc/nginx/sites-enabled/"
     nginxCerts = "/opt/woodCDN/certs/"
-    gdnsdConfig = "/etc/gdnsd/config"
+    gdnsdConfigFile = "/etc/gdnsd/config"
     gdnsdZonesDir = "/etc/gdnsd/zones/"
     reload = False
     vhosts = {}
@@ -176,7 +176,7 @@ class Generate:
         #pass the original list and filtered because gdnsd needs the full list in datacenters
         config = self.templator.gdnsdConfig(data['results'][0]['values'],pops)
 
-        with open(self.gdnsdConfig, 'w') as out:
+        with open(self.gdnsdConfigFile, 'w') as out:
             out.write(config)
         print("Restarting gdnsd")
         subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
