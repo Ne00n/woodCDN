@@ -172,7 +172,7 @@ class Generate:
         if len(pops) == 0: pops = data['results'][0]['values'] #fallback
 
         comp = pops
-        for comp in comp: del comp[2]
+        for row in comp: del row[2]
         if self.pops == comp: return False
 
         #pass the original list and filtered because gdnsd needs the full list in datacenters
