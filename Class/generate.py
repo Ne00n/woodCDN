@@ -147,19 +147,19 @@ class Generate:
         #update/create dns zones
         for vhost in vhosts.items():
             if not vhost[0] in self.vhosts: self.vhosts[vhost[0]] = {}
-            current.append('cdn-'+vhost[0])
+            current.append(vhost[0])
             if self.vhosts[vhost[0]] == vhost[1]:
                 print("skipping",vhost[0])
                 continue
             zone = self.templator.gdnsdZone(vhost)
-            with open(self.gdnsdZonesDir+'cdn-'+vhost[0], 'w') as out:
+            with open(self.gdnsdZonesDir+vhost[0], 'w') as out:
                 out.write(zone)
             reload = True
             self.vhosts[vhost[0]] = vhost[1]
 
         #domains removed from database
         for file in files:
-            if file not in current and "cdn-" in file:
+            if file not in current:
                 os.remove(self.gdnsdZonesDir+file)
                 reload = True
 
