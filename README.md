@@ -61,10 +61,8 @@ apt-get install sudo git python3 python3-pip -y && pip3 install simple-acme-dns
 mkdir /opt/woodCDN && chown -R cdn:cdn /opt/woodCDN/ && cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git && cd woodCDN && git checkout gdnsd
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
-cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/
-systemctl enable cdnLastrun && systemctl start cdnLastrun
-cp /opt/woodCDN/config/cdnCert.service /etc/systemd/system/
-systemctl enable cdnCert && systemctl start cdnCert
+cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/ && systemctl enable cdnLastrun && systemctl start cdnLastrun
+cp /opt/woodCDN/config/cdnCert.service /etc/systemd/system/ && systemctl enable cdnCert && systemctl start cdnCert
 ```
 **Nginx Nodes**
 ```
