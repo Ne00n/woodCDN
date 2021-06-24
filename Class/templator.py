@@ -64,7 +64,7 @@ server {
       datacenters => ['''
         for index, pop in enumerate(popsOrg):
             template += pop[0]
-            if index < len(pops) -1: template += ","
+            if index <= len(pops) -1: template += ","
         template += '''],
       nets = dc.conf
     }
