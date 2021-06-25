@@ -77,10 +77,10 @@ server {
         for i in range(1,len(popsList)+1):
             for combos in list(itertools.combinations(popsList,i)):
                 template += " " + "-".join(combos)+" => {"
-                template += '''\n\t  map => prod\n\t\tdcmap => {\n'''
+                template += '''\n\t  map => prod\n\t\tdcmap => {'''
                 for combo in combos:
-                    template += "\t\t  " +combo+" => "+popsDict[combo]+",\n"
-                template += '''\t\t}
+                    template += combo+" => "+popsDict[combo]+","
+                template += '''}
 \t}'''
         template += '''
     }
