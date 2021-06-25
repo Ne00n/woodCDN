@@ -71,17 +71,17 @@ server {
       nets = dc.conf
     }
   },
-  resources => {\n    prod_www => {\n\t'''
+  resources => {\n\t'''
         for row in pops: del row[2]
         popsDict = dict(pops)
         for i in range(1,len(popsList)+1):
             for combos in list(itertools.combinations(popsList,i)):
-                template += 'map => '+"-".join(combos)+'\n\tdcmap => {'
+                template += '-'.join(combos)+' => {\n\t'
+                template += 'map => geo\n\tdcmap => {'
                 for combo in combos:
                     template += combo+" => "+popsDict[combo]+","
-                template += '}\n\t'
+                template += '}}\n\t'
         template += '''
-      }
     }
 }}'''
         return template
