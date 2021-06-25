@@ -1,3 +1,5 @@
+import itertools
+
 class Templator:
     def nginxWrap(self,domain,body):
         template = '''
@@ -56,33 +58,36 @@ server {
 '''
         return template
 
-    def gdnsdConfig(self,popsOrg,pops):
+    def gdnsdConfig(self,pops,popsList):
         template = '''plugins => { geoip => {
   undefined_datacenters_ok = true
   maps => {
     prod => {
       datacenters => ['''
-        for index, pop in enumerate(popsOrg):
+        for index, pop in enumerate(pops):
             template += pop[0]
             if index < len(pops) -1: template += ","
         template += '''],
       nets = dc.conf
     }
   },
-  resources => {
-    prod_www => {
-      map => prod
-      dcmap => {
-'''
-        for pop in pops:
-            template += "       "+pop[0]+" => "+pop[1]+",\n"
-        template += '''      }
+  resources => {\n\t'''
+        for row in pops: del row[2]
+        popsDict = dict(pops)
+        for i in range(1,len(popsList)+1):
+            for combos in list(itertools.combinations(popsList,i)):
+                template += " " + "-".join(combos)+" => {"
+                template += '''\n\t  map => prod\n\t\tdcmap => {\n'''
+                for combo in combos:
+                    template += "\t\t  " +combo+" => "+popsDict[combo]+",\n"
+                template += '''\t\t}
+\t}'''
+        template += '''
     }
-  }
 }}'''
         return template
 
-    def gdnsdZone(self,vhost):
+    def gdnsdZone(self,vhost,pops):
         template = '''$TTL 86400
 
 @     SOA ns1 '''+vhost[0]+''' (
@@ -103,7 +108,7 @@ server {
         if not vhost[1]['records']: return template
         for record in vhost[1]['records']:
             if record['type'] == "proxy":
-                template += record['record']+'   30 	DYNA 	 geoip!prod_www'+'\n'
+                template += record['record']+'   30 	DYNA 	 geoip!'+'-'.join(pops)+'\n'
             elif record['type'] == 'TXT':
                 template += record['record']+'   3600 	'+record['type']+' 	 "'+record['target']+'"\n'
             else:
