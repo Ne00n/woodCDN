@@ -20,7 +20,7 @@ class CLI(rqlite):
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def getTable(self,table="domains"):
-        response = self.query(["SELECT * FROM "+table])
+        response = self.query(["SELECT rowid, * FROM "+table])
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def deleteDomain(self,data):
