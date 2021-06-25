@@ -60,7 +60,6 @@ server {
 
     def gdnsdConfig(self,pops,popsList):
         template = '''plugins => { geoip => {
-  undefined_datacenters_ok = true
   maps => {
     prod => {
       datacenters => ['''
