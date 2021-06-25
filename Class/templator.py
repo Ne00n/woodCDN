@@ -65,21 +65,23 @@ server {
     prod => {
       datacenters => ['''
         for index, pop in enumerate(pops):
-            template += pop[0]
+            template += str(pop[0])
             if index < len(pops) -1: template += ","
         template += '''],
       nets = dc.conf
     }
   },
   resources => {\n\t'''
-        for row in pops: del row[2]
+        for row in pops:
+            del row[1]
+            del row[2]
         popsDict = dict(pops)
         for i in range(1,len(popsList)+1):
             for combos in list(itertools.combinations(popsList,i)):
-                template += '-'.join(combos)+' => {\n\t'
+                template += '-'.join(str(v) for v in combos)+' => {\n\t'
                 template += 'map => prod\n\tdcmap => {'
                 for combo in combos:
-                    template += combo+" => "+popsDict[combo]+","
+                    template += str(combo)+" => "+str(popsDict[combo])+","
                 template += '}}\n\t'
         template += '''
     }
@@ -107,7 +109,7 @@ server {
         if not vhost[1]['records']: return template
         for record in vhost[1]['records']:
             if record['type'] == "proxy":
-                template += record['record']+'   30 	DYNA 	 geoip!'+'-'.join(pops)+'\n'
+                template += record['record']+'   30 	DYNA 	 geoip!'+'-'.join(str(v) for v in pops)+'\n'
             elif record['type'] == 'TXT':
                 template += record['record']+'   3600 	'+record['type']+' 	 "'+record['target']+'"\n'
             else:

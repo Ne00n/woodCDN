@@ -136,7 +136,7 @@ class Generate:
         files,current = os.listdir(self.gdnsdZonesDir),[]
 
         popsOrg = pops
-        pops = [x for x in pops if x[2] + 60 > int(time.time())]
+        pops = [x for x in pops if x[3] + 60 > int(time.time())]
         if len(pops) == 0: pops = popsOrg #fallback
         pops = [item[0] for item in pops]
 
@@ -178,7 +178,7 @@ class Generate:
     def gdnsdConfig(self):
         print("Updating gdnsd config")
 
-        data = self.cli.query(['SELECT * FROM pops'])
+        data = self.cli.query(['SELECT rowid, * FROM pops'])
         if data is False:
             print("rqlite gone")
             return False
