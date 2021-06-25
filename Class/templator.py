@@ -60,6 +60,7 @@ server {
 
     def gdnsdConfig(self,pops,popsList):
         template = '''plugins => { geoip => {
+  undefined_datacenters_ok = true
   maps => {
     prod => {
       datacenters => ['''
@@ -70,18 +71,19 @@ server {
       nets = dc.conf
     }
   },
-  resources => {\n\t'''
+  resources => {\n    prod_www => {\n\t'''
         for row in pops: del row[2]
         popsDict = dict(pops)
         for i in range(1,len(popsList)+1):
             for combos in list(itertools.combinations(popsList,i)):
                 template += " " + "-".join(combos)+" => {"
-                template += '''\n\t  map => prod\n\t\tdcmap => {'''
+                template += '''\n\t  map => prod\n\tdcmap => {'''
                 for combo in combos:
                     template += combo+" => "+popsDict[combo]+","
                 template += '''}
 \t}'''
         template += '''
+      }
     }
 }}'''
         return template
