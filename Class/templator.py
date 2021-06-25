@@ -76,12 +76,10 @@ server {
         popsDict = dict(pops)
         for i in range(1,len(popsList)+1):
             for combos in list(itertools.combinations(popsList,i)):
-                template += " " + "-".join(combos)+" => {"
-                template += '''\n\t  map => prod\n\tdcmap => {'''
+                template += 'map => '+"-".join(combos)+'\n\tdcmap => {'
                 for combo in combos:
                     template += combo+" => "+popsDict[combo]+","
-                template += '''}
-\t}'''
+                template += '}\n\t'
         template += '''
       }
     }
