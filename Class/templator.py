@@ -62,7 +62,7 @@ server {
         template = '''service_types => {
   state => {
     plugin => "extfile",
-    file => /usr/local/var/lib/gdnsd/state",
+    file => "/usr/local/var/lib/gdnsd/state",
     direct => true,
   }
 }
