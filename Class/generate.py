@@ -186,8 +186,7 @@ class Generate:
             else:
                 state += pop[1]+" => DOWN\n"
 
-
-        with open("/home/cdn/state", 'w') as file:
+        with open("/usr/local/var/lib/gdnsd/state", 'w') as file:
             file.write(state)
         if self.popsList == popsList: return True
 
