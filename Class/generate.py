@@ -12,7 +12,6 @@ class Generate:
     reload = False
     vhosts = {}
     popsList = {}
-    pops = {}
 
     def __init__(self):
         self.cli = CLI()
@@ -27,8 +26,8 @@ class Generate:
 
     def gdnsd(self):
         while True:
-            pops = self.gdnsdConfig()
-            self.gdnsdZones(pops)
+            self.gdnsdConfig()
+            self.gdnsdZones()
             time.sleep(60)
 
     def certs(self):
@@ -124,7 +123,7 @@ class Generate:
             print("Reloading nginx")
             subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "nginx", "reload"])
 
-    def gdnsdZones(self,pops):
+    def gdnsdZones(self):
         print("Updating gdnsd zones")
 
         domains = self.cli.query(['SELECT * FROM domains LEFT JOIN vhosts ON domains.domain=vhosts.domain'])
@@ -134,14 +133,6 @@ class Generate:
 
         if not 'values' in domains['results'][0]: return False
         files,current = os.listdir(self.gdnsdZonesDir),[]
-
-        popsOrg = pops
-        pops = [x for x in pops if x[3] + 60 > int(time.time())]
-        if len(pops) == 0: pops = popsOrg #fallback
-        pops = [item[0] for item in pops]
-
-        if self.pops != pops: reload = True
-        self.pops = pops
 
         vhosts,reload = {},False
         #build dict
@@ -160,7 +151,7 @@ class Generate:
             if self.vhosts[vhost[0]] == vhost[1]:
                 print("skipping",vhost[0])
                 continue
-            zone = self.templator.gdnsdZone(vhost,pops)
+            zone = self.templator.gdnsdZone(vhost)
             with open(self.gdnsdZonesDir+vhost[0], 'w') as out:
                 out.write(zone)
             reload = True
@@ -178,7 +169,7 @@ class Generate:
     def gdnsdConfig(self):
         print("Updating gdnsd config")
 
-        data = self.cli.query(['SELECT rowid, * FROM pops'])
+        data = self.cli.query(['SELECT * FROM pops'])
         if data is False:
             print("rqlite gone")
             return False
@@ -186,10 +177,18 @@ class Generate:
         if not 'values' in data['results'][0]: return False
 
         pops = data['results'][0]['values']
-        popsOrg = copy.deepcopy(pops)
         popsList = [item[0] for item in pops]
 
-        if self.popsList == popsList: return popsOrg
+        state = ""
+        for pop in pops:
+            if pop[2] + 60 > int(time.time()):
+                state += pop[1]+" => DOWN\n"
+            else:
+                state += pop[1]+" => UP\n"
+
+        with open("/home/cdn/state", 'w') as file:
+            file.write(state)
+        if self.popsList == popsList: return True
 
         config = self.templator.gdnsdConfig(pops,popsList)
         with open(self.gdnsdConfigFile, 'w') as out:
@@ -200,4 +199,3 @@ class Generate:
             subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
 
         self.popsList = pops
-        return popsOrg

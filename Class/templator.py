@@ -59,7 +59,14 @@ server {
         return template
 
     def gdnsdConfig(self,pops,popsList):
-        template = '''plugins => { geoip => {
+        template = '''service_types => {
+  state => {
+    plugin => "extfile",
+    file => "/home/cdn/state",
+    direct => true,
+  }
+}
+plugins => { geoip => {
   undefined_datacenters_ok = true
   maps => {
     prod => {
@@ -71,26 +78,22 @@ server {
       nets = dc.conf
     }
   },
-  resources => {\n\t'''
-        for row in pops:
-            del row[1]
-            del row[2]
-        popsDict = dict(pops)
-        for i in range(1,len(popsList)+1):
-            for combos in list(itertools.combinations(popsList,i)):
-                template += '-'.join(str(v) for v in combos)+' => {\n\t'
-                template += 'map => prod\n\tdcmap => {'
-                for combo in combos:
-                    template += str(combo)+" => "+str(popsDict[combo])+","
-                template += '}}\n\t'
-        template += '''
+  resources => {
+    prod_www => {
+      map => prod
+      service_types => state,
+      dcmap => {
+'''
+        for pop in pops:
+            template += "       "+pop[0]+" => "+pop[1]+",\n"
+        template += '''      }
     }
+  }
 }}'''
         return template
 
-    def gdnsdZone(self,vhost,pops):
+    def gdnsdZone(self,vhost):
         template = '''$TTL 86400
-
 @     SOA ns1 '''+vhost[0]+''' (
       1      ; serial
       7200   ; refresh
@@ -98,10 +101,8 @@ server {
       3D     ; expire
       900    ; ncache
 )
-
 @       NS      ns1
 @       NS      ns2
-
 '''
         for index, nameserver in enumerate(vhost[1]['nameserver'].split(",")):
             template += 'ns'+str(index +1)+' 3600 A '+nameserver+"\n"
@@ -109,7 +110,7 @@ server {
         if not vhost[1]['records']: return template
         for record in vhost[1]['records']:
             if record['type'] == "proxy":
-                template += record['record']+'   30 	DYNA 	 geoip!'+'-'.join(str(v) for v in pops)+'\n'
+                template += record['record']+'   30 	DYNA 	 geoip!prod_www'+'\n'
             elif record['type'] == 'TXT':
                 template += record['record']+'   3600 	'+record['type']+' 	 "'+record['target']+'"\n'
             else:
