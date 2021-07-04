@@ -198,4 +198,4 @@ class Generate:
             print("Restarting gdnsd")
             subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "gdnsd", "restart"])
 
-        self.popsList = pops
+        self.popsList = popsList
