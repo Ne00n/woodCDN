@@ -181,10 +181,11 @@ class Generate:
 
         state = ""
         for pop in pops:
-            if pop[2] + 60 > int(time.time()):
-                state += pop[1]+" => DOWN\n"
-            else:
+            if int(pop[2]) + 60 > int(time.time()):
                 state += pop[1]+" => UP\n"
+            else:
+                state += pop[1]+" => DOWN\n"
+
 
         with open("/home/cdn/state", 'w') as file:
             file.write(state)
