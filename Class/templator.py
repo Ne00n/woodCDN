@@ -35,6 +35,7 @@ server {
     ssl_certificate     /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
     ssl_certificate_key /opt/woodCDN/certs/'''+domain+'''-privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3; #drop 1.0 and 1.1
+    add_header woodCDN-cache-status $upstream_cache_status;
 
     location ~* ^.+\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$ {
         proxy_cache '''+domain+''';
