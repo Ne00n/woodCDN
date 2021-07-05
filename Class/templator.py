@@ -101,10 +101,9 @@ plugins => { geoip => {
       3D     ; expire
       900    ; ncache
 )
-@       NS      ns1
-@       NS      ns2
 '''
         for index, nameserver in enumerate(vhost[1]['nameserver'].split(",")):
+            template += '@       NS      ns'+str(index +1)+"\n"
             template += 'ns'+str(index +1)+' 3600 A '+nameserver+"\n"
         template += "\n"
         if not vhost[1]['records']: return template
