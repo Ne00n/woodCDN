@@ -86,7 +86,7 @@ plugins => { geoip => {
       dcmap => {
 '''
         for pop in pops:
-            template += f"       {pop[0]} => {pop[1]},\n"
+            template += f"       {pop[0]} => {pop[2]},\n"
         template += '''      }
     }
   }
