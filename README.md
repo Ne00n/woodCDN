@@ -86,7 +86,7 @@ cp /opt/woodCDN/config/cdnNginx.service /etc/systemd/system/ && systemctl enable
 ```
 apt-get install gdnsd -y
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service gdnsd restart" >> /etc/sudoers
-echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/gdnsdctl reload-zones" >> /etc/sudoers
+echo "cdn ALL=(ALL) NOPASSWD: /usr/bin/gdnsdctl reload-zones" >> /etc/sudoers
 #If you compiled gdnsd
 #echo "cdn ALL=(ALL) NOPASSWD: /usr/local/bin/gdnsdctl reload-zones" >> /etc/sudoers
 chgrp -R cdn /etc/gdnsd/ && chmod 775 -R /etc/gdnsd/
