@@ -95,7 +95,7 @@ cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/ && systemctl enable c
 1GB+ Memory needed for boot (depends on zone file size)<br />
 Afterwards you should be able to run that on any node but just once<br />
 ```
-python3 cli.py init
+cd /opt/woodCDN; python3 cli.py init
 ```
 
 **cli**<br />
