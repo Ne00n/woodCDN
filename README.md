@@ -36,7 +36,7 @@ In theory you can write the routing file by hand, if you want, for testing and s
 
 ## Setup<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
-You can use ansible for that so you get it up in a few minutes. Fork that I [use](https://github.com/Ne00n/ansible-tinc).</br >
+You can use ansible for that so you get it up in a few minutes. Fork that I [used](https://github.com/Ne00n/ansible-tinc).</br >
 Add rqlite as entry to hosts that points to the local vpn interface.<br />
 ```
 echo "10.0.251.x rqlite" >> /etc/hosts
@@ -86,11 +86,13 @@ cp /opt/woodCDN/config/cdnNginx.service /etc/systemd/system/ && systemctl enable
 ```
 apt-get install gdnsd -y
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service gdnsd restart" >> /etc/sudoers
-echo "cdn ALL=(ALL) NOPASSWD: /usr/local/bin/gdnsdctl reload-zones" >> /etc/sudoers
+echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/gdnsdctl reload-zones" >> /etc/sudoers
+#If you compiled gdnsd
+#echo "cdn ALL=(ALL) NOPASSWD: /usr/local/bin/gdnsdctl reload-zones" >> /etc/sudoers
 chgrp -R cdn /etc/gdnsd/ && chmod 775 -R /etc/gdnsd/
 cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/ && systemctl enable cdnDNS && systemctl start cdnDNS
 ```
-1GB+ Memory needed for boot<br />
+1GB+ Memory needed for boot (depends on zone file size)<br />
 Afterwards you should be able to run that on any node but just once<br />
 ```
 python3 cli.py init
