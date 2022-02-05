@@ -181,7 +181,7 @@ class Generate:
 
         state = ""
         for pop in pops:
-            if int(pop[2]) + 60 > int(time.time()):
+            if int(pop[2]) + 60 > int(time.time()) or pop[0] == "anycast":
                 state += pop[1]+" => UP\n"
             else:
                 state += pop[1]+" => DOWN\n"
