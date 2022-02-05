@@ -169,7 +169,7 @@ class Generate:
     def gdnsdConfig(self):
         print("Updating gdnsd config")
 
-        data = self.cli.query(['SELECT * FROM pops'])
+        data = self.cli.query(['SELECT rowid,* FROM pops'])
         if data is False:
             print("rqlite gone")
             return False
