@@ -164,7 +164,7 @@ class Generate:
                 reload = True
 
         if reload:
-            subprocess.run(["/usr/bin/sudo", "/usr/local/bin/gdnsdctl", "reload-zones"])
+            subprocess.run(["/usr/bin/sudo", "/usr/bin/gdnsdctl", "reload-zones"])
 
     def gdnsdConfig(self):
         print("Updating gdnsd config")
