@@ -40,14 +40,14 @@ echo "10.0.251.x rqlite" >> /etc/hosts
 ```
 adduser cdn --disabled-login
 #Make sure to check for the latest release!
-su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v6.0.0/rqlite-v6.0.0-linux-amd64.tar.gz -o rqlite-v6.0.0-linux-amd64.tar.gz
-tar xvfz rqlite-v6.0.0-linux-amd64.tar.gz; mv rqlite-v6.0.0-linux-amd64 rqlite
+su cdn; curl -L https://github.com/rqlite/rqlite/releases/download/v7.2.0/rqlite-v7.2.0-linux-amd64.tar.gz -o rqlite-v7.2.0-linux-amd64.tar.gz
+tar xvfz rqlite-v7.2.0-linux-amd64.tar.gz; mv rqlite-v7.2.0-linux-amd64 rqlite
 #First node
 rqlited -node-id 1 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 datadir
 #Moah nodes
 rqlited -node-id 2 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 -join http://10.0.0.1:4003 datadir
 ```
-To run rqlite as service and on boot checkout config/rqlite.service<br />
+To run rqlite as service and on boot, checkout config/rqlite.service<br />
 You can check the cluster status by running<br />
 **rqlite is known to NOT resolve IP addresses!**
 ```
