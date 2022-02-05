@@ -8,7 +8,7 @@
 - Keep the overhead and dependencies at a minimum
 - Keep it Simple and Stupid and fucking Dry
 - High Availability, even if the db cluster shits itself, stuff should keep going
-- GeoDNS to reduce latency
+- Latency Based routing to reduce latency
 
 **Software**<br />
 - Nginx as proxy/caching device
@@ -28,6 +28,11 @@
 **Todo**<br />
 - HTTPS Support (wildcard)
 - IPv6 Support
+
+**Routing Data**<br />
+- https://github.com/Ne00n/latency-geolocator-4550
+Since the goal is to use latency based routing, you first need to scan the entire internet and build the routing file with the tool above.<br>
+In theory you can write the routing file by hand, if you want, for testing and such.<br>
 
 ## Setup<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
