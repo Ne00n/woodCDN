@@ -30,7 +30,7 @@
 - IPv6 Support
 
 **Routing Data**<br />
-- https://github.com/Ne00n/latency-geolocator-4550
+- https://github.com/Ne00n/latency-geolocator-4550<br>
 Since the goal is to use latency based routing, you first need to scan the entire internet and build the routing file with the tool above.<br>
 In theory you can write the routing file by hand, if you want, for testing and such.<br>
 
