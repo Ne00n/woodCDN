@@ -49,7 +49,7 @@ rqlited -node-id 2 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 -join http:
 ```
 To run rqlite as service and on boot, checkout config/rqlite.service<br />
 You can check the cluster status by running<br />
-**rqlite is known to NOT resolve IP addresses!**
+**rqlite is known to NOT resolve hostnames!**
 ```
 curl rqlite:4003/nodes?pretty
 ```
