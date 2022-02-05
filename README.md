@@ -48,13 +48,18 @@ rqlited -node-id 1 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 datadir
 #Moah nodes
 rqlited -node-id 2 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 -join http://10.0.0.1:4003 datadir
 ```
-**rqlite is known to NOT resolve hostnames!**
+**rqlite is known to NOT resolve hostnames!**<br />
 To run rqlite as service and on boot, checkout config/rqlite.service<br />
 You can check the cluster status by running<br />
 ```
 curl rqlite:4003/nodes?pretty
 ```
 3. Deploy the Code
+
+You may need run beforehand
+```
+apt-get install python3-dev build-essential libffi-dev
+```
 
 **All Nodes**
 ```
