@@ -116,6 +116,7 @@ python3 cli.py pop add atlanta 3.3.3.3
 - Internally the system uses the rowid from the rqlite database, these have to match the ID's from the dc.conf<br>
 - The first POP you add, is used by gdnsd to route traffic that can't be associated/mapped with the dc.conf<br>
 - The name/pop "anycast" will be always set to UP<br>
+- The POP name is case sensitive<br>
 
 Add your first vhost (proxy/dns) entry
 ```
