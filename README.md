@@ -92,7 +92,7 @@ echo "cdn ALL=(ALL) NOPASSWD: /usr/bin/gdnsdctl reload-zones" >> /etc/sudoers
 chgrp -R cdn /etc/gdnsd/ && chmod 775 -R /etc/gdnsd/
 cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/ && systemctl enable cdnDNS && systemctl start cdnDNS
 ```
-300MB up to 2GB Memory needed for boot (depends on zone file size, failover nodes...)<br />
+300MB up to 2GB Memory needed for gdnsd (depends on zone file size, failover nodes...)<br />
 **If you upload the dc.conf, the POP's need to be already added, otherwise gdnsd will refuse to start**<br>
 Afterwards you should be able to run that on any node but just once<br />
 ```
