@@ -36,6 +36,9 @@ elif sys.argv[1] == "pop":
     elif sys.argv[2] == "list":
         cli.getTable("pops")
     elif sys.argv[2] == "del":
+        print("Warning: Removing a POP that is still listed in the dc.conf will crash the dns servers")
+        response = input("Are you sure you wanna remove this POP? (y/n) ")
+        if response != "y": exit()
         cli.deletePoP(sys.argv[3:])
 elif sys.argv[1] == "cert":
     if len(sys.argv) == 2:
