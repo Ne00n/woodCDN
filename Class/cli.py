@@ -16,7 +16,7 @@ class CLI(rqlite):
 
     def addPoP(self,data):
         print("adding",data[0])
-        response = self.execute(['INSERT INTO pops(name,v4) VALUES(?, ?)',data[0],data[1]])
+        response = self.execute(['INSERT INTO pops(id,name,v4) VALUES(?, ?)',data[0],data[1],data[2]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def getTable(self,table="domains"):
