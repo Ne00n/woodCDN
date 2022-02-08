@@ -47,7 +47,7 @@ adduser cdn --disabled-login
 #Make sure to check for the latest release!
 su cdn; 
 cd; curl -L https://github.com/rqlite/rqlite/releases/download/v7.2.0/rqlite-v7.2.0-linux-amd64.tar.gz -o rqlite-v7.2.0-linux-amd64.tar.gz
-tar xvfz rqlite-v7.2.0-linux-amd64.tar.gz; mv rqlite-v7.2.0-linux-amd64 rqlite
+tar xvfz rqlite-v7.2.0-linux-amd64.tar.gz; mv rqlite-v7.2.0-linux-amd64 rqlite; exit
 #First node
 rqlited -node-id 1 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 datadir
 #Moah nodes
@@ -63,7 +63,7 @@ curl rqlite:4003/nodes?pretty
 
 You may need run beforehand
 ```
-apt-get install python3-dev build-essential libffi-dev
+apt-get install python3-dev build-essential libffi-dev -y
 ```
 
 **All Nodes**
