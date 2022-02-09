@@ -13,9 +13,10 @@ class Generate:
     vhosts = {}
     popsList = {}
 
-    def __init__(self):
+    def __init__(self,pop):
         self.cli = CLI()
         self.cert = Cert()
+        self.pop = pop
         self.templator = Templator()
 
     def run(self):
@@ -100,7 +101,7 @@ class Generate:
                     if "443" not in file and os.path.isfile(self.nginxCerts+domain+"-fullchain.pem") and os.path.isfile(self.nginxCerts+domain+"-privkey.pem"):
                         print("Writing HTTPS config for",domain)
                         http = self.templator.nginxHTTP(domain,entry[4])
-                        https = self.templator.nginxHTTPS(domain,entry[4])
+                        https = self.templator.nginxHTTPS(domain,entry[4],self.pop)
                         vhost = self.templator.nginxWrap(domain,http+https)
 
                         with open(self.nginxPath+"cdn-"+domain, 'w') as out:

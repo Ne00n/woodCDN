@@ -1,9 +1,15 @@
 #!/usr/bin/python3
-import sys
+import socket, sys
 sys.path.append("..") # Adds higher directory to python modules path.
 from Class.generate import Generate
 
-generate = Generate()
+hostname = socket.gethostname()
+if "." in hostname:
+    pop = hostname.split(".", 1)[0]
+else:
+    pop = hostname
+
+generate = Generate(pop)
 
 if len(sys.argv) == 1:
     print("nginx certs")

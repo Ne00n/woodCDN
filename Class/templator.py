@@ -25,7 +25,7 @@ server {
 '''
         return template
 
-    def nginxHTTPS(self,domain,target):
+    def nginxHTTPS(self,domain,target,pop):
         template = '''
 server {
     listen 443 ssl http2;
@@ -34,12 +34,17 @@ server {
 
     ssl_certificate     /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
     ssl_certificate_key /opt/woodCDN/certs/'''+domain+'''-privkey.pem;
+    ssl_trusted_certificate /opt/woodCDN/certs/'''+domain+'''-fullchain.pem;
     ssl_protocols TLSv1.2 TLSv1.3; #drop 1.0 and 1.1
+    ssl_stapling_verify on;
+    ssl_stapling on;
+
     add_header woodCDN-cache-status $upstream_cache_status;
+    add_header woodCDN-pop '''+pop+''';  
 
     location ~* ^.+\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$ {
         proxy_cache '''+domain+''';
-        proxy_cache_valid 200 1d;
+        proxy_cache_valid 200 301 302 1d;
         proxy_cache_valid 404 1m;
         proxy_set_header Host '''+target+''';
         proxy_set_header X-Real-IP $remote_addr;
