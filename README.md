@@ -81,6 +81,7 @@ apt-get install nginx -y
 mkdir -p /data/nginx/cache && chgrp -R cdn /etc/nginx/sites-enabled/ && chmod 775 -R /etc/nginx/sites-enabled/
 echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
 cp /opt/woodCDN/config/cdnNginx.service /etc/systemd/system/ && systemctl enable cdnNginx && systemctl start cdnNginx
+cp /opt/woodCDN/config/woodCDN.conf /etc/nginx/conf.d/
 ```
 **DNS Nodes**
 ```
