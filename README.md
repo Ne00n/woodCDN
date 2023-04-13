@@ -39,19 +39,21 @@ In theory you can write the routing file by hand, if you want, for testing and s
 You can use ansible for that so you get it up in a few minutes. Fork that I [used](https://github.com/Ne00n/ansible-tinc).</br >
 Add rqlite as entry to hosts that points to the local vpn interface.<br />
 ```
-echo "10.0.251.x rqlite" >> /etc/hosts
+echo "10.0.x.x rqlite" >> /etc/hosts
 ```
-2. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
+2. Install woodCDN<br >
 ```
-adduser cdn --disabled-login
+mkdir /opt/woodCDN && chown -R cdn:cdn /opt/woodCDN/ && cd /opt/;su cdn
+git clone https://github.com/Ne00n/woodCDN.git && cd woodCDN && git checkout gdnsd
+exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
+```
+3. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
+```
+useradd rqlite -m -d /home/rqlite/ -s /bin/bash && su rqlite -c "cd; wget https://github.com/rqlite/rqlite/releases/download/v7.14.2/rqlite-v7.14.2-linux-amd64.tar.gz && tar xvf rqlite-v7.14.2-linux-amd64.tar.gz && mv rqlite-v7.14.2-linux-amd64 rqlite
 #Make sure to check for the latest release!
-su cdn; 
-cd; curl -L https://github.com/rqlite/rqlite/releases/download/v7.2.0/rqlite-v7.2.0-linux-amd64.tar.gz -o rqlite-v7.2.0-linux-amd64.tar.gz
-tar xvfz rqlite-v7.2.0-linux-amd64.tar.gz; mv rqlite-v7.2.0-linux-amd64 rqlite; exit
-#First node
-rqlited -node-id 1 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 datadir
-#Moah nodes
-rqlited -node-id 2 -http-addr 10.0.0.x:4003 -raft-addr 10.0.0.x:4004 -join http://10.0.0.1:4003 datadir
+cp /opt/woodCDN/config/rqlite.service /etc/systemd/system/rqlite.service
+#Needs to be edited
+systemctl enable rqlite && systemctl start rqlite
 ```
 **rqlite is known to NOT resolve hostnames!**<br />
 To run rqlite as service and on boot, checkout config/rqlite.service<br />
@@ -59,7 +61,7 @@ You can check the cluster status by running<br />
 ```
 curl rqlite:4003/nodes?pretty
 ```
-3. Deploy the Code
+4. Deploy the Code
 
 You may need run beforehand
 ```
@@ -69,9 +71,6 @@ apt-get install python3-dev build-essential libffi-dev -y
 **All Nodes**
 ```
 apt-get install sudo git python3 python3-pip -y && pip3 install simple-acme-dns
-mkdir /opt/woodCDN && chown -R cdn:cdn /opt/woodCDN/ && cd /opt/;su cdn
-git clone https://github.com/Ne00n/woodCDN.git && cd woodCDN && git checkout gdnsd
-exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
 cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/ && systemctl enable cdnLastrun && systemctl start cdnLastrun
 cp /opt/woodCDN/config/cdnCert.service /etc/systemd/system/ && systemctl enable cdnCert && systemctl start cdnCert
 ```
