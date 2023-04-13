@@ -115,9 +115,9 @@ python3 cli.py domain add bla.com noc@bla.com 1.1.1.1,2.2.2.2
 ```
 Add your first PoP<br/>
 ```
-python3 cli.py pop add <hostname of node> <v4>
+python3 cli.py pop add <id> <hostname of node> <v4>
 #Example
-python3 cli.py pop add atlanta 3.3.3.3
+python3 cli.py pop add 1 atlanta 3.3.3.3
 #The hostname needs to match the hostname of the node, otherwise the cron won't be updating data correctly
 ```
 - Internally the system uses the id from the rqlite database, these have to match the ID's from the dc.conf<br>
