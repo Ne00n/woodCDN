@@ -43,13 +43,14 @@ echo "10.0.x.x rqlite" >> /etc/hosts
 ```
 2. Install woodCDN<br >
 ```
+adduser cdn --disabled-login
 mkdir /opt/woodCDN && chown -R cdn:cdn /opt/woodCDN/ && cd /opt/;su cdn
 git clone https://github.com/Ne00n/woodCDN.git && cd woodCDN && git checkout gdnsd
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
 ```
 3. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
 ```
-useradd rqlite -m -d /home/rqlite/ -s /bin/bash && su rqlite -c "cd; wget https://github.com/rqlite/rqlite/releases/download/v7.14.2/rqlite-v7.14.2-linux-amd64.tar.gz && tar xvf rqlite-v7.14.2-linux-amd64.tar.gz && mv rqlite-v7.14.2-linux-amd64 rqlite
+su cdn -c "cd; wget https://github.com/rqlite/rqlite/releases/download/v7.14.2/rqlite-v7.14.2-linux-amd64.tar.gz && tar xvf rqlite-v7.14.2-linux-amd64.tar.gz && mv rqlite-v7.14.2-linux-amd64 rqlite"
 #Make sure to check for the latest release!
 cp /opt/woodCDN/config/rqlite.service /etc/systemd/system/rqlite.service
 #Needs to be edited
