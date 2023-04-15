@@ -79,17 +79,18 @@ cp /opt/woodCDN/config/cdnCert.service /etc/systemd/system/ && systemctl enable 
 ```
 apt-get install nginx -y
 mkdir -p /data/nginx/cache && chgrp -R cdn /etc/nginx/sites-enabled/ && chmod 775 -R /etc/nginx/sites-enabled/
-echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers
+echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload" >> /etc/sudoers.d/woodCDN
 cp /opt/woodCDN/config/cdnNginx.service /etc/systemd/system/ && systemctl enable cdnNginx && systemctl start cdnNginx
 cp /opt/woodCDN/config/woodCDN.conf /etc/nginx/conf.d/
 ```
 **DNS Nodes**
 ```
 apt-get install gdnsd -y
-echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service gdnsd restart" >> /etc/sudoers
-echo "cdn ALL=(ALL) NOPASSWD: /usr/bin/gdnsdctl reload-zones" >> /etc/sudoers
+echo "cdn ALL=(ALL) NOPASSWD: /usr/sbin/service gdnsd restart" >> /etc/sudoers.d/woodCDN
+echo "cdn ALL=(ALL) NOPASSWD: /usr/bin/gdnsdctl reload-zones" >> /etc/sudoers.d/woodCDN
 #If you compiled gdnsd
-#echo "cdn ALL=(ALL) NOPASSWD: /usr/local/bin/gdnsdctl reload-zones" >> /etc/sudoers
+#echo "cdn ALL=(ALL) NOPASSWD: /usr/local/bin/gdnsdctl reload-zones" >> /etc/sudoers.d/woodCDN
+#continue
 chgrp -R cdn /etc/gdnsd/ && chmod 775 -R /etc/gdnsd/
 cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/ && systemctl enable cdnDNS && systemctl start cdnDNS
 #Give gdnsd access to /tmp/state (systemd)
