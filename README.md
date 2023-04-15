@@ -95,7 +95,7 @@ chgrp -R cdn /etc/gdnsd/ && chmod 775 -R /etc/gdnsd/
 cp /opt/woodCDN/config/cdnDNS.service /etc/systemd/system/ && systemctl enable cdnDNS && systemctl start cdnDNS
 #Give gdnsd access to /tmp/state (systemd)
 systemctl edit --full gdnsd
-#add this
+#add this, below Service
 TemporaryFileSystem=/tmp/:ro
 BindReadOnlyPaths=/tmp/state
 ```
