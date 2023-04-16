@@ -32,7 +32,7 @@ class Cert(rqlite):
 
         for acmeDomain, token in client.request_verification_tokens().items():
             print("adding {domain} --> {token}".format(domain=acmeDomain, token=token))
-            response = self.cli.addVHost([domain,"_acme-challenge."+subdomain,'TXT',token])
+            response = self.cli.addVHost([domain,"_acme-challenge."+subdomain,'TXT',token[0]])
             if response is False: return False
 
         print("Waiting for dns propagation")
