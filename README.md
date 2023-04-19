@@ -30,9 +30,7 @@
 - IPv6 Support
 
 **Routing Data**<br />
-- https://github.com/Ne00n/latency-geolocator-4550<br>
-Since the goal is to use latency based routing, you first need to scan the entire internet and build the routing file with the tool above.<br>
-In theory you can write the routing file by hand, if you want, for testing and such.<br>
+You can get the .mmdb at maxmind or other providers.<br />
 
 ## Setup<br />
 1. Get a full mesh VPN like [tinc](https://www.tinc-vpn.org/) and deploy it on all nodes (at least 3)</br >
@@ -99,8 +97,6 @@ systemctl edit --full gdnsd
 TemporaryFileSystem=/tmp/:ro
 BindReadOnlyPaths=/tmp/state
 ```
-300MB up to 2GB Memory needed for gdnsd (depends on zone file size, failover nodes...)<br />
-**If you upload the dc.conf, the POP's need to be already added, otherwise gdnsd will refuse to start**<br>
 Afterwards you should be able to run that on any node but just once<br />
 ```
 cd /opt/woodCDN; python3 cli.py init
@@ -116,9 +112,9 @@ python3 cli.py domain add bla.com noc@bla.com 1.1.1.1,2.2.2.2
 ```
 Add your first PoP<br/>
 ```
-python3 cli.py pop add <id> <hostname of node> <v4>
+python3 cli.py pop add <id> <hostname of node> <latitude> <longitude> <v4>
 #Example
-python3 cli.py pop add 1 atlanta 3.3.3.3
+python3 cli.py pop add 1 atlanta 50.48 -2.88 3.3.3.3
 #The hostname needs to match the hostname of the node, otherwise the cron won't be updating data correctly
 ```
 - Internally the system uses the id from the rqlite database, these have to match the ID's from the dc.conf<br>

@@ -76,12 +76,16 @@ plugins => { geoip => {
   undefined_datacenters_ok = true
   maps => {
     prod => {
+      geoip2_db => geo.mmdb,
       datacenters => ['''
         for index, pop in enumerate(pops):
             template += str(pop[0])
             if index < len(pops) -1: template += ","
         template += '''],
-      nets = dc.conf
+      auto_dc_coords => {'''
+        for index, pop in enumerate(pops):
+            template += f"{index} => [ {pop[2]}, {pop[3]} ],\n"
+      '''}
     }
   },
   resources => {

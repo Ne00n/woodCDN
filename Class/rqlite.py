@@ -38,7 +38,7 @@ class rqlite:
         return self.curl(url,[])
 
     def init(self):
-        self.execute(["CREATE TABLE pops (id TEXT NOT NULL PRIMARY KEY,name TEXT NOT NULL UNIQUE,v4 TEXT NOT NULL, lastrun INTEGER DEFAULT 0)"])
+        self.execute(["CREATE TABLE pops (id TEXT NOT NULL PRIMARY KEY, name TEXT NOT NULL UNIQUE, latitude DECIMAL(10,7) NOT NULL, longitude DECIMAL(10,7) NOT NULL,v4 TEXT NOT NULL, lastrun INTEGER DEFAULT 0)"])
         self.execute(["CREATE TABLE domains (domain TEXT NOT NULL PRIMARY KEY, nsv4 TEXT NOT NULL, email TEXT NOT NULL)"])
         self.execute(["CREATE TABLE vhosts (id INTEGER NOT NULL PRIMARY KEY, domain TEXT NOT NULL, subdomain TEXT NOT NULL, type TEXT NOT NULL, value TEXT NOT NULL, updated INTEGER NOT NULL, FOREIGN KEY(domain) REFERENCES domains(domain) ON DELETE CASCADE)"])
         self.execute(["CREATE TABLE certs (id INTEGER NOT NULL PRIMARY KEY, domain TEXT NOT NULL, subdomain TEXT NULL, fullchain TEXT NOT NULL, privkey TEXT not NULL, updated INTEGER NOT NULL, FOREIGN KEY(domain) REFERENCES domains(domain) ON DELETE CASCADE)"])
