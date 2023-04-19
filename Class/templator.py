@@ -82,7 +82,8 @@ plugins => { geoip => {
             template += str(pop[0])
             if index < len(pops) -1: template += ","
         template += '''],
-      auto_dc_coords => {'''
+      auto_dc_coords => {
+'''
         for index, pop in enumerate(pops):
             template += f"       {index} => [ {pop[2]}, {pop[3]} ],\n"
         template += '''
