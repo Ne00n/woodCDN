@@ -84,8 +84,8 @@ plugins => { geoip => {
         template += '''],
       auto_dc_coords => {
 '''
-        for index, pop in enumerate(pops):
-            template += f"       {index} => [ {pop[2]}, {pop[3]} ],\n"
+        for pop in pops:
+            template += f"       {pop[0]} => [ {pop[2]}, {pop[3]} ],\n"
         template += '''
       }
     }
