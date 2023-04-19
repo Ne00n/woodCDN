@@ -12,7 +12,7 @@ else:
 generate = Generate(pop)
 
 if len(sys.argv) == 1:
-    print("nginx certs")
+    print("nginx, certs, config, zones, gdnsd, run")
 elif sys.argv[1] == "nginx":
     generate.nginx()
 elif sys.argv[1] == "certs":
