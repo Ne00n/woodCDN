@@ -85,6 +85,7 @@ plugins => { geoip => {
       auto_dc_coords => {
 '''
         for pop in pops:
+            if pop[1] == "anycast": continue
             template += f"       {pop[0]} => [ {pop[2]}, {pop[3]} ],\n"
         template += '''
       }
