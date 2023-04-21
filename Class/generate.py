@@ -182,10 +182,10 @@ class Generate:
 
         state = ""
         for pop in pops:
-            if int(pop[3]) + 60 > int(time.time()) or pop[1] == "anycast":
-                state += f"{pop[2]} => UP\n"
+            if int(pop[5]) + 60 > int(time.time()) or pop[1] == "anycast":
+                state += f"{pop[4]} => UP\n"
             else:
-                state += f"{pop[2]} => DOWN\n"
+                state += f"{pop[4]} => DOWN\n"
 
         with open("/tmp/state", 'w') as file:
             file.write(state)
