@@ -1,7 +1,7 @@
 from Class.templator import Templator
 from Class.cli import CLI
 from Class.cert import Cert
-import requests, subprocess, json, time, copy, socket, os
+import requests, subprocess, json, time, copy, os
 
 class Generate:
 
@@ -18,11 +18,6 @@ class Generate:
         self.cert = Cert()
         self.pop = pop
         self.templator = Templator()
-        hostname = socket.gethostname()
-        if "." in hostname:
-            self.hostname = hostname.split(".", 1)[0]
-        else:
-            self.hostname = hostname
 
     def run(self):
         while True:
@@ -172,11 +167,6 @@ class Generate:
         if reload:
             subprocess.run(["/usr/bin/sudo", "/usr/bin/gdnsdctl", "reload-zones"])
 
-    def gePoP(self,node,pops):
-        for pop in pops:
-            if node == pop[1]: return pop
-        return False
-
     def gdnsdConfig(self):
         print("Updating gdnsd config")
 
@@ -187,22 +177,12 @@ class Generate:
 
         if not 'values' in data['results'][0]: return False
 
-        #fetching status
-        nodes = self.cli.nodes()
-        if nodes is False:
-            print("Warning, could not fetch nodes")
-            time.sleep(10)
-            return False
-        if self.hostname not in nodes:
-            print("Warning, could not find",self.hostname,"in rqlite nodes")
-            time.sleep(10)
-            return False
+        pops = data['results'][0]['values']
+        popsList = [item[0] for item in pops]
 
-        pops,state = data['results'][0]['values'],""
-        for node,data in nodes.items():
-            pop = self.getPoP(node,pops)
-            if not pop: continue
-            if data['reachable'] or node == "anycast":
+        state = ""
+        for pop in pops:
+            if int(pop[5]) + 60 > int(time.time()) or pop[1] == "anycast":
                 state += f"{pop[4]} => UP\n"
             else:
                 state += f"{pop[4]} => DOWN\n"
