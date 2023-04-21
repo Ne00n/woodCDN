@@ -37,6 +37,10 @@ class rqlite:
         url = 'http://'+self.ip+':'+str(self.port)+'/status?pretty'
         return self.curl(url,[])
 
+    def nodes(self):
+        url = 'http://'+self.ip+':'+str(self.port)+'/nodes?pretty'
+        return self.curl(url)
+
     def init(self):
         self.execute(["CREATE TABLE pops (id TEXT NOT NULL PRIMARY KEY, name TEXT NOT NULL UNIQUE, latitude DECIMAL(10,7) NOT NULL, longitude DECIMAL(10,7) NOT NULL,v4 TEXT NOT NULL, lastrun INTEGER DEFAULT 0)"])
         self.execute(["CREATE TABLE domains (domain TEXT NOT NULL PRIMARY KEY, nsv4 TEXT NOT NULL, email TEXT NOT NULL)"])
