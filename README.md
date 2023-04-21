@@ -70,7 +70,6 @@ apt-get install python3-dev build-essential libffi-dev -y
 **All Nodes**
 ```
 apt-get install sudo git python3 python3-pip -y && pip3 install simple-acme-dns
-cp /opt/woodCDN/config/cdnLastrun.service /etc/systemd/system/ && systemctl enable cdnLastrun && systemctl start cdnLastrun
 cp /opt/woodCDN/config/cdnCert.service /etc/systemd/system/ && systemctl enable cdnCert && systemctl start cdnCert
 ```
 **Nginx Nodes**
