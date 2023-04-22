@@ -118,8 +118,7 @@ python3 cli.py pop add <id> <hostname of node> <latitude> <longitude> <v4>
 python3 cli.py pop add 1 atlanta 50.48 -2.88 3.3.3.3
 #The hostname needs to match the hostname of the node, otherwise the cron won't be updating data correctly
 ```
-- Internally the system uses the id from the rqlite database, these have to match the ID's from the dc.conf<br>
-- The first POP you add, is used by gdnsd to route traffic that can't be associated/mapped with the dc.conf<br>
+- The first POP you add, is used by gdnsd to route traffic that can't be associated/mapped with the .mmdb<br>
 - The name/pop "anycast" will be always set to UP<br>
 - The POP name is case sensitive<br>
 
