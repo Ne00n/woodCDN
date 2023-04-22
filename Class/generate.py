@@ -193,6 +193,10 @@ class Generate:
 
         #fetch geocast
         geocast = self.cli.query(['SELECT id,name,latitude,longitude FROM geocast LEFT JOIN pops ON pops.popID=pops.id'])
+        if geocast and 'values' in geocast['results'][0]: 
+            geocast = data['results'][0]['values']
+        else:
+            geocast = False
         config = self.templator.gdnsdConfig(pops,popsList,geocast)
         with open(self.gdnsdConfigFile, 'w') as out:
             out.write(config)

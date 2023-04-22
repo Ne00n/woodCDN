@@ -75,8 +75,7 @@ server {
 plugins => { geoip => {
   undefined_datacenters_ok = true
   maps => {'''
-        if geocast and 'values' in geocast['results'][0]:
-            geocast = geocast['results'][0]['values']
+        if geocast:
             template += '''
     geocast => {
       geoip2_db => geo.mmdb,
@@ -92,7 +91,8 @@ plugins => { geoip => {
             template += f"       {geo[0]} => [ {geo[2]}, {geo[3]} ],\n"
         template += '''
       }
-    },
+    },'''
+    template += '''
     wood => {
       geoip2_db => geo.mmdb,
       datacenters => ['''
@@ -109,7 +109,19 @@ plugins => { geoip => {
       }
     }
   },
-  resources => {
+  resources => {'''
+    if geocast:
+        template += '''
+    geocast_www => {
+      map => geocast
+      service_types => state,
+      dcmap => {
+'''
+        for geo in geocast:
+            template += f"       {geo[0]} => {geo[4]},\n"
+        template += '''      }
+    },'''
+    template += '''
     wood_www => {
       map => wood
       service_types => state,
