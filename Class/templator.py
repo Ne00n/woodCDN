@@ -92,9 +92,8 @@ plugins => { geoip => {
             template += f"       {geo[0]} => [ {geo[2]}, {geo[3]} ],\n"
         template += '''
       }
-    }
-        template += '''
-    prod => {
+    },
+    wood => {
       geoip2_db => geo.mmdb,
       datacenters => ['''
         for index, pop in enumerate(pops):
@@ -111,8 +110,8 @@ plugins => { geoip => {
     }
   },
   resources => {
-    prod_www => {
-      map => prod
+    wood_www => {
+      map => wood
       service_types => state,
       dcmap => {
 '''
@@ -141,7 +140,7 @@ plugins => { geoip => {
         if not vhost[1]['records']: return template
         for record in vhost[1]['records']:
             if record['type'] == "proxy":
-                template += record['record']+'   30 	DYNA 	 geoip!prod_www'+'\n'
+                template += record['record']+'   30 	DYNA 	 geoip!wood_www'+'\n'
             elif record['type'] == 'TXT':
                 template += record['record']+'   3600 	'+record['type']+' 	 "'+record['target']+'"\n'
             else:
