@@ -77,7 +77,7 @@ plugins => { geoip => {
   maps => {'''
         if geocast:
             template += '''
-    geocast => {
+    geocast_map => {
       geoip2_db => geo.mmdb,
       datacenters => ['''
             for index, geo in enumerate(geocast):
@@ -93,7 +93,7 @@ plugins => { geoip => {
       }
     },'''
         template += '''
-    wood => {
+    wood_map => {
       geoip2_db => geo.mmdb,
       datacenters => ['''
         for index, pop in enumerate(pops):
@@ -113,7 +113,7 @@ plugins => { geoip => {
         if geocast:
             template += '''
     geocast_www => {
-      map => geocast
+      map => geocast_map
       service_types => state,
       dcmap => {
 '''
@@ -123,7 +123,7 @@ plugins => { geoip => {
     },'''
         template += '''
     wood_www => {
-      map => wood
+      map => wood_map
       service_types => state,
       dcmap => {
 '''
