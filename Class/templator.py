@@ -73,6 +73,7 @@ server {
   }
 }
 plugins => { geoip => {
+  undefined_datacenters_ok = true
   maps => {'''
         if geocast:
             template += '''
