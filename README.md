@@ -39,6 +39,7 @@ Add rqlite as entry to hosts that points to the local vpn interface.<br />
 ```
 echo "10.0.x.x rqlite" >> /etc/hosts
 ```
+If you don't setup rqlite on a node, just change the IP to the next rqlite node, idealy multiple entries.<br >
 2. Install woodCDN<br >
 ```
 adduser cdn --disabled-login
@@ -47,6 +48,7 @@ git clone https://github.com/Ne00n/woodCDN.git && cd woodCDN && git checkout gdn
 exit; chmod 775 -R /opt/woodCDN; chmod 750 /opt/woodCDN/certs
 ```
 3. Setup a [rqlite](https://github.com/rqlite/rqlite) instance on every node<br >
+You don't have to and you should not setup rqlite on every node, do it selectively.<br >
 ```
 su cdn -c "cd; wget https://github.com/rqlite/rqlite/releases/download/v7.14.2/rqlite-v7.14.2-linux-amd64.tar.gz && tar xvf rqlite-v7.14.2-linux-amd64.tar.gz && mv rqlite-v7.14.2-linux-amd64 rqlite"
 #Make sure to check for the latest release!
