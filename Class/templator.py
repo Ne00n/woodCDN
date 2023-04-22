@@ -92,44 +92,44 @@ plugins => { geoip => {
         template += '''
       }
     },'''
-    template += '''
+        template += '''
     wood => {
       geoip2_db => geo.mmdb,
       datacenters => ['''
-    for index, pop in enumerate(pops):
-        template += str(pop[0])
-        if index < len(pops) -1: template += ","
-    template += '''],
+        for index, pop in enumerate(pops):
+            template += str(pop[0])
+            if index < len(pops) -1: template += ","
+        template += '''],
       auto_dc_coords => {
 '''
-    for pop in pops:
-        if pop[1] == "anycast": continue
-        template += f"       {pop[0]} => [ {pop[2]}, {pop[3]} ],\n"
-    template += '''
+        for pop in pops:
+            if pop[1] == "anycast": continue
+            template += f"       {pop[0]} => [ {pop[2]}, {pop[3]} ],\n"
+        template += '''
       }
     }
   },
   resources => {'''
-    if geocast:
-        template += '''
+        if geocast:
+            template += '''
     geocast_www => {
       map => geocast
       service_types => state,
       dcmap => {
 '''
-        for geo in geocast:
-            template += f"       {geo[0]} => {geo[4]},\n"
-        template += '''      }
+            for geo in geocast:
+                template += f"       {geo[0]} => {geo[4]},\n"
+            template += '''      }
     },'''
-    template += '''
+        template += '''
     wood_www => {
       map => wood
       service_types => state,
       dcmap => {
 '''
-    for pop in pops:
-        template += f"       {pop[0]} => {pop[4]},\n"
-    template += '''      }
+        for pop in pops:
+            template += f"       {pop[0]} => {pop[4]},\n"
+        template += '''      }
     }
   }
 }}'''
