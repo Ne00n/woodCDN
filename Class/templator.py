@@ -127,9 +127,9 @@ plugins => { geoip => {
       service_types => state,
       dcmap => {
 '''
-        for pop in pops:
-            template += f"       {pop[0]} => {pop[4]},\n"
-        template += '''      }
+    for pop in pops:
+        template += f"       {pop[0]} => {pop[4]},\n"
+    template += '''      }
     }
   }
 }}'''
