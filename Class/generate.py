@@ -192,7 +192,7 @@ class Generate:
         if self.popsList == popsList: return True
 
         #fetch geocast
-        geocast = self.cli.query(['SELECT id,name,latitude,longitude FROM geocast LEFT JOIN pops ON geocast.popID=pops.id'])
+        geocast = self.cli.query(['SELECT id,name,latitude,longitude,v4 FROM geocast LEFT JOIN pops ON geocast.popID=pops.id'])
         if geocast and 'values' in geocast['results'][0]: 
             geocast = geocast['results'][0]['values']
         else:
