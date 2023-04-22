@@ -19,6 +19,11 @@ class CLI(rqlite):
         response = self.execute(['INSERT INTO pops(id,name,latitude,longitude,v4) VALUES(?, ?, ?, ?, ?)',data[0],data[1],data[2],data[3],data[4]])
         print(json.dumps(response, indent=4, sort_keys=True))
 
+    def addGeocast(self,data):
+        print("adding",data[0])
+        response = self.execute(['INSERT INTO geocast(popID) VALUES(?)',data[0]])
+        print(json.dumps(response, indent=4, sort_keys=True))
+
     def getTable(self,table="domains"):
         response = self.query(["SELECT rowid, * FROM "+table])
         print(json.dumps(response, indent=4, sort_keys=True))
@@ -33,4 +38,8 @@ class CLI(rqlite):
 
     def deletePoP(self,data):
         response = self.execute(['DELETE FROM pops WHERE name=?',data[0]])
+        print(json.dumps(response, indent=4, sort_keys=True))
+
+    def deleteGeocast(self,data):
+        response = self.execute(['DELETE FROM geocast WHERE popID=?',data[0]])
         print(json.dumps(response, indent=4, sort_keys=True))
