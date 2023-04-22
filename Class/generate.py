@@ -158,7 +158,7 @@ class Generate:
             if self.vhosts[vhost[0]] == vhost[1]:
                 print("skipping",vhost[0])
                 continue
-            zone = self.templator.gdnsdZone(vhost)
+            zone = self.templator.gdnsdZone(vhost,geocast)
             with open(self.gdnsdZonesDir+vhost[0], 'w') as out:
                 out.write(zone)
             reload = True

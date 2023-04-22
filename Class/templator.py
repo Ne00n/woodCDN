@@ -135,7 +135,7 @@ plugins => { geoip => {
 }}'''
         return template
 
-    def gdnsdZone(self,vhost):
+    def gdnsdZone(self,vhost,geocast):
         template = '''$TTL 86400
 @     SOA ns1 '''+vhost[0]+''' (
       1      ; serial
@@ -147,7 +147,10 @@ plugins => { geoip => {
 '''
         for index, nameserver in enumerate(vhost[1]['nameserver'].split(",")):
             template += '@       NS      ns'+str(index +1)+"\n"
-            template += 'ns'+str(index +1)+' 3600 A '+nameserver+"\n"
+            if geocast:
+                template += 'ns'+str(index +1)+' 3600 	DYNA 	 geoip!geocast_www'+'\n'
+            else:
+                template += 'ns'+str(index +1)+' 3600 A '+nameserver+"\n"
         template += "\n"
         if not vhost[1]['records']: return template
         for record in vhost[1]['records']:
