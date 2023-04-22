@@ -57,7 +57,6 @@ cp /opt/woodCDN/config/rqlite.service /etc/systemd/system/rqlite.service
 systemctl enable rqlite && systemctl start rqlite
 ```
 **rqlite is known to NOT resolve hostnames!**<br />
-To run rqlite as service and on boot, checkout config/rqlite.service<br />
 You can check the cluster status by running<br />
 ```
 curl rqlite:4003/nodes?pretty
