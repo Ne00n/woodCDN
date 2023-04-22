@@ -139,14 +139,15 @@ class Generate:
             return False
 
         if not 'values' in domains['results'][0]: return False
-        files,current = os.listdir(self.gdnsdZonesDir),[]
+        domains = domains['results'][0]['values']
 
-        vhosts,reload = {},False
+        files,current,vhosts,reload = os.listdir(self.gdnsdZonesDir),[],{},False
         #build dict
-        for domain in domains['results'][0]['values']:
+        for domain in domains:
             if not domain[0] in vhosts:
                 vhosts[domain[0]] = {}
                 vhosts[domain[0]]['records'] = []
+                vhosts[domain[0]]['options'] = {'geocast':domain[3]}
                 vhosts[domain[0]]['nameserver'] = domain[1]
             if domain[6] is None: continue
             vhosts[domain[0]]['records'].append({"type":domain[6],"record":domain[5],"target":domain[7]})
