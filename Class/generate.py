@@ -150,7 +150,7 @@ class Generate:
                 vhosts[domain[0]]['options'] = {'geocast':domain[3]}
                 vhosts[domain[0]]['nameserver'] = domain[1]
             if domain[6] is None: continue
-            vhosts[domain[0]]['records'].append({"type":domain[6],"record":domain[5],"target":domain[7]})
+            vhosts[domain[0]]['records'].append({"type":domain[7],"record":domain[6],"target":domain[8]})
 
         #update/create dns zones
         for vhost in vhosts.items():
