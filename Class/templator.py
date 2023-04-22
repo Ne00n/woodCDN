@@ -64,7 +64,7 @@ server {
 '''
         return template
 
-    def gdnsdConfig(self,pops,popsList):
+    def gdnsdConfig(self,pops,popsList,geocast):
         template = '''service_types => {
   state => {
     plugin => "extfile",
@@ -74,7 +74,26 @@ server {
 }
 plugins => { geoip => {
   undefined_datacenters_ok = true
-  maps => {
+  maps => {'''
+        if geocast and 'values' in geocast['results'][0]:
+            geocast = geocast['results'][0]['values']
+            template += '''
+    geocast => {
+      geoip2_db => geo.mmdb,
+      datacenters => ['''
+        for index, geo in enumerate(geocast):
+            template += str(geo[0])
+            if index < len(geocast) -1: template += ","
+        template += '''],
+      auto_dc_coords => {
+'''
+        for geo in geocast:
+            if geo[1] == "anycast": continue
+            template += f"       {geo[0]} => [ {geo[2]}, {geo[3]} ],\n"
+        template += '''
+      }
+    }
+        template += '''
     prod => {
       geoip2_db => geo.mmdb,
       datacenters => ['''

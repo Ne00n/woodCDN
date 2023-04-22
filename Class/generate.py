@@ -191,7 +191,9 @@ class Generate:
             file.write(state)
         if self.popsList == popsList: return True
 
-        config = self.templator.gdnsdConfig(pops,popsList)
+        #fetch geocast
+        geocast = self.cli.query(['SELECT id,name,latitude,longitude FROM geocast LEFT JOIN pops ON pops.popID=pops.id'])
+        config = self.templator.gdnsdConfig(pops,popsList,geocast)
         with open(self.gdnsdConfigFile, 'w') as out:
             out.write(config)
 
