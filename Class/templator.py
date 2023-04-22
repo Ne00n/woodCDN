@@ -118,7 +118,7 @@ plugins => { geoip => {
       dcmap => {
 '''
             for geo in geocast:
-                template += f"       {geo[0]} => {geo[4]},\n"
+                template += f"       {geo[0]} => {geo[3]},\n"
             template += '''      }
     },'''
         template += '''
