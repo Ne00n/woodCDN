@@ -73,23 +73,22 @@ server {
   }
 }
 plugins => { geoip => {
-  undefined_datacenters_ok = true
   maps => {'''
         if geocast:
             template += '''
     geocast => {
       geoip2_db => geo.mmdb,
       datacenters => ['''
-        for index, geo in enumerate(geocast):
-            template += str(geo[0])
-            if index < len(geocast) -1: template += ","
-        template += '''],
+            for index, geo in enumerate(geocast):
+                template += str(geo[0])
+                if index < len(geocast) -1: template += ","
+            template += '''],
       auto_dc_coords => {
 '''
-        for geo in geocast:
-            if geo[1] == "anycast": continue
-            template += f"       {geo[0]} => [ {geo[2]}, {geo[3]} ],\n"
-        template += '''
+            for geo in geocast:
+                if geo[1] == "anycast": continue
+                template += f"       {geo[0]} => [ {geo[2]}, {geo[3]} ],\n"
+            template += '''
       }
     },'''
         template += '''
