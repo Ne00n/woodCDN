@@ -96,16 +96,16 @@ plugins => { geoip => {
     wood => {
       geoip2_db => geo.mmdb,
       datacenters => ['''
-        for index, pop in enumerate(pops):
-            template += str(pop[0])
-            if index < len(pops) -1: template += ","
-        template += '''],
+    for index, pop in enumerate(pops):
+        template += str(pop[0])
+        if index < len(pops) -1: template += ","
+    template += '''],
       auto_dc_coords => {
 '''
-        for pop in pops:
-            if pop[1] == "anycast": continue
-            template += f"       {pop[0]} => [ {pop[2]}, {pop[3]} ],\n"
-        template += '''
+    for pop in pops:
+        if pop[1] == "anycast": continue
+        template += f"       {pop[0]} => [ {pop[2]}, {pop[3]} ],\n"
+    template += '''
       }
     }
   },
