@@ -27,8 +27,14 @@ class Generate:
 
     def gdnsd(self):
         while True:
-            self.gdnsdConfig()
-            self.gdnsdZones()
+            #fetch geocast
+            geocast = self.cli.query(['SELECT id,name,latitude,longitude,v4 FROM geocast LEFT JOIN pops ON geocast.popID=pops.id'])
+            if geocast and 'values' in geocast['results'][0]: 
+                geocast = geocast['results'][0]['values']
+            else:
+                geocast = False
+            self.gdnsdConfig(geocast)
+            self.gdnsdZones(geocast)
             time.sleep(60)
 
     def certs(self):
@@ -124,7 +130,7 @@ class Generate:
             print("Reloading nginx")
             subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "nginx", "reload"])
 
-    def gdnsdZones(self):
+    def gdnsdZones(self,geocast=False):
         print("Updating gdnsd zones")
 
         domains = self.cli.query(['SELECT * FROM domains LEFT JOIN vhosts ON domains.domain=vhosts.domain'])
@@ -167,7 +173,7 @@ class Generate:
         if reload:
             subprocess.run(["/usr/bin/sudo", "/usr/bin/gdnsdctl", "reload-zones"])
 
-    def gdnsdConfig(self):
+    def gdnsdConfig(self,geocast=False):
         print("Updating gdnsd config")
 
         data = self.cli.query(['SELECT * FROM pops'])
@@ -191,12 +197,6 @@ class Generate:
             file.write(state)
         if self.popsList == popsList: return True
 
-        #fetch geocast
-        geocast = self.cli.query(['SELECT id,name,latitude,longitude,v4 FROM geocast LEFT JOIN pops ON geocast.popID=pops.id'])
-        if geocast and 'values' in geocast['results'][0]: 
-            geocast = geocast['results'][0]['values']
-        else:
-            geocast = False
         config = self.templator.gdnsdConfig(pops,popsList,geocast)
         with open(self.gdnsdConfigFile, 'w') as out:
             out.write(config)
