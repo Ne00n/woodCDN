@@ -133,7 +133,7 @@ plugins => { geoip => {
     }
   }
 }}'''
-    return template
+        return template
 
     def gdnsdZone(self,vhost):
         template = '''$TTL 86400
