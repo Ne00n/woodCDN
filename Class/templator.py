@@ -157,7 +157,7 @@ plugins => { geoip => {
                 template += f"@       NS      ns{str(index +1)}\n"
                 template += f"ns{str(index +1)} 3600 A {nameserver}\n"
             else:
-                template += f"@       NS      {nameserver}\n"
+                template += f"@       NS      3600 {nameserver}\n"
         template += "\n"
         if not vhost[1]['records']: return template
         for record in vhost[1]['records']:
