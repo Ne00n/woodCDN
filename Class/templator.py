@@ -1,4 +1,4 @@
-import itertools
+import itertools, socket
 
 class Templator:
     def nginxWrap(self,domain,body):
@@ -135,6 +135,13 @@ plugins => { geoip => {
 }}'''
         return template
 
+    def isIP(self,ip):
+        try:
+            socket.inet_aton(ip)
+            return True
+        except socket.error:
+            return False
+
     def gdnsdZone(self,vhost):
         template = '''$TTL 86400
 @     SOA ns1 '''+vhost[0]+''' (
@@ -146,8 +153,11 @@ plugins => { geoip => {
 )
 '''
         for index, nameserver in enumerate(vhost[1]['nameserver'].split(",")):
-            template += '@       NS      ns'+str(index +1)+"\n"
-            template += 'ns'+str(index +1)+' 3600 A '+nameserver+"\n"
+            if self.isIP(nameserver):
+                template += f"@       NS      ns{str(index +1)}\n"
+                template += f"ns{str(index +1)} 3600 A {nameserver}\n"
+            else:
+                template += f"@       NS      {nameserver}\n"
         template += "\n"
         if not vhost[1]['records']: return template
         for record in vhost[1]['records']:
