@@ -143,8 +143,10 @@ plugins => { geoip => {
             return False
 
     def gdnsdZone(self,vhost):
+        firstNS = vhost[1]['nameserver'].split(",")[0]
+        firstNS = f"{firstNS}." if self.isIP(firstNS) else firstNS
         template = f'''$TTL 86400
-@     SOA ns1 {vhost[1]['email']}. (
+@     SOA {firstNS} {vhost[1]['email']}. (
       1      ; serial
       7200   ; refresh
       30M    ; retry
