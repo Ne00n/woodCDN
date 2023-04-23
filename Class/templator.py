@@ -147,7 +147,7 @@ plugins => { geoip => {
 '''
         for index, nameserver in enumerate(vhost[1]['nameserver'].split(",")):
             template += '@       NS      ns'+str(index +1)+"\n"
-            if geocast and vhost[1]['options']['geocast']:
+            if geocast:
                 template += 'ns'+str(index +1)+' 3600 	DYNA 	 geoip!geocast_www'+'\n'
             else:
                 template += 'ns'+str(index +1)+' 3600 A '+nameserver+"\n"
