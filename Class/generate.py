@@ -124,7 +124,7 @@ class Generate:
             print("Reloading nginx")
             subprocess.run(["/usr/bin/sudo", "/usr/sbin/service", "nginx", "reload"])
 
-    def gdnsdZones(self,geocast=False):
+    def gdnsdZones(self):
         print("Updating gdnsd zones")
 
         domains = self.cli.query(['SELECT * FROM domains LEFT JOIN vhosts ON domains.domain=vhosts.domain'])
@@ -153,7 +153,7 @@ class Generate:
             if self.vhosts[vhost[0]] == vhost[1]:
                 print("skipping",vhost[0])
                 continue
-            zone = self.templator.gdnsdZone(vhost,geocast)
+            zone = self.templator.gdnsdZone(vhost)
             with open(self.gdnsdZonesDir+vhost[0], 'w') as out:
                 out.write(zone)
             reload = True
@@ -168,7 +168,7 @@ class Generate:
         if reload:
             subprocess.run(["/usr/bin/sudo", "/usr/bin/gdnsdctl", "reload-zones"])
 
-    def gdnsdConfig(self,geocast=False):
+    def gdnsdConfig(self):
         print("Updating gdnsd config")
 
         data = self.cli.query(['SELECT * FROM pops'])
