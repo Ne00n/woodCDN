@@ -141,6 +141,7 @@ class Generate:
             if not domain[0] in vhosts:
                 vhosts[domain[0]] = {}
                 vhosts[domain[0]]['records'] = []
+                vhosts[domain[0]]['email'] = domain[2]
                 vhosts[domain[0]]['options'] = {'geocast':domain[3]}
                 vhosts[domain[0]]['nameserver'] = domain[1]
             if domain[6] is None: continue

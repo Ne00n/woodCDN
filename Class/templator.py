@@ -144,7 +144,7 @@ plugins => { geoip => {
 
     def gdnsdZone(self,vhost):
         template = '''$TTL 86400
-@     SOA ns1 '''+vhost[0]+''' (
+@     SOA ns1 '''+vhost[1]['email']+''' (
       1      ; serial
       7200   ; refresh
       30M    ; retry
