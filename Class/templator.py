@@ -166,7 +166,7 @@ plugins => { geoip => {
             if record['type'] == "proxy":
                 template += record['record']+'   30 	DYNA 	 geoip!wood_www'+'\n'
             elif record['type'] == 'geocast':
-                template += record['record']+'   3600 	DYNA 	 geoip!geocast_www'+'\n'
+                template += record['record']+'   300 	DYNA 	 geoip!geocast_www'+'\n'
             elif record['type'] == 'TXT':
                 template += record['record']+'   3600 	'+record['type']+' 	 "'+record['target']+'"\n'
             else:
